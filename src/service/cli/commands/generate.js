@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 const fs = require(`fs`).promises;
 const path = require(`path`);
@@ -6,7 +6,7 @@ const path = require(`path`);
 const {
   snuffle,
   randomInt,
-  pad
+  formatDate
 } = require(`../../../utils`);
 
 const {
@@ -19,35 +19,36 @@ const {
 const getRndField = (arr) => arr[randomInt(0, arr.length - 1)];
 
 const generateDate = () => {
-  // TODO: format date;
-  const date = new Date();
-  const year = date.getFullYear();
-  const month = pad(date.getMonth(), 2);
-  const day = pad(date.getDay(), 2)
-  const hours = pad(date.getHours(), 2)
-  const minutes = pad(date.getMinutes(), 2);
-  const seconds = pad(date.getHours(), 2)
-  
-  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
-}
+  const from = new Date();
+  const to = new Date();
+  to.setMonth(from.getMonth() - 2);
+
+  return () => {
+    const diff = from - to;
+    const randomDate = +from - randomInt(0, diff);
+    return formatDate(new Date(randomDate));
+  };
+};
 
 const generatePost = () => {
-
+  const getDate = generateDate();
   return {
     title: getRndField(TITLES),
     announce: snuffle(SENTENCES).slice(0, randomInt(1, 5)).join(` `),
     fullText: snuffle(SENTENCES).slice(0, randomInt(1, SENTENCES.length)).join(` `),
+    createdDate: getDate(),
     category: snuffle(CATEGORIES).slice(0, randomInt(1, 3)),
-    date: generateDate()
   };
 };
 
 const writeFile = (outDir, posts) => {
   return fs.mkdir(outDir, {recursive: true})
-    .then(() => fs.writeFile(`${outDir}/mocks.json`, JSON.stringify(posts, null, 2)));
+    .then(() =>
+      fs.writeFile(`${outDir}/mocks.json`, JSON.stringify(posts, null, 2))
+    );
 };
 
-const generate = async (commandManager, args) => {
+const generate = async (manager, args) => {
   const count = +args[0];
 
   if (count > MAX_POSTS_COUNT) {
@@ -55,9 +56,11 @@ const generate = async (commandManager, args) => {
   }
 
   const outDir = path.resolve(__dirname, `../../../../`);
-  const offers = count ? [...Array(count).keys()].map(() => generatePost()) : [];
+  const posts = count
+    ? [...Array(count).keys()].map(() => generatePost())
+    : [];
 
-  return writeFile(outDir, offers);
+  return writeFile(outDir, posts);
 };
 
 module.exports = generate;

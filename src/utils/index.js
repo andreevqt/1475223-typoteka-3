@@ -5,5 +5,6 @@ module.exports = {
   randomInt: require(`./randomInt`),
   pad: require(`./pad`),
   getNumLen: require(`./getNumLen`),
-  maxStringLen: require(`./maxStringLen`)
+  maxStringLen: require(`./maxStringLen`),
+  formatDate: require(`./formatDate`)
 };
