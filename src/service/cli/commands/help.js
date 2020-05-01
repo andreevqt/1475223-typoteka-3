@@ -1,6 +1,7 @@
 'use strict';
 
 const {maxStringLen} = require(`../../../utils`);
+const chalk = require(`chalk`);
 
 const help = async (manager/* , args */) => {
   const {commands, name, description} = manager;
@@ -31,7 +32,7 @@ const help = async (manager/* , args */) => {
     out += `    ${align(command.name)}  ${command.description}\n`;
   });
 
-  console.log(out);
+  console.log(chalk.grey(out));
 };
 
 module.exports = help;

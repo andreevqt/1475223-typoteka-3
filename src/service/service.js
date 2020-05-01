@@ -1,6 +1,7 @@
 'use strict';
 
 const ConsoleCommandManager = require(`./cli/ConsoleCommandManager`);
+const chalk = require(`chalk`);
 const {
   generate,
   version,
@@ -23,6 +24,7 @@ commandManager
   .add(`--help`, `печатает этот текст`, help)
   .execute(command, args)
   .catch((err) => {
-    console.log(err.message);
+    console.log(chalk.red(`Ошибка`));
+    console.log(chalk.red(err.message));
     process.exit(1);
   });

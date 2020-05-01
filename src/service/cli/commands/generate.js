@@ -2,6 +2,7 @@
 
 const fs = require(`fs`).promises;
 const path = require(`path`);
+const chalk = require(`chalk`);
 
 const {
   snuffle,
@@ -49,18 +50,17 @@ const writeFile = (outDir, posts) => {
 };
 
 const generate = async (manager, args) => {
-  const count = +args[0];
+  const count = +args[0] || 0;
 
   if (count > MAX_POSTS_COUNT) {
     throw Error(`Максимальное количество публикаций ${MAX_POSTS_COUNT}`);
   }
 
   const outDir = path.resolve(__dirname, `../../../../`);
-  const posts = count
-    ? [...Array(count).keys()].map(() => generatePost())
-    : [];
+  const posts = Array(count).fill(``).map(() => generatePost());
 
-  return writeFile(outDir, posts);
+  return writeFile(outDir, posts)
+    .then(() => console.log(chalk.green(`Сгенерировано ${posts.length} публикаций`)));
 };
 
 module.exports = generate;
