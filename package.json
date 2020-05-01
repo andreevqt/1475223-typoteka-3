@@ -1,0 +1,25 @@
+{
+  "name": "1475223-typoteka-3",
+  "version": "1.0.0",
+  "description": "* Студент: [Александр Андреев](https://up.htmlacademy.ru/nodejs/3/user/1475223). * Наставник: [Артемий Бойков](https://htmlacademy.ru/profile/id607755).",
+  "main": "./src/service/service.js",
+  "scripts": {
+    "start": "node ./src/service/service.js",
+    "test": "npm run eslint",
+    "eslint": "eslint --ext .js src/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qprquo/1475223-typoteka-3.git"
+  },
+  "author": "Александр Андреев",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/qprquo/1475223-typoteka-3/issues"
+  },
+  "homepage": "https://github.com/qprquo/1475223-typoteka-3#readme",
+  "devDependencies": {
+    "eslint": "6.8.0",
+    "eslint-config-htmlacademy": "0.5.2"
+  }
+}
