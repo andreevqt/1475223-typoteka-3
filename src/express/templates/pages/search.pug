@@ -1,0 +1,12 @@
+extends ../layouts/main-2
+
+block content
+  section.search-page
+    .search-page__wrapper
+      h1 Поиск
+      .search.search-page__form
+        form(action='#', method='get')
+          label
+            input(type='text', placeholder='Что ищем?')
+          button.search__button.button.button--transparent(type='submit') Найти
+

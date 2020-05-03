@@ -1,0 +1,31 @@
+body {
+  position: relative;
+}
+
+.modal {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  /* Required for overflow: auto */
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.form__image-loader-input {
+  /* Fix modal overflow */
+  width: 1px !important;
+}
+
+.popup--new-publication {
+  margin: 140px auto 0 auto;
+  padding: 20px 40px;
+}
+
+.modal-is-shown {
+  overflow: hidden;
+}
+
+.modal-is-shown .modal {
+  display: block;
+}

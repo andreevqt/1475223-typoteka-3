@@ -1,0 +1,43 @@
+section.modal
+  .popup.popup--registration
+    button.modal__close.popup__button.button.button--popup-close(type='button' aria-label='Закрыть окно') Закрыть окно
+    h2.visually-hidden Форма регистрации
+    ul.popup__tabs
+      li.popup__tab.popup__tab--active.popup__tab--register
+        button.popup__tab-switcher.button(type='button') Регистрация
+      li.popup__tab.popup__tab--log-in
+        button.popup__tab-switcher.button(type='button') Войти
+    .popup__form.popup__form--active.form.form--register
+      form(action='#' method='get')
+        .form__field
+          label
+            input(type='email' placeholder='Электронная почта' required='')
+        .form__field
+          label
+            input(type='text' placeholder='Имя' required='')
+        .form__field
+          label
+            input(type='text' placeholder='Фамилия')
+        .form__field
+          label
+            input(type='password' placeholder='Пароль' required='')
+        .form__field
+          label
+            input(type='password' placeholder='Повтор пароля' required='')
+        .form__image-loader
+          a.form__avatar.avatar
+            img(src='/img/icons/smile.svg' alt='аватар пользователя')
+          label
+            input.visually-hidden(type='file')
+            | Загрузить фото профиля
+        button.form__submit-btn.form__submit-btn--register.button.button--colored(type='submit') Зарегистрироваться
+    .popup__form.popup__form--hidden.form.form--log-in
+      form(action='#' method='get')
+        .form__field
+          label
+            input(type='email' placeholder='Электронная почта' required='')
+        .form__field
+          label
+            input(type='password' placeholder='Пароль' required='')
+        button.form__submit-btn.form__submit-btn--log-in.button.button--colored(type='submit') Войти
+  .modal__overlay

@@ -1,0 +1,29 @@
+block variables
+doctype html
+html(lang='ru')
+  head
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width,initial-scale=1')
+    meta(name='Description', content='Личный блог Типотека')
+    title Типотека
+    link(rel='preload', href='./fonts/Inter-Regular.woff2', as='font', crossorigin='anonymous')
+    link(rel='preload', href='./fonts/Inter-Medium.woff2', as='font', crossorigin='anonymous')
+    link(rel='preload', href='./fonts/SFProDisplay-Regular.woff2', as='font', crossorigin='anonymous')
+    link(rel='stylesheet', href='css/style.min.css')
+  body
+    .wrapper-color
+      header.header.header--error
+        a.header__logo.logo(href='/', class=logoClass)
+            img(src='/img/icons/logo.svg', alt='логотип Тайпотеки')
+        a.header__registration(href='#') Регистрация
+        a.header__enter(href='#') Вход с паролем
+        a.header__search.button.button--search(href='#', aria-label='поиск по сайту')
+      main
+        section.error
+          block content
+          a.error__link.text.text--big(href='/') Вернуться на главную
+      footer.footer
+        a.footer__copyright(href='#', aria-label='HTMLAcademy')
+          img(src='img/icons/HTMLAcademyLogo.svg', width='112', height='50', alt='HTMLAcademy')
+        span •
+        p Типотека, 2019
