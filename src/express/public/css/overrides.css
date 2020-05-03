@@ -12,6 +12,10 @@ body {
   overflow-y: auto;
 }
 
+.modal--is-shown {
+  display: block;
+}
+
 .form__image-loader-input {
   /* Fix modal overflow */
   width: 1px !important;
@@ -22,10 +26,6 @@ body {
   padding: 20px 40px;
 }
 
-.modal-is-shown {
+.ovh {
   overflow: hidden;
-}
-
-.modal-is-shown .modal {
-  display: block;
 }

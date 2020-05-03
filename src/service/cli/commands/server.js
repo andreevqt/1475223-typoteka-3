@@ -1,50 +1,30 @@
 'use strict';
 
-const http = require(`http`);
-const path = require(`path`);
+const express = require(`express`);
+const {once} = require(`events`);
 const fs = require(`fs`).promises;
 const chalk = require(`chalk`);
 
-const getMocks = async () => {
-  const mocks = JSON.parse(await fs.readFile(`${process.cwd()}/mocks.json`, `utf8`));
-  return `<ul>
-    ${mocks.map((mock) => `<li>${mock.title}</li>`).join(``)}
-  </ul>`;
-};
+const app = express();
+app.use(express.json());
 
-const response = (res, status, data, type = `text/html`) => {
-  res.writeHead(status, {
-    [`Content-Type`]: `${type}; charset=UTF-8`
-  });
-  res.end(data);
-};
-
-const onClientConnect = async (req, res) => {
-  switch (req.url) {
-    case `/`:
-      try {
-        const mocks = await getMocks();
-        response(res, 200, mocks);
-      } catch (err) {
-        response(res, 404, `404 Not found`, `text\plain`);
-      }
-      break;
-    default:
-      response(res, 404, `404 Not found`, `text\plain`);
+app.use(`/posts`, async (_req, res) => {
+  try {
+    const posts = await getMocks();
+    res.status(200).json(posts);
+  } catch (err) {
+    res.status(500).send(err);
   }
+});
+
+const getMocks = async () => {
+  return JSON.parse(await fs.readFile(`mocks.json`, `utf8`));
 };
 
-const server = async (manager, args) => {
+const server = (manager, args) => {
   const port = args[0] || 3000;
-  const httpServer = http.createServer(onClientConnect);
-
-  httpServer.listen(port, (err) => {
-    if (err) {
-      console.log(chalk.red(err.message));
-    }
-
-    return console.log(`Сервер слушает ${port} порт`);
-  });
+  return once(app.listen(port), `listening`)
+    .then(() => console.log(chalk.green(`Ожидаю соединений на ${port}`)));
 };
 
 module.exports = server;

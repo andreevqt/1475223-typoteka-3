@@ -1,40 +1,43 @@
 'use strict';
-// vendor.js hackfix
 
-let enableScrolling = () =>  {
+// vendor.js hackfix
+let enableScrolling = () => {
   document.body.removeAttribute("style");
   document.body.classList.remove("body-fixed");
 };
 
 enableScrolling();
 
-
 // модальное окно
-let modalToggle = document.querySelector('.modal-toggle');
-if (modalToggle) {
-  let onModalClick = (evt) => {
-    evt.preventDefault();
-    document.body.classList.add('modal-is-shown');
-  }
-  modalToggle.addEventListener('click', onModalClick);
-}
-
-let closeModal = (evt) =>  {
+let toggles = document.querySelectorAll('.modal-toggle');
+let onModalClick = (evt) => {
   evt.preventDefault();
-  document.body.classList.remove('modal-is-shown');
+  let toggle = evt.target;
+  let {target} = toggle.dataset;
+  let modal = document.querySelector(target);
+
+  modal.classList.add('modal--is-shown');
+  document.body.classList.add('ovh');
 }
 
-// если кликаем по .modal__overlay закрываем окно
-let modalOverlay = document.querySelector('.modal__overlay');
-if (modalOverlay) {
-  modalOverlay.addEventListener('click', closeModal);
+toggles.forEach((toggle) => {
+  toggle.addEventListener('click', onModalClick);
+});
+
+let onCloseClick = (evt) => {
+  evt.preventDefault();
+  const el = evt.target;
+  const parent = el.closest('.modal');
+  if (parent) {
+    parent.classList.remove('modal--is-shown');
+    document.body.classList.remove('ovh');
+  };
 }
 
-// если кликаем по .modal__close закрываем окно
-let modalClose = document.querySelector('.modal__close');
-if (modalClose) {
-  modalClose.addEventListener('click', closeModal)
-}
+let closeBtns = document.querySelectorAll('.modal__close');
+closeBtns.forEach((el) => {
+  el.addEventListener('click', onCloseClick);
+});
 
 // логика выбора даты в календаре
 
