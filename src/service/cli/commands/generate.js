@@ -5,7 +5,7 @@ const path = require(`path`);
 const chalk = require(`chalk`);
 
 const {
-  snuffle,
+  shuffle,
   randomInt,
   formatDate
 } = require(`../../../utils`);
@@ -32,10 +32,10 @@ const generatePost = (titles, sentences, categories) => {
   const getDate = generateDate();
   return {
     title: getRndField(titles),
-    announce: snuffle(sentences).slice(0, randomInt(1, 5)).join(` `),
-    fullText: snuffle(sentences).slice(0, randomInt(1, sentences.length)).join(` `),
+    announce: shuffle(sentences).slice(0, randomInt(1, 5)).join(` `),
+    fullText: shuffle(sentences).slice(0, randomInt(1, sentences.length)).join(` `),
     createdDate: getDate(),
-    category: snuffle(categories).slice(0, randomInt(1, 3)),
+    category: shuffle(categories).slice(0, randomInt(1, 3)),
   };
 };
 
