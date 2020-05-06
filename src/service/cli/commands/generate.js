@@ -5,15 +5,12 @@ const path = require(`path`);
 const chalk = require(`chalk`);
 
 const {
-  snuffle,
+  shuffle,
   randomInt,
   formatDate
 } = require(`../../../utils`);
 
 const {
-  TITLES,
-  CATEGORIES,
-  SENTENCES,
   MAX_POSTS_COUNT,
 } = require(`../constants`);
 
@@ -31,14 +28,14 @@ const generateDate = () => {
   };
 };
 
-const generatePost = () => {
+const generatePost = (titles, sentences, categories) => {
   const getDate = generateDate();
   return {
-    title: getRndField(TITLES),
-    announce: snuffle(SENTENCES).slice(0, randomInt(1, 5)).join(` `),
-    fullText: snuffle(SENTENCES).slice(0, randomInt(1, SENTENCES.length)).join(` `),
+    title: getRndField(titles),
+    announce: shuffle(sentences).slice(0, randomInt(1, 5)).join(` `),
+    fullText: shuffle(sentences).slice(0, randomInt(1, sentences.length)).join(` `),
     createdDate: getDate(),
-    category: snuffle(CATEGORIES).slice(0, randomInt(1, 3)),
+    category: shuffle(categories).slice(0, randomInt(1, 3)),
   };
 };
 
@@ -49,6 +46,10 @@ const writeFile = (outDir, posts) => {
     );
 };
 
+const readFile = (file) => {
+  return fs.readFile(file, `utf8`).then((data) => data.split(/\r?\n/));
+};
+
 const generate = async (manager, args) => {
   const count = +args[0] || 0;
 
@@ -56,10 +57,16 @@ const generate = async (manager, args) => {
     throw Error(`Максимальное количество публикаций ${MAX_POSTS_COUNT}`);
   }
 
-  const outDir = path.resolve(__dirname, `../../../../`);
-  const posts = Array(count).fill(``).map(() => generatePost());
+  const rootDir = path.resolve(__dirname, `../../../../`);
 
-  return writeFile(outDir, posts)
+  const sentences = await readFile(`${rootDir}/data/sentences.txt`);
+  const categories = await readFile(`${rootDir}/data/categories.txt`);
+  const titles = await readFile(`${rootDir}/data/titles.txt`);
+
+  const posts = Array(count).fill(``)
+    .map(() => generatePost(titles, sentences, categories));
+
+  return writeFile(rootDir, posts)
     .then(() => console.log(chalk.green(`Сгенерировано ${posts.length} публикаций`)));
 };
 

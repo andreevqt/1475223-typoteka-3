@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-  snuffle: require(`./snuffle`),
+  shuffle: require(`./shuffle`),
   randomInt: require(`./randomInt`),
   pad: require(`./pad`),
   getNumLen: require(`./getNumLen`),
