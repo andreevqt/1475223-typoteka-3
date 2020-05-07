@@ -5,7 +5,8 @@ const chalk = require(`chalk`);
 const {
   generate,
   version,
-  help
+  help,
+  server
 } = require(`./cli/commands`);
 
 const command = process.argv[2];
@@ -22,6 +23,7 @@ commandManager
   .add(`--generate`, `формирует файл mocks.json`, generate, [`count`])
   .add(`--version`, `выводит номер версии`, version)
   .add(`--help`, `печатает этот текст`, help)
+  .add(`--server`, `запускает http-server`, server, [`port`])
   .execute(command, args)
   .catch((err) => {
     console.log(chalk.red(`Ошибка`));
