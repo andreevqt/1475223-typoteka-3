@@ -6,8 +6,7 @@ const fs = require(`fs`).promises;
 const chalk = require(`chalk`);
 
 const getMocks = async () => {
-  const root = path.resolve(__dirname, `../../../../`);
-  const mocks = JSON.parse(await fs.readFile(`${root}/mocks.json`, `utf8`));
+  const mocks = JSON.parse(await fs.readFile(`${process.cwd()}/mocks.json`, `utf8`));
   return `<ul>
     ${mocks.map((mock) => `<li>${mock.title}</li>`).join(``)}
   </ul>`;
