@@ -1,0 +1,26 @@
+extends header-base
+
+block header_content
+  button.modal-toggle.button.button--colored.header__button-new Новая запись
+  .header__dropdown
+    a.button.button--burger.header__burger(href='#') Открыть меню
+    ul.navigation.header__navigation
+      li.navigation__item
+        a(href='/') Главная
+      li.navigation__item
+        a(href='/categories') Категории
+      li.navigation__item
+        a(href='/articles/1') Публикация  
+      li.navigation__item
+        a(href='/my') Мои публикации
+      li.navigation__item
+        a(href='/my/comments') Мои комментарии
+      li.navigation__item
+        a(href='/articles/add') Новая публикация
+      li.navigation__item
+        a(href='/search') Поиск
+      li.navigation__item
+        a(href='/register') Регистрация
+      li.navigation__item
+        a(href='/login') Войти
+    

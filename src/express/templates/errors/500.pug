@@ -1,0 +1,10 @@
+extends ../layouts/error
+
+block variables
+  - let logoClass = `header__logo--500`
+
+block content
+  h2.error__title.title.title--big Что-то пошло не так
+  p.error__text.text.text--big.
+    Причин может быть много: сервер не выдержал нагрузку или в коде ошибка.
+    Попробуйте повторить попытку позже.

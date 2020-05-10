@@ -1,7 +1,6 @@
 'use strict';
 
 const fs = require(`fs`).promises;
-const path = require(`path`);
 const chalk = require(`chalk`);
 
 const {
@@ -57,11 +56,11 @@ const generate = async (manager, args) => {
     throw Error(`Максимальное количество публикаций ${MAX_POSTS_COUNT}`);
   }
 
-  const rootDir = path.resolve(__dirname, `../../../../`);
+  const rootDir = `${process.cwd()}/data`;
 
-  const sentences = await readFile(`${rootDir}/data/sentences.txt`);
-  const categories = await readFile(`${rootDir}/data/categories.txt`);
-  const titles = await readFile(`${rootDir}/data/titles.txt`);
+  const sentences = await readFile(`${rootDir}/sentences.txt`);
+  const categories = await readFile(`${rootDir}/categories.txt`);
+  const titles = await readFile(`${rootDir}/titles.txt`);
 
   const posts = Array(count).fill(``)
     .map(() => generatePost(titles, sentences, categories));

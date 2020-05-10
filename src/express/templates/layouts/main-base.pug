@@ -1,0 +1,15 @@
+include ../mixins/mixins
+block variables
+doctype html
+html(lang="ru")
+  head
+    include head
+  body(class=bodyClass)
+    block before_content
+    .wrapper(class=wrapperClass)
+      block header
+      main(class=mainClass)
+        block content
+      include footer
+    block after_content
+    include scripts
