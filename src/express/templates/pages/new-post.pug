@@ -2,3 +2,8 @@ extends ../layouts/main-2
 
 block variables
   - let bodyClass = `modal-is-shown`
+
+block after_scripts
+  script.
+    document.querySelector("#modalNewPost").classList.add('modal--is-shown')
+    document.body.classList.add('ovh')
