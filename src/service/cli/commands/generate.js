@@ -2,6 +2,7 @@
 
 const fs = require(`fs`).promises;
 const chalk = require(`chalk`);
+const {nanoid} = require(`nanoid`);
 
 const {
   shuffle,
@@ -11,7 +12,8 @@ const {
 
 const {
   MAX_POSTS_COUNT,
-} = require(`../constants`);
+  ID_LEN
+} = require(`../../constants`);
 
 const getRndField = (arr) => arr[randomInt(0, arr.length - 1)];
 
@@ -27,14 +29,25 @@ const generateDate = () => {
   };
 };
 
-const generatePost = (titles, sentences, categories) => {
+const generateComments = (comments) => {
+  return shuffle(comments)
+    .slice(0, randomInt(1, comments.length))
+    .map((text) => ({
+      id: nanoid(ID_LEN),
+      text
+    }));
+};
+
+const generatePost = (titles, sentences, categories, comments) => {
   const getDate = generateDate();
   return {
+    id: nanoid(ID_LEN),
     title: getRndField(titles),
     announce: shuffle(sentences).slice(0, randomInt(1, 5)).join(` `),
     fullText: shuffle(sentences).slice(0, randomInt(1, sentences.length)).join(` `),
     createdDate: getDate(),
     category: shuffle(categories).slice(0, randomInt(1, 3)),
+    comments: generateComments(comments)
   };
 };
 
@@ -61,11 +74,12 @@ const generate = async (manager, args) => {
   const sentences = await readFile(`${rootDir}/sentences.txt`);
   const categories = await readFile(`${rootDir}/categories.txt`);
   const titles = await readFile(`${rootDir}/titles.txt`);
+  const comments = await readFile(`${rootDir}/comments.txt`);
 
   const posts = Array(count).fill(``)
-    .map(() => generatePost(titles, sentences, categories));
+    .map(() => generatePost(titles, sentences, categories, comments));
 
-  return writeFile(rootDir, posts)
+  return writeFile(process.cwd(), posts)
     .then(() => console.log(chalk.green(`Сгенерировано ${posts.length} публикаций`)));
 };
 

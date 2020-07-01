@@ -16,3 +16,6 @@ build/
 
 # mocks 
 mocks.json
+
+# REST Client
+*.http
