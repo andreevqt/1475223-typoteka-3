@@ -27,7 +27,7 @@ const server = async (manager, args) => {
     next();
   }, api.router);
 
-  app.use((req, res) => res.status(404).send(`Not found`));
+  app.use((req, res) => res.status(http.NOT_FOUND).send(`Not found`));
 
   app.use((err, req, res, _next) => {
     if (err instanceof ValidationError) {

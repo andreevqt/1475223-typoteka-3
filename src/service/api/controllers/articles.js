@@ -59,7 +59,7 @@ module.exports = (articleService, commentService) => ({
     create: (req, res) => {
       const {article} = req.locals;
       const comment = commentService.create(article.id, req.body);
-      res.status(http.OK).send(comment);
+      res.status(http.CREATED).send(comment);
     },
 
     delete: (req, res) => {
