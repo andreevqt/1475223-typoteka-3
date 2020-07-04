@@ -1,10 +1,12 @@
 'use strict';
 
+const {logger} = require(`../../../utils`).logger;
 const config = require(`../../../../config`);
 const express = require(`express`);
 const {once} = require(`events`);
 const api = require(`../../api/routes`);
 const {ValidationError} = require(`express-validation`);
+const {logRequests} = require(`../../api/middleware`);
 const {
   API_PREFIX,
   http
@@ -18,12 +20,13 @@ const server = async (manager, args) => {
     extended: true
   }));
   app.use(express.json());
+  app.use(logRequests);
 
   // load data
   await api.loadData();
 
   app.use(API_PREFIX, (req, res, next) => {
-    console.log(`[ROUTE]: ${req.method} ${req.url}`);
+    logger.error(`[ROUTE]: ${req.method} ${req.url}`);
     next();
   }, api.router);
 
@@ -42,7 +45,7 @@ const server = async (manager, args) => {
   return once(app.listen(port), `listening`)
     .then(() => console.log(`[SERVER] Ожидаю соединений на ${port}`))
     .catch((err) => {
-      console.log(`[ERROR] ${err.msg}`);
+      logger.info(`[ERROR] ${err.msg}`);
     });
 };
 

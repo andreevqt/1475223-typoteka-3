@@ -5,9 +5,10 @@
   "main": "./src/service/service.js",
   "scripts": {
     "generate": "node ./src/service/service.js --generate 20",
-    "start": "nodemon ./src/service/service.js --server",
+    "start": "cross-env LOG_LEVEL=error nodemon ./src/service/service.js --server 3000 > ./logs/server.log",
+    "start::debug": "cross-env LOG_LEVEL=info nodemon ./src/service/service.js --server 3000 | pino-pretty",
     "start-front-server": "nodemon ./src/express",
-    "test": "npm run eslint",
+    "test": "jest",
     "eslint": "eslint --ext .js src/"
   },
   "repository": {
@@ -22,16 +23,20 @@
   "homepage": "https://github.com/qprquo/1475223-typoteka-3#readme",
   "devDependencies": {
     "eslint": "6.8.0",
-    "eslint-config-htmlacademy": "0.5.2"
+    "eslint-config-htmlacademy": "0.5.2",
+    "jest": "26.1.0",
+    "pino-pretty": "4.0.0",
+    "supertest": "4.0.2"
   },
   "dependencies": {
     "chalk": "4.0.0",
-    "crossenv": "0.0.2-security",
+    "cross-env": "^7.0.2",
     "dotenv": "8.2.0",
     "express": "4.17.1",
     "express-validation": "3.0.5",
     "nanoid": "3.1.10",
     "nodemon": "2.0.3",
+    "pino": "6.3.2",
     "pug": "2.0.4"
   }
 }

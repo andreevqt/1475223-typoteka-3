@@ -36,5 +36,11 @@ const loadData = async () => {
 
 module.exports = {
   router,
+  services: {
+    articleService,
+    categoryService,
+    commentService,
+    searchService
+  },
   loadData
 };
