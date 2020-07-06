@@ -4,9 +4,8 @@
   "description": "* Студент: [Александр Андреев](https://up.htmlacademy.ru/nodejs/3/user/1475223). * Наставник: [Артемий Бойков](https://htmlacademy.ru/profile/id607755).",
   "main": "./src/service/service.js",
   "scripts": {
-    "start": "node ./src/service/service.js",
     "generate": "node ./src/service/service.js --generate 20",
-    "server": "nodemon ./src/service/service.js --server",
+    "start": "nodemon ./src/service/service.js --server",
     "start-front-server": "nodemon ./src/express",
     "test": "npm run eslint",
     "eslint": "eslint --ext .js src/"
@@ -27,7 +26,11 @@
   },
   "dependencies": {
     "chalk": "4.0.0",
+    "crossenv": "0.0.2-security",
+    "dotenv": "8.2.0",
     "express": "4.17.1",
+    "express-validation": "3.0.5",
+    "nanoid": "3.1.10",
     "nodemon": "2.0.3",
     "pug": "2.0.4"
   }
