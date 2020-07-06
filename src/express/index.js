@@ -1,7 +1,12 @@
 'use strict';
 
+const config = require(`../../config`);
 const express = require(`express`);
 const path = require(`path`);
+const {logger} = require(`../utils`).logger;
+const {once} = require(`events`);
+const {API_PREFIX} = require(`../service/constants`);
+const axios = require(`axios`);
 const {
   main,
   articles,
@@ -9,18 +14,40 @@ const {
   categories
 } = require(`./routes`);
 
-const DEFAULT_PORT = 8080;
-const PUBLIC_DIR = `public`;
-
 const app = express();
 
-// routes
-app.use(`/`, main);
-app.use(`/my`, my);
-app.use(`/articles`, articles);
-app.use(`/categories`, categories);
+const appUrl = `${config.APP_URL}:${config.APP_PORT}`;
+const apiUrl = `${config.APP_URL}:${config.API_SERVER_PORT}${API_PREFIX}`;
 
-app.use(express.static(path.resolve(__dirname, PUBLIC_DIR)));
+app.set(`app_url`, appUrl);
+app.set(`api_url`, apiUrl);
+
+app.use(express.urlencoded({
+  extended: true
+}));
+
+app.use(async (req, res, next) => {
+  let cats = [];
+  try {
+    cats = (await axios.get(`${apiUrl}/categories`)).data;
+  } catch (err) {
+    logger.error(`[ERROR] route: ${req.url}, message: status - ${err.response.status}, data - ${err.response.data}`);
+  }
+  res.locals.categories = cats;
+  res.locals.formData = {
+    action: `/articles/add`,
+    category: []
+  };
+  next();
+});
+
+// routes
+app.use(`/`, main(app));
+app.use(`/my`, my(app));
+app.use(`/articles`, articles(app));
+app.use(`/categories`, categories(app));
+
+app.use(express.static(path.resolve(__dirname, config.APP_PUBLIC_FOLDER)));
 
 app.use((req, res) => res.status(404).render(`errors/404`));
 app.use((req, res) => res.status(500).render(`errors/500`));
@@ -28,4 +55,5 @@ app.use((req, res) => res.status(500).render(`errors/500`));
 app.set(`views`, path.join(__dirname, `templates`));
 app.set(`view engine`, `pug`);
 
-app.listen(DEFAULT_PORT);
+once(app.listen(config.APP_PORT), `listening`)
+  .then(() => logger.info(`Ожидаю соединений на  ${config.APP_PORT}`));

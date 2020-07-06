@@ -19,3 +19,6 @@ mocks.json
 
 # REST Client
 *.http
+
+# thumbnail
+*.thumbnail*

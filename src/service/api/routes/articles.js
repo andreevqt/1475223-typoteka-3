@@ -15,23 +15,27 @@ module.exports = (app, articleService, commentService) => {
   router.param(`articleId`, controller.checkArticle);
   router.param(`commentId`, controller.checkComment);
 
-  router.
-    route(`/`).
-    get(controller.list).
-    post(validate(articles.create, {keyByField: true}), controller.create);
+  router
+    .route(`/`)
+    .get(controller.list)
+    .post(validate(articles.create, {keyByField: true}), controller.create);
 
-  router.
-    route(`/:articleId`).
-    get(controller.get).
-    put(validate(articles.update, {keyByField: true}), controller.update).
-    delete(controller.delete);
+  router
+    .route(`/:articleId`)
+    .get(controller.get)
+    .put(validate(articles.update, {keyByField: true}), controller.update)
+    .delete(controller.delete);
 
-  router.
-    route(`/:articleId/comments`).
-    get(controller.comments.list).
-    post(validate(comments.create, {keyByField: true}), controller.comments.create);
+  router
+    .route(`/:articleId/comments`)
+    .get(controller.comments.list)
+    .post(validate(comments.create, {keyByField: true}), controller.comments.create);
 
-  router.
-    route(`/:articleId/comments/:commentId`).
-    delete(controller.comments.delete);
+  router
+    .route(`/:articleId/comments/:commentId`)
+    .delete(controller.comments.delete);
+
+  router
+    .route(`/category/:category`)
+    .get(controller.categories.get);
 };

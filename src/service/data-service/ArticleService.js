@@ -26,12 +26,20 @@ class ArticleService extends BaseService {
       createdDate: formatDate(new Date()),
       announce: null,
       title: null,
-      fullText: null
+      fullText: null,
+      picture: null
     };
 
     if (!Array.isArray(attrs.category)) {
       attrs.category = [attrs.category];
     }
+
+    // temoprary
+    attrs.picture = {
+      orig: attrs.picture,
+      big: attrs.picture,
+      small: attrs.picture
+    };
 
     const newArticle = {...defaults, ...attrs};
     this._items = [

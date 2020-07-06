@@ -1,34 +1,36 @@
 section#modalNewPost.modal
   .popup.popup--new-publication
-    form(action='#' method='POST')
-      .new-publication__header
-        h1 Новая публикация
-        .new-publication__date-form
-          h3 Дата публикации
-          .new-publication__date-form-division
-            .new-publication__date-block
-              label(for='new-publication-date' aria-label='Календарь')
-              input#new-publication-date(type='text' name='login' placeholder='21.03.2019')
-        button.new-publication__button.button.button--colored(type='submit') Опубликовать
-      button.modal__close.popup__button.button.button--popup-close(type='button' aria-label='Закрыть окно') Закрыть окно
-      .new-publication__form.form
-        .form__wrapper.form__wrapper--intro
-          .form__field
-            label
-              input(type='text' placeholder='Заголовок' required='')
-          .form__field.form__field--post-image
-            label
-              input#image-name-field(type='text' placeholder='Фотография' readonly='')
-            .form__image-loader.form__image-loader--publication
+    .new-publication
+      form(action=formData.action, method=`POST`, enctype=`multipart/form-data` )
+        .new-publication__header
+          h1 Новая публикация
+          .new-publication__date-form
+            h3 Дата публикации
+            .new-publication__date-form-division
+              .new-publication__date-block
+                label(for='new-publication-date' aria-label='Календарь')
+                input#new-publication-date(type=`text`, name=`createdDate`, placeholder=`21.03.2019`, value=formData.createdDate)
+          button.new-publication__button.button.button--colored(type='submit') Опубликовать
+        button.modal__close.popup__button.button.button--popup-close(type='button' aria-label='Закрыть окно') Закрыть окно
+        .new-publication__form.form
+          .form__wrapper.form__wrapper--intro
+            .form__field
               label
-                input.form__image-loader-input.visually-hidden(type='file')
-                | Обзор
-          a.new-publication__form-link.button.button--transparent(href='#') Добавить категорию
-        .form__wrapper.form__wrapper--text
-          .form__field.form__field--publication-text
-            label
-              textarea(rows='1' placeholder='Анонс публикации')
-          .form__field.form__field--publication-text
-            label
-              textarea(rows='1' placeholder='Полный текст публикации')
+                input(type=`text`, placeholder=`Заголовок`, name=`title` value=formData.title)
+            .form__field.form__field--post-image
+              label
+                input#image-name-field(type=`text`, placeholder=`Фотография`, readonly=true)
+              .form__image-loader.form__image-loader--publication
+                label
+                  input.form__image-loader-input.visually-hidden(type=`file`, name=`picture`)
+                  | Обзор
+            .form__field
+              select#category-field.form__select.js-multiple-select(name=`category`, data-label=`Выбрать категории публикации`, data-options=JSON.stringify(categories.map(cat => ({text: cat, value: cat, selected: formData.category.includes(cat)}))))
+          .form__wrapper.form__wrapper--text
+            .form__field.form__field--publication-text
+              label
+                textarea(rows='1', placeholder='Анонс публикации', name=`announce`) #{formData.announce}
+            .form__field.form__field--publication-text
+              label
+                textarea(rows=`1`, placeholder=`Полный текст публикации`, name=`fullText`) #{formData.fullText}
   .modal__overlay
