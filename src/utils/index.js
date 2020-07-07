@@ -7,5 +7,6 @@ module.exports = {
   getNumLen: require(`./getNumLen`),
   maxStringLen: require(`./maxStringLen`),
   formatDate: require(`./formatDate`),
-  getMocks: require(`./getMocks`)
+  getMocks: require(`./getMocks`),
+  logger: require(`./logger`)
 };
