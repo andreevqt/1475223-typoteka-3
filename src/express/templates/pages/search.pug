@@ -2,11 +2,18 @@ extends ../layouts/main-2
 
 block content
   section.search-page
-    .search-page__wrapper
+    .search-page__wrapper(class=(!articles.length && query ? `search-page__wrapper--empty` : ``))
       h1 Поиск
       .search.search-page__form
-        form(action='#', method='get')
+        form(action=``, method=`get`)
           label
-            input(type='text', placeholder='Что ищем?')
-          button.search__button.button.button--transparent(type='submit') Найти
+            input(type=`text`, name=`query`, placeholder=`Что ищем?`)
+          button.search__button.button.button--transparent(type=`submit`) Найти
+        if (!articles.length && query)
+          p.search.search-page__empty Ничего не нашлось
+        else
+          each article in articles
+            .search__result
+              time.search__date #{article.createdDate}
+              a.search__link(href=`/articles/${article.id}`) !{article.title}
 

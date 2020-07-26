@@ -1,0 +1,9 @@
+extends ../layouts/main-2.pug
+
+block variables
+  - let mainClass = `articles-category`
+
+block content
+  h1 #{category}
+  include ../partials/categories
+  include ../partials/preview

@@ -59,14 +59,26 @@ module.exports = (articleService, commentService) => ({
     create: (req, res) => {
       const {article} = req.locals;
       const comment = commentService.create(article.id, req.body);
-      res.status(http.CREATED).send(comment);
+      res.status(http.CREATED).json(comment);
     },
 
     delete: (req, res) => {
       const {article} = req.locals;
       const {commentId} = req.params;
       const deleted = commentService.delete(article.id, commentId);
-      res.status(http.OK).send(deleted);
+      res.status(http.OK).json(deleted);
     }
+  },
+
+  categories: {
+    get: (req, res) => {
+      const {category} = req.params;
+      const articles = articleService.find((article) => article.category.includes(category));
+      if (!articles.length) {
+        res.status(http.NOT_FOUND).send(`404 Not found`);
+        return;
+      }
+      res.status(http.OK).json(articles);
+    },
   }
 });

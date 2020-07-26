@@ -1,0 +1,26 @@
+.main-page__section-flex
+  section.main-page__hot.hot
+    h2.hot__name Самое обсуждаемое 
+      span.hot__icon.hot__icon--fire
+    if popular.length > 0
+      ul.hot__list
+        each article in popular
+          li.hot__list-item
+            a.hot__list-link(href=`/articles/${article.id}`)
+              | #{article.title}
+              sup.hot__link-sup #{article.comments.length}
+    else
+      p.hot__empty Здесь пока ничего нет...
+
+  section.main-page__last.last
+    h2.last__name Последние комментарии 
+      span.last__icon.last__icon--cloud
+    if comments.length > 0
+      ul.last__list
+        each comment in comments
+          li.last__list-item
+            img.last__list-image(src=`img/avatar-small-1.png`, width=`20`, height=`20`, alt=`Аватар пользователя`)
+            b.last__list-name Анна Артамонова
+            a.last__list-link(href='#') #{comment.text}
+    else
+      p.last__empty Здесь пока ничего нет...

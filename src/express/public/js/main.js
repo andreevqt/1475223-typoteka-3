@@ -39,6 +39,21 @@ closeBtns.forEach((el) => {
   el.addEventListener('click', onCloseClick);
 });
 
+// select
+var selects = document.querySelectorAll('.js-multiple-select');
+for (var i = 0; i < selects.length; i++) {
+  var placeholder = selects[i].getAttribute('data-label');
+  const options = JSON.parse(selects[i].dataset.options);
+  const data = options;
+  var SS = new Selectr(selects[i], {
+    searchable: false,
+    multiple: true,
+    width: 222,
+    placeholder,
+    data
+  });
+}
+
 // логика выбора даты в календаре
 
 let calendar = document.querySelector('.calendar');

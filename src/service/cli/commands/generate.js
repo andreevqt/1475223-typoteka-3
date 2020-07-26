@@ -29,6 +29,18 @@ const generateDate = () => {
   };
 };
 
+const generatePicture = () => {
+  const pictures = [`forest`, `sea`, `skyscraper`, null];
+  const picture = pictures[randomInt(0, pictures.length)];
+  return (
+    picture ? {
+      orig: `${picture}@2x.jpg`,
+      big: `${picture}@2x.jpg`,
+      small: `${picture}@1x.jpg`,
+    } : null
+  );
+};
+
 const generateComments = (comments) => {
   return shuffle(comments)
     .slice(0, randomInt(1, comments.length))
@@ -43,11 +55,12 @@ const generatePost = (titles, sentences, categories, comments) => {
   return {
     id: nanoid(ID_LEN),
     title: getRndField(titles),
+    picture: generatePicture(),
     announce: shuffle(sentences).slice(0, randomInt(1, 5)).join(` `),
     fullText: shuffle(sentences).slice(0, randomInt(1, sentences.length)).join(` `),
     createdDate: getDate(),
     category: shuffle(categories).slice(0, randomInt(1, 3)),
-    comments: generateComments(comments)
+    comments: generateComments(comments),
   };
 };
 

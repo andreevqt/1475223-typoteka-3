@@ -1,0 +1,5 @@
+section.main-page__theme-list
+  h2.visually-hidden Список тем
+  ul.themes
+    each cat in categories
+      +category(cat, cat === category)

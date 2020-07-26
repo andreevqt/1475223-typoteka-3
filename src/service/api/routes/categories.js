@@ -10,7 +10,7 @@ module.exports = (app, categoryService) => {
 
   app.use(`/categories`, router);
 
-  router.
-    route(`/`).
-    get(controller.list);
+  router
+    .route(`/`)
+    .get(controller.list);
 };
