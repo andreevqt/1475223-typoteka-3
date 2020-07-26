@@ -6,7 +6,8 @@ const {
   generate,
   version,
   help,
-  server
+  server,
+  fill
 } = require(`./cli/commands`);
 
 const command = process.argv[2];
@@ -21,12 +22,14 @@ const commandManager = new ConsoleCommandManager(
 
 commandManager
   .add(`--generate`, `формирует файл mocks.json`, generate, [`count`])
+  .add(`--fill`, `генерирует файл fill-db.sql со сформированными запросами для создания n-публикаций`, fill, [`n`])
   .add(`--version`, `выводит номер версии`, version)
   .add(`--help`, `печатает этот текст`, help)
   .add(`--server`, `запускает http-server`, server, [`port`])
   .execute(command, args)
   .catch((err) => {
     console.log(chalk.red(`Ошибка`));
+    console.log(err.stack);
     console.log(chalk.red(err.message));
     process.exit(1);
   });

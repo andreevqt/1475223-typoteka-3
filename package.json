@@ -5,6 +5,7 @@
   "main": "./src/service/service.js",
   "scripts": {
     "generate": "node ./src/service/service.js --generate 20",
+    "fill": "node ./src/service/service.js --fill 20",
     "start": "cross-env LOG_LEVEL=error nodemon ./src/service/service.js --server 3000 > ./logs/server.log",
     "start::debug": "cross-env LOG_LEVEL=info nodemon ./src/service/service.js --server 3000 | pino-pretty",
     "start-front-server": "cross-env LOG_LEVEL=info nodemon ./src/express > ./logs/app.log",
@@ -37,6 +38,7 @@
     "express": "4.17.1",
     "express-validation": "3.0.5",
     "mime": "2.4.6",
+    "moment": "2.27.0",
     "multer": "1.4.2",
     "nanoid": "3.1.10",
     "nodemon": "2.0.3",

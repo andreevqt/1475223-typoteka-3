@@ -5,4 +5,5 @@ module.exports = {
   help: require(`./help`),
   version: require(`./version`),
   server: require(`./server`),
+  fill: require(`./fill`)
 };
