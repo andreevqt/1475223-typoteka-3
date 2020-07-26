@@ -33,7 +33,7 @@ CREATE TABLE public.articles (
   id bigserial PRIMARY KEY, 
   title character varying(250),
   announce character varying(250),
-  fullText text,
+  full_text text,
   picture character varying(100),
   author_id bigint NOT NULL,
   created_at timestamp WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
