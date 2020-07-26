@@ -11,6 +11,9 @@ CREATE TABLE public.users (
   password character varying(255)
 );
 
+ALTER TABLE ONLY public.users
+  ADD CONSTRAINT email UNIQUE (email);
+
 
 --
 -- Create categories table
