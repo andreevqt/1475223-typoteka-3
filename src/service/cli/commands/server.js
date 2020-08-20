@@ -7,13 +7,16 @@ const {once} = require(`events`);
 const api = require(`../../api/routes`);
 const {ValidationError} = require(`express-validation`);
 const {logRequests} = require(`../../api/middleware`);
+const {create} = require(`../../db-service`);
 const {
   API_PREFIX,
   http
 } = require(`../../constants`);
 
+const db = create();
+
 const server = async (manager, args) => {
-  const port = args[0] || config.API_SERVER_PORT;
+  const port = args[0] || config.server.port;
 
   const app = express();
   app.use(express.urlencoded({
@@ -21,6 +24,9 @@ const server = async (manager, args) => {
   }));
   app.use(express.json());
   app.use(logRequests);
+
+  // auth
+  await db.auth();
 
   // load data
   await api.loadData();

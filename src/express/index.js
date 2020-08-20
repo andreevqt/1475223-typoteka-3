@@ -5,7 +5,7 @@ const express = require(`express`);
 const path = require(`path`);
 const {logger} = require(`../utils`).logger;
 const {once} = require(`events`);
-const {API_PREFIX} = require(`../service/constants`);
+const {API_PREFIX, http} = require(`../service/constants`);
 const axios = require(`axios`);
 const {
   main,
@@ -16,8 +16,8 @@ const {
 
 const app = express();
 
-const appUrl = `${config.APP_URL}:${config.APP_PORT}`;
-const apiUrl = `${config.APP_URL}:${config.API_SERVER_PORT}${API_PREFIX}`;
+const appUrl = `${config.app.url}:${config.app.port}`;
+const apiUrl = `${config.app.url}:${config.server.port}${API_PREFIX}`;
 
 app.set(`app_url`, appUrl);
 app.set(`api_url`, apiUrl);
@@ -47,13 +47,13 @@ app.use(`/my`, my(app));
 app.use(`/articles`, articles(app));
 app.use(`/categories`, categories(app));
 
-app.use(express.static(path.resolve(__dirname, config.APP_PUBLIC_FOLDER)));
+app.use(express.static(path.resolve(__dirname, `public`)));
 
-app.use((req, res) => res.status(404).render(`errors/404`));
-app.use((req, res) => res.status(500).render(`errors/500`));
+app.use((req, res) => res.status(http.NOT_FOUND).render(`errors/404`));
+app.use((req, res) => res.status(http.INTERNAL_SERVER_ERROR).render(`errors/500`));
 
 app.set(`views`, path.join(__dirname, `templates`));
 app.set(`view engine`, `pug`);
 
-once(app.listen(config.APP_PORT), `listening`)
-  .then(() => logger.info(`Ожидаю соединений на  ${config.APP_PORT}`));
+once(app.listen(config.app.port), `listening`)
+  .then(() => logger.info(`Ожидаю соединений на  ${config.app.port}`));
