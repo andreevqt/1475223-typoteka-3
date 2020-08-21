@@ -22,3 +22,6 @@ mocks.json
 
 # thumbnail
 *.thumbnail*
+
+# env
+.env
