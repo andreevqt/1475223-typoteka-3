@@ -8,5 +8,7 @@ module.exports = {
   maxStringLen: require(`./maxStringLen`),
   formatDate: require(`./formatDate`),
   getMocks: require(`./getMocks`),
-  logger: require(`./logger`)
+  logger: require(`./logger`),
+  isClass: require(`./isClass`),
+  readData: require(`./readData`)
 };

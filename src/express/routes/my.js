@@ -2,18 +2,15 @@
 
 const {Router} = require(`express`);
 const router = new Router();
-const axios = require(`axios`);
 const {logger} = require(`../../utils`).logger;
+const api = require(`../api-services`);
 
-module.exports = (app) => {
-  const url = app.get(`api_url`);
-
+module.exports = (_app) => {
   router.get(`/`, async (req, res) => {
     let articles = [];
 
     try {
-      const results = (await axios.get(`${url}/articles`)).data;
-      articles = results.slice(0, 4);
+      articles = await api.articles.fetch({limit: 4});
     } catch (err) {
       logger.error(`[ERROR] route: ${req.url}, message: status - ${err.response.status}, data - ${err.response.data}`);
     }
@@ -25,8 +22,10 @@ module.exports = (app) => {
     let articles = [];
 
     try {
-      const results = (await axios.get(`${url}/articles`)).data;
-      articles = results.slice(0, 3);
+      articles = await api.articles.fetch({limit: 3});
+      for (let article of articles) {
+        article.comments = await api.comments.fetch(article.id);
+      }
     } catch (err) {
       logger.error(`[ERROR] route: ${req.url}, message: status - ${err.response.status}, data - ${err.response.data}`);
     }

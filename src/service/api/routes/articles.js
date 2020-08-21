@@ -4,11 +4,12 @@ const {Router} = require(`express`);
 const controllers = require(`../controllers`);
 const {articles, comments} = require(`../validators`);
 const {validate} = require(`express-validation`);
+const {parseQuery} = require(`../middleware`);
 
 const router = new Router();
 
-module.exports = (app, articleService, commentService) => {
-  const controller = controllers.articles(articleService, commentService);
+module.exports = (app, services) => {
+  const controller = controllers.articles(services);
 
   app.use(`/articles`, router);
 
@@ -17,7 +18,7 @@ module.exports = (app, articleService, commentService) => {
 
   router
     .route(`/`)
-    .get(controller.list)
+    .get(parseQuery, controller.list)
     .post(validate(articles.create, {keyByField: true}), controller.create);
 
   router
@@ -36,6 +37,6 @@ module.exports = (app, articleService, commentService) => {
     .delete(controller.comments.delete);
 
   router
-    .route(`/category/:category`)
-    .get(controller.categories.get);
+    .route(`/category/:categoryId`)
+    .get(parseQuery, controller.categories.get);
 };

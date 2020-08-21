@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "* Студент: [Александр Андреев](https://up.htmlacademy.ru/nodejs/3/user/1475223). * Наставник: [Артемий Бойков](https://htmlacademy.ru/profile/id607755).",
   "main": "./src/service/service.js",
+  "jest": {
+    "testEnvironment": "node"
+  },
   "scripts": {
     "generate": "node ./src/service/service.js --generate 20",
     "fill": "node ./src/service/service.js --fill 20",
@@ -10,8 +13,13 @@
     "start::debug": "cross-env LOG_LEVEL=info nodemon ./src/service/service.js --server 3000 | pino-pretty",
     "start-front-server": "cross-env LOG_LEVEL=info nodemon ./src/express > ./logs/app.log",
     "start-front-server::debug": "cross-env LOG_LEVEL=info nodemon ./src/express | pino-pretty",
-    "test": "jest",
-    "eslint": "eslint --ext .js src/"
+    "test": "cross-env NODE_ENV=test npm run test::rest",
+    "test::rest": "jest --runInBand",
+    "eslint": "eslint --ext .js src/",
+    "migrate": "sequelize-cli db:migrate",
+    "migrate::rollback": "sequelize-cli db:migrate:undo:all",
+    "migrate::refresh": "npm run migrate::rollback & npm run migrate",
+    "filldb": "node ./src/service/service.js --filldb 200"
   },
   "repository": {
     "type": "git",
@@ -28,6 +36,7 @@
     "eslint-config-htmlacademy": "0.5.2",
     "jest": "26.1.0",
     "pino-pretty": "4.0.0",
+    "sequelize-cli": "6.2.0",
     "supertest": "4.0.2"
   },
   "dependencies": {

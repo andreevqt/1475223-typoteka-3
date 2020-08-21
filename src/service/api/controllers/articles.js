@@ -1,29 +1,41 @@
 'use strict';
 const {http} = require(`../../constants`);
 
-module.exports = (articleService, commentService) => ({
-  checkArticle: (req, res, next, id) => {
-    const article = articleService.findOne(id);
+module.exports = (services) => ({
+  checkArticle: async (req, res, next, id) => {
+    const article = await services.articles.findById(id);
     if (!article) {
       res.status(http.NOT_FOUND).send(`Not found`);
       return;
     }
+
     req.locals = {article};
     next();
   },
 
-  checkComment: (req, res, next, id) => {
+  checkComment: async (req, res, next, id) => {
     const {article} = req.locals;
-    const hasComment = article.comments.some((comment) => comment.id === id);
-    if (!hasComment) {
+
+    const comment = await services.comments.findOne({
+      where: {
+        id,
+        articleId: article.id
+      }
+    });
+
+    if (!comment) {
       res.status(http.NOT_FOUND).send(`Not found`);
       return;
     }
+
+    req.locals = req.locals || {};
+    req.locals.comment = comment;
     next();
   },
 
-  list: (req, res) => {
-    const articles = articleService.findAll();
+  list: async (req, res) => {
+    const {page, limit, ...rest} = req.locals.parsed;
+    const articles = await services.articles.paginate(page, limit, rest);
     res.status(http.OK).json(articles);
   },
 
@@ -32,52 +44,54 @@ module.exports = (articleService, commentService) => ({
     res.status(http.OK).json(article);
   },
 
-  create: (req, res) => {
-    const article = articleService.create(req.body);
+  create: async (req, res) => {
+    const article = await services.articles.create(req.body);
     res.status(http.CREATED).json(article);
   },
 
-  update: (req, res) => {
+  update: async (req, res) => {
     const {article} = req.locals;
-    const updated = articleService.update(article.id, req.body);
+    const updated = await services.articles.update(article, req.body);
     res.status(http.OK).json(updated);
   },
 
-  delete: (req, res) => {
+  delete: async (req, res) => {
     const {article} = req.locals;
-    const deleted = articleService.delete(article.id);
+    const deleted = await services.articles.delete(article);
     res.status(http.OK).json(deleted);
   },
 
   comments: {
-    list: (req, res) => {
+    list: async (req, res) => {
       const {article} = req.locals;
-      const comments = article.comments;
+      const comments = await services.comments.findAll(article);
       res.status(http.OK).json(comments);
     },
 
-    create: (req, res) => {
+    create: async (req, res) => {
       const {article} = req.locals;
-      const comment = commentService.create(article.id, req.body);
+      const comment = await services.comments.create(article, req.body);
       res.status(http.CREATED).json(comment);
     },
 
-    delete: (req, res) => {
-      const {article} = req.locals;
-      const {commentId} = req.params;
-      const deleted = commentService.delete(article.id, commentId);
+    delete: async (req, res) => {
+      const {comment} = req.locals;
+      const deleted = await services.comments.delete(comment);
       res.status(http.OK).json(deleted);
     }
   },
 
   categories: {
-    get: (req, res) => {
-      const {category} = req.params;
-      const articles = articleService.find((article) => article.category.includes(category));
-      if (!articles.length) {
+    get: async (req, res) => {
+      const {categoryId} = req.params;
+      const {page, limit} = req.locals.parsed;
+
+      const articles = await services.articles.findByCategory(page, limit, categoryId);
+      if (!articles) {
         res.status(http.NOT_FOUND).send(`404 Not found`);
         return;
       }
+
       res.status(http.OK).json(articles);
     },
   }

@@ -4,11 +4,11 @@
       span.hot__icon.hot__icon--fire
     if popular.length > 0
       ul.hot__list
-        each article in popular
-          li.hot__list-item
-            a.hot__list-link(href=`/articles/${article.id}`)
-              | #{article.title}
-              sup.hot__link-sup #{article.comments.length}
+        - for (let article of popular)
+            li.hot__list-item
+              a.hot__list-link(href=`/articles/${article.id}`)
+                | #{article.title}
+                sup.hot__link-sup #{article.commentsCount}
     else
       p.hot__empty Здесь пока ничего нет...
 
@@ -17,10 +17,10 @@
       span.last__icon.last__icon--cloud
     if comments.length > 0
       ul.last__list
-        each comment in comments
+        - for (let comment of comments)
           li.last__list-item
             img.last__list-image(src=`img/avatar-small-1.png`, width=`20`, height=`20`, alt=`Аватар пользователя`)
-            b.last__list-name Анна Артамонова
+            b.last__list-name #{comment.author.name}
             a.last__list-link(href='#') #{comment.text}
     else
       p.last__empty Здесь пока ничего нет...

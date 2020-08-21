@@ -1,46 +1,37 @@
 'use strict';
 
 const {Router} = require(`express`);
-const {getMocks} = require(`../../../utils`);
 
 const articles = require(`./articles`);
-const categories = require(`./categories`);
 const search = require(`./search`);
+const categories = require(`./categories`);
+const comments = require(`./comments`);
+const {Article, Category, User, Comment} = require(`../../models`);
 
 const {
   ArticleService,
-  CategoryService,
   CommentService,
-  SearchService
+  SearchService,
+  CategoryService,
+  UserService
 } = require(`../../data-service`);
 
-let mocks = [];
+const services = {};
 
-const articleService = new ArticleService(mocks);
-const categoryService = new CategoryService(mocks);
-const commentService = new CommentService(articleService);
-const searchService = new SearchService(mocks);
+services.users = new UserService(User, services);
+services.categories = new CategoryService(Category, services);
+services.articles = new ArticleService(Article, services);
+services.comments = new CommentService(Comment, services);
+services.search = new SearchService(null, services);
 
 const router = new Router();
 
-articles(router, articleService, commentService);
-categories(router, categoryService);
-search(router, searchService);
-
-const loadData = async () => {
-  mocks = await getMocks();
-  articleService.items = mocks;
-  categoryService.items = mocks;
-  searchService.items = mocks;
-};
+articles(router, services);
+search(router, services);
+categories(router, services);
+comments(router, services);
 
 module.exports = {
   router,
-  services: {
-    articleService,
-    categoryService,
-    commentService,
-    searchService
-  },
-  loadData
+  services
 };

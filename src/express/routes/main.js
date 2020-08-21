@@ -1,20 +1,12 @@
 'use strict';
 
 const {Router} = require(`express`);
-const axios = require(`axios`);
 const {logger} = require(`../../utils`).logger;
-const {
-  latestArticles,
-  latestComments,
-  popularArticles,
-  insertAt
-} = require(`../helpers`);
+const api = require(`../api-services`);
 
 const router = new Router();
 
-module.exports = (app) => {
-  const url = app.get(`api_url`);
-
+module.exports = (_app) => {
   router.get(`/`, async (req, res) => {
     let popular = [];
     let articles = [];
@@ -22,13 +14,11 @@ module.exports = (app) => {
     let empty = true;
 
     try {
-      const results = (await axios.get(`${url}/articles`)).data;
-      empty = !results.length;
+      articles = await api.articles.fetch({order: `latest`});
+      popular = await api.articles.fetch({order: `popular`});
+      comments = await api.comments.latest();
 
-      articles = latestArticles(results);
-      popular = popularArticles(results);
-      comments = latestComments(results);
-
+      empty = !articles.length;
     } catch (err) {
       logger.error(`[ERROR] route: ${req.url}, message: status - ${err.response.status}, data - ${err.response.data}`);
     }
@@ -37,24 +27,15 @@ module.exports = (app) => {
   });
 
   router.get(`/search`, async (req, res) => {
-    const {query = null} = req.query;
+    const {query, page, limit} = req.query;
     let articles = [];
 
-    try {
-      if (query) {
-        articles = (await axios.get(`${url}/search`, {params: {query}})).data;
-        articles = articles.map((article) => {
-          const idx = article.title.toLowerCase().indexOf(query.toLowerCase());
-          if (idx !== -1) {
-            let title = insertAt(article.title, idx, `<b>`);
-            title = insertAt(title, idx + `<b>`.length + query.length, `</b>`);
-            article.title = title;
-          }
-          return article;
-        });
+    if (query) {
+      try {
+        articles = await api.search.fetch({query, page, limit});
+      } catch (err) {
+        logger.error(`[ERROR] route: ${req.url}, message: status - ${err.response.status}, data - ${err.response.data}`);
       }
-    } catch (err) {
-      logger.error(`[ERROR] route: ${req.url}, message: status - ${err.response.status}, data - ${err.response.data}`);
     }
 
     res.render(`pages/search`, {articles, query});

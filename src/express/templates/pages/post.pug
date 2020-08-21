@@ -18,7 +18,7 @@ block content
               +category(category)
         if article.picture
           .post__picture
-            img(src=`/img/${article.picture.orig}` alt='пейзаж море, скалы, пляж')
+            img(src=article.picture.orig alt='пейзаж море, скалы, пляж')
         .post__text
           h3 #{article.title}
           p #{article.fullText}
@@ -35,8 +35,8 @@ block content
                     img(src='/img/avatar-1.png' alt='аватар пользователя')
                   .comments__text
                     .comments__head
-                      p Евгений Петров •
-                      time.comments__date(datetime='2019-03-21T20:33') 21.03.2019, 20:33
+                      p #{article.author.name} •
+                      time.comments__date(datetime='2019-03-21T20:33') #{article.createdAt}
                     p.comments__message #{comment.text}
 
           .comments__footer.comments__footer--user

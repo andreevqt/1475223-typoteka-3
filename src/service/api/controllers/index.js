@@ -3,5 +3,6 @@
 module.exports = {
   articles: require(`./articles`),
   categories: require(`./categories`),
-  search: require(`./search`)
+  search: require(`./search`),
+  comments: require(`./comments`)
 };

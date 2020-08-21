@@ -2,12 +2,20 @@
 
 const {Router} = require(`express`);
 const router = new Router();
-const axios = require(`axios`);
 const {logger} = require(`../../utils`).logger;
 const upload = require(`../middleware/upload`);
+const api = require(`../api-services`);
 
-module.exports = (app) => {
-  const url = app.get(`api_url`);
+module.exports = (_app) => {
+  router.param(`categoryId`, async (req, res, next, id) => {
+    const category = await api.categories.get(id);
+    if (!category) {
+      res.status(404).render(`errors/404`);
+    }
+
+    req.locals = {category};
+    next();
+  });
 
   router.get(`/add`, (req, res) => {
     res.render(`pages/new-post`);
@@ -20,7 +28,7 @@ module.exports = (app) => {
     };
 
     try {
-      await axios.post(`${url}/articles`, formData);
+      await api.articles.create(formData);
     } catch (err) {
       logger.info(err.response.data);
       res.render(`pages/new-post`, {formData});
@@ -35,7 +43,8 @@ module.exports = (app) => {
     let article = null;
 
     try {
-      article = (await axios.get(`${url}/articles/${id}`)).data;
+      article = await api.articles.get(id);
+      article.comments = await api.comments.fetch(article.id);
     } catch (err) {
       res.status(404).render(`errors/404`);
       return;
@@ -53,7 +62,7 @@ module.exports = (app) => {
     };
 
     try {
-      article = (await axios.get(`${url}/articles/${id}`)).data;
+      article = await api.articles.get(id);
     } catch (err) {
       res.status(404).render(`errors/404`);
       return;
@@ -68,7 +77,7 @@ module.exports = (app) => {
     const formData = {picture: filename, category: [], ...req.body};
 
     try {
-      await axios.put(`${url}/articles/${id}`, formData);
+      await api.articles.update(id, formData);
     } catch (err) {
       logger.info(err.response.data);
       res.status(404).render(`errors/404`);
@@ -78,12 +87,12 @@ module.exports = (app) => {
     res.redirect(`/my`);
   });
 
-  router.get(`/category/:category`, async (req, res) => {
-    const {category} = req.params;
+  router.get(`/category/:categoryId`, async (req, res) => {
+    const {category} = req.locals;
     let articles = [];
 
     try {
-      articles = (await axios.get(`${url}/articles/category/${encodeURI(category)}`)).data;
+      articles = await api.articles.fetchByCat({id: category.id});
     } catch (err) {
       res.status(404).render(`errors/404`);
       return;

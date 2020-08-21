@@ -13,7 +13,7 @@ module.exports = {
         Joi.string().required()
       ],
       picture: Joi.string(),
-      createdDate: Joi.string().allow(``).allow(null)
+      createdAt: Joi.string().allow(``).allow(null)
     })
   },
   update: {
@@ -26,7 +26,7 @@ module.exports = {
         Joi.string()
       ],
       picture: Joi.string().allow(null),
-      createdDate: Joi.string().allow(``).allow(null)
+      createdAt: Joi.string().allow(``).allow(null)
     })
   }
 };

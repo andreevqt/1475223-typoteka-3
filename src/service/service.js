@@ -7,7 +7,8 @@ const {
   version,
   help,
   server,
-  fill
+  fill,
+  filldb
 } = require(`./cli/commands`);
 
 const command = process.argv[2];
@@ -26,6 +27,7 @@ commandManager
   .add(`--version`, `выводит номер версии`, version)
   .add(`--help`, `печатает этот текст`, help)
   .add(`--server`, `запускает http-server`, server, [`port`])
+  .add(`--filldb`, `заполняет базу данных объявлениями`, filldb, [`n`])
   .execute(command, args)
   .catch((err) => {
     console.log(chalk.red(`Ошибка`));
