@@ -1,8 +1,10 @@
 'use strict';
 
+const Paginator = require(`./paginator/Paginator`);
+
 class Collection {
-  constructor(items = [], _totalPages, _currentPage) {
-    // this._paginator = new Paginator(totalPages, currentPage);
+  constructor(items = [], totalPages, currentPage) {
+    this._paginator = new Paginator(totalPages, currentPage);
     this._items = items;
   }
 

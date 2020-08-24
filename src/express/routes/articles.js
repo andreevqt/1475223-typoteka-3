@@ -88,11 +88,12 @@ module.exports = (_app) => {
   });
 
   router.get(`/category/:categoryId`, async (req, res) => {
+    const {query, page} = req.query;
     const {category} = req.locals;
     let articles = [];
 
     try {
-      articles = await api.articles.fetchByCat({id: category.id});
+      articles = await api.articles.fetchByCat({id: category.id, query, page});
     } catch (err) {
       res.status(404).render(`errors/404`);
       return;

@@ -32,6 +32,7 @@ app.use(async (req, res, next) => {
   try {
     cats = await api.categories.fetch();
   } catch (err) {
+    console.log(err);
     logger.error(`[ERROR] route: ${req.url}, message: status - ${err.response.status}, data - ${err.response.data}`);
   }
   res.locals.categories = cats;
