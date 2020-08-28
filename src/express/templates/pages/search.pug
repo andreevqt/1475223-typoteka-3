@@ -12,8 +12,10 @@ block content
         if (!articles.length && query)
           p.search.search-page__empty Ничего не нашлось
         else
-          each article in articles
-            .search__result
-              time.search__date #{article.createdDate}
-              a.search__link(href=`/articles/${article.id}`) !{article.title}
+          - for (article of articles)
+              .search__result
+                time.search__date #{article.createdAt}
+                a.search__link(href=`/articles/${article.id}`) !{article.title}
+          include ../partials/pagination
+      
 

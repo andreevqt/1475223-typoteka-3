@@ -9,7 +9,7 @@ section#modalNewPost.modal
             .new-publication__date-form-division
               .new-publication__date-block
                 label(for='new-publication-date' aria-label='Календарь')
-                input#new-publication-date(type=`text`, name=`createdDate`, placeholder=`21.03.2019`, value=formData.createdDate)
+                input#new-publication-date(type=`text`, name=`createdAt`, placeholder=`21.03.2019`, value=formData.createdAt)
           button.new-publication__button.button.button--colored(type='submit') Опубликовать
         button.modal__close.popup__button.button.button--popup-close(type='button' aria-label='Закрыть окно') Закрыть окно
         .new-publication__form.form
@@ -25,7 +25,7 @@ section#modalNewPost.modal
                   input.form__image-loader-input.visually-hidden(type=`file`, name=`picture`)
                   | Обзор
             .form__field
-              select#category-field.form__select.js-multiple-select(name=`category`, data-label=`Выбрать категории публикации`, data-options=JSON.stringify(categories.map(cat => ({text: cat, value: cat, selected: formData.category.includes(cat)}))))
+              select#category-field.form__select.js-multiple-select(name=`category`, data-label=`Выбрать категории публикации`, data-options=JSON.stringify(categories.items.map(cat => ({text: cat.name, value: cat.id, selected: formData.category.some((el) => el.id === cat.id) }))))
           .form__wrapper.form__wrapper--text
             .form__field.form__field--publication-text
               label

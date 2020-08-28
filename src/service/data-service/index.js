@@ -2,7 +2,8 @@
 
 module.exports = {
   ArticleService: require(`./ArticleService`),
-  CategoryService: require(`./CategoryService`),
   CommentService: require(`./CommentService`),
-  SearchService: require(`./SearchService`)
+  CategoryService: require(`./CategoryService`),
+  SearchService: require(`./SearchService`),
+  UserService: require(`./UserService`)
 };

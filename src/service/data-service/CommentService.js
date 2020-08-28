@@ -1,69 +1,31 @@
 'use strict';
 
-const {nanoid} = require(`nanoid`);
-const {ID_LEN} = require(`../constants`);
+const BaseService = require(`./BaseService`);
 
-class CommentService {
-  constructor(articleService) {
-    this.articleService = articleService;
-  }
-
-  findAll(offerId) {
-    const article = this.articleService.findOne(offerId);
-    if (!article) {
-      return null;
-    }
-
-    return article.comments;
-  }
-
-  create(articleId, attrs) {
-    const article = this.articleService.findOne(articleId);
-    if (!article) {
-      return null;
-    }
-
-    const comment = {id: nanoid(ID_LEN), ...attrs};
-    article.comments = [...article.comments, comment];
-
-    return comment;
-  }
-
-  delete(offerId, commentId) {
-    const article = this.articleService.findOne(offerId);
-    if (!article) {
-      return null;
-    }
-
-    let deleted = null;
-
-    article.comments = article.comments.filter((comment) => {
-      if (comment.id === commentId) {
-        deleted = comment;
-        return false;
+class CommentService extends BaseService {
+  async findAll(article) {
+    return this._model.findAll({
+      ...this._model.getQueryOptions(),
+      where: {
+        articleId: article.id
       }
-      return true;
     });
-
-    return deleted;
   }
 
-  update(articleId, commentId, attrs) {
-    const article = this.articleService.findOne(articleId);
-    if (!article) {
-      return null;
-    }
+  async create(article, attrs) {
+    const articleId = typeof article === `object` ? article.id : article;
 
-    let updated = null;
-    article.comments = article.comments.map((comment) => {
-      if (comment.id === commentId) {
-        updated = {...comment, ...attrs};
-        return updated;
-      }
-      return comment;
-    });
+    const user = await this._services.users.random();
+    attrs.authorId = user.id;
+    attrs.articleId = articleId;
 
-    return updated;
+    const comment = await this._model.create(attrs);
+    return comment.reload();
+  }
+
+  async update(comment, attrs) {
+    await comment.update({text: attrs.text});
+    return comment.reload();
   }
 }
 

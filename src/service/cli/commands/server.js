@@ -7,13 +7,10 @@ const {once} = require(`events`);
 const api = require(`../../api/routes`);
 const {ValidationError} = require(`express-validation`);
 const {logRequests} = require(`../../api/middleware`);
-const {create} = require(`../../db-service`);
 const {
   API_PREFIX,
   http
 } = require(`../../constants`);
-
-const db = create();
 
 const server = async (manager, args) => {
   const port = args[0] || config.server.port;
@@ -24,12 +21,6 @@ const server = async (manager, args) => {
   }));
   app.use(express.json());
   app.use(logRequests);
-
-  // auth
-  await db.auth();
-
-  // load data
-  await api.loadData();
 
   app.use(API_PREFIX, (req, res, next) => {
     logger.error(`[ROUTE]: ${req.method} ${req.url}`);

@@ -6,7 +6,8 @@ const path = require(`path`);
 const {logger} = require(`../utils`).logger;
 const {once} = require(`events`);
 const {API_PREFIX, http} = require(`../service/constants`);
-const axios = require(`axios`);
+const api = require(`./api-services`);
+
 const {
   main,
   articles,
@@ -29,7 +30,7 @@ app.use(express.urlencoded({
 app.use(async (req, res, next) => {
   let cats = [];
   try {
-    cats = (await axios.get(`${apiUrl}/categories`)).data;
+    cats = await api.categories.fetch();
   } catch (err) {
     logger.error(`[ERROR] route: ${req.url}, message: status - ${err.response.status}, data - ${err.response.data}`);
   }

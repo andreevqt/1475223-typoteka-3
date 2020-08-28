@@ -1,77 +1,58 @@
 'use strict';
 
-const {nanoid} = require(`nanoid`);
-const {ID_LEN} = require(`../constants`);
-const {formatDate} = require(`../../utils`);
 const BaseService = require(`./BaseService`);
 
 class ArticleService extends BaseService {
-  find(cb) {
-    return this._items.filter(cb);
+  async getCategory(ids) {
+    return this._services.categories.find({
+      where: {
+        id: ids
+      }
+    });
   }
 
-  findAll() {
-    return this._items;
-  }
-
-  findOne(id) {
-    return this._items.find((article) => article.id === id);
-  }
-
-  create(attrs) {
-    const defaults = {
-      id: nanoid(ID_LEN),
-      comments: [],
-      category: [],
-      createdDate: formatDate(new Date()),
-      announce: null,
-      title: null,
-      fullText: null,
-      picture: null
-    };
-
-    if (!Array.isArray(attrs.category)) {
-      attrs.category = [attrs.category];
+  async create(attrs) {
+    const attrsCopy = {...attrs};
+    if (!Array.isArray(attrsCopy.category)) {
+      attrsCopy.category = [attrsCopy.category];
     }
 
-    // temoprary
-    attrs.picture = {
-      orig: attrs.picture,
-      big: attrs.picture,
-      small: attrs.picture
-    };
+    if (!attrsCopy.authorId) {
+      attrsCopy.authorId = (await this._services.users.random()).id;
+    }
 
-    const newArticle = {...defaults, ...attrs};
-    this._items = [
-      ...this._items,
-      newArticle
-    ];
-
-    return newArticle;
-  }
-
-  delete(id) {
-    const deleted = this._items.find((item) => item.id === id);
-
-    if (!deleted) {
+    const categories = await this.getCategory(attrsCopy.category);
+    if (!categories.length) {
       return null;
     }
 
-    this._items = this._items.filter((article) => article.id !== id);
-    return deleted;
+    const article = await this._model.create(attrsCopy);
+    await article.setCategory(categories);
+
+    return article.reload();
   }
 
-  update(articleId, attrs) {
-    let updated = null;
-    this._items = this._items.map((article) => {
-      if (article.id === articleId) {
-        updated = {...article, ...attrs};
-        return updated;
-      }
-      return article;
-    });
+  async update(article, attrs) {
+    let categories;
+    if (attrs.category) {
+      categories = await this.getCategory(attrs.category);
+    }
 
-    return updated;
+    if (!attrs.picture) {
+      delete attrs.picture;
+    }
+
+    await article.update(attrs);
+
+    if (categories) {
+      await article.setCategory(categories);
+    }
+
+    return article.reload();
+  }
+
+  async findByCategory(page, limit, categoryId) {
+    return this._model.findByCategory(page, limit, categoryId);
   }
 }
 

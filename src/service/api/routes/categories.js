@@ -2,15 +2,22 @@
 
 const {Router} = require(`express`);
 const controllers = require(`../controllers`);
+const {parseQuery} = require(`../middleware`);
 
 const router = new Router();
 
-module.exports = (app, categoryService) => {
-  const controller = controllers.categories(categoryService);
+module.exports = (app, services) => {
+  const controller = controllers.categories(services);
 
   app.use(`/categories`, router);
 
+  router.param(`categoryId`, controller.checkCategory);
+
   router
     .route(`/`)
-    .get(controller.list);
+    .get(parseQuery, controller.list);
+
+  router
+    .route(`/:categoryId`)
+    .get(controller.get);
 };

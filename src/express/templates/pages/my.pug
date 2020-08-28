@@ -8,9 +8,9 @@ block content
   section.main-page__notes.notes
     h1.notes__title Мои записи
     ul.notes__list
-      each article in articles
-        li.notes__list-item
-          time.notes__item-time(datetime='2019-03-21T20:33') #{article.createdDate}
-          a.notes__item-text(href='#') #{article.title}
-          button.notes__button.button.button--close-item(type='button')
-            span.visually-hidden Закрыть строку списка
+      - for (article of articles)
+          li.notes__list-item
+            time.notes__item-time(datetime='2019-03-21T20:33') #{article.createdDate}
+            a.notes__item-text(href='#') #{article.title}
+            button.notes__button.button.button--close-item(type='button')
+              span.visually-hidden Закрыть строку списка

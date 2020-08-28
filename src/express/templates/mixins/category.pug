@@ -1,4 +1,4 @@
 mixin category(category, active)
   li.themes__item
-    a.themes__item-link(href=`/articles/category/${category}`, class=(active ? `themes__item-link--active` : ``)) #{category}
-      sup 88
+    a.themes__item-link(href=`/articles/category/${category.id}`, class=(active ? `themes__item-link--active` : ``)) #{category.name}
+      sup #{category.articlesCount}

@@ -1,11 +1,20 @@
 'use strict';
 
 const BaseService = require(`./BaseService`);
+const {Op} = require(`sequelize`);
 
 class SearchService extends BaseService {
-  search(query = ``) {
-    const regex = new RegExp(`${query}`, `i`);
-    return this.items.filter((item) => regex.test(item.title));
+  async search(page, limit, rest) {
+    const options = {
+      ...rest,
+      where: {
+        title: {
+          [Op.iLike]: `%${rest.query}%`
+        }
+      }
+    };
+
+    return this._services.articles.paginate(page, limit, options);
   }
 }
 

@@ -187,3 +187,13 @@ body {
 .form .selectr-options-container:hover .selectr-option {
   border-color: rgba(0,0,0, 0.5);
 }
+
+.preview__breadcrumbs {
+  flex-wrap: wrap;
+  overflow: hidden;
+}
+
+.pagination {
+  justify-content: center;
+}
+
