@@ -12,6 +12,7 @@ const {createDatabase} = require(`./database`);
 const loadModules = require(`./load/loadModules`);
 const path = require(`path`);
 const bootstrap = require(`./load/bootstrap`);
+const mountRoutes = require(`./mount/mountRoutes`);
 
 class App {
   constructor(opts = {}) {
@@ -39,6 +40,7 @@ class App {
     this.api = modules.api;
 
     await bootstrap(this);
+    console.log(this.routes);
 
     this.db = createDatabase(this);
     await this.db.init();
@@ -62,8 +64,9 @@ class App {
   }
 
   async listen() {
-    return once(this.app.listen(this.port), `listening`)
-      .then(() => this.log.info(`[SERVER] Ожидаю соединений на ${this.port}`))
+    const port = this.config.get(`server.port`);
+    return once(this.app.listen(port), `listening`)
+      .then(() => this.log.info(`[SERVER] Ожидаю соединений на ${port}`))
       .catch((err) => {
         this.log.error(`[ERROR] ${err.msg}`);
       });

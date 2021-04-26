@@ -1,11 +1,12 @@
 'use strict';
+const createKnex = require(`knex`);
 
-const init = (app) => {
+const init = async (app) => {
   let knex;
   const {config} = app;
   
   if (process.env.NODE_ENV === `test`) {
-    knex = require(`knex`)({
+    knex = createKnex({
       client: `sqlite3`,
       connection: {
         filename: `:memory:`
@@ -14,7 +15,7 @@ const init = (app) => {
       useNullAsDefault: true
     });
   } else {
-    knex = require(`knex`)({
+    knex = createKnex({
       debug: config.get(`debug`),
       client: config.get(`db.client`),
       connection: {
@@ -25,6 +26,8 @@ const init = (app) => {
       }
     });
   }
+
+  await knex.raw('select 1+1 as result');
 
   app.connection = knex;
 

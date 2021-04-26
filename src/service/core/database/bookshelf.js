@@ -5,7 +5,7 @@ const initKnex = require(`./knex`);
 module.exports = (app) => {
 
   const initialize = async () => {
-    initKnex(app);
+    await initKnex(app);
   };
 
   const close = async () => {
