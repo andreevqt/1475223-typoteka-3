@@ -3,12 +3,7 @@
 const ConsoleCommandManager = require(`./cli/ConsoleCommandManager`);
 const chalk = require(`chalk`);
 const {
-  generate,
-  version,
-  help,
-  server,
-  fill,
-  filldb
+  server
 } = require(`./cli/commands`);
 
 const command = process.argv[2];
@@ -22,12 +17,7 @@ const commandManager = new ConsoleCommandManager(
 /* eslint-enable */
 
 commandManager
-  .add(`--generate`, `формирует файл mocks.json`, generate, [`count`])
-  .add(`--fill`, `генерирует файл fill-db.sql со сформированными запросами для создания n-публикаций`, fill, [`n`])
-  .add(`--version`, `выводит номер версии`, version)
-  .add(`--help`, `печатает этот текст`, help)
   .add(`--server`, `запускает http-server`, server, [`port`])
-  .add(`--filldb`, `заполняет базу данных объявлениями`, filldb, [`n`])
   .execute(command, args)
   .catch((err) => {
     console.log(chalk.red(`Ошибка`));

@@ -1,6 +1,6 @@
 'use strict';
 
-const {logger} = require(`../../../utils`).logger;
+/* const {logger} = require(`../../../utils`).logger;
 const config = require(`../../../../config`);
 const express = require(`express`);
 const {once} = require(`events`);
@@ -10,12 +10,17 @@ const {logRequests} = require(`../../api/middleware`);
 const {
   API_PREFIX,
   http
-} = require(`../../constants`);
+} = require(`../../constants`); */
+
+const createApp = require(`../../core/App`);
+
 
 const server = async (manager, args) => {
-  const port = args[0] || config.server.port;
+  const port = args[0];
+  const app = createApp({port});
+  await app.start({port});
 
-  const app = express();
+  /* const app = express();
   app.use(express.urlencoded({
     extended: true
   }));
@@ -43,7 +48,7 @@ const server = async (manager, args) => {
     .then(() => console.log(`[SERVER] Ожидаю соединений на ${port}`))
     .catch((err) => {
       logger.info(`[ERROR] ${err.msg}`);
-    });
+    }); */
 };
 
 module.exports = server;
