@@ -1,7 +1,8 @@
 'use strict';
 const createKnex = require(`knex`);
+const bookshelf = require(`bookshelf`);
 
-const init = async (app) => {
+const init = async (app = {}) => {
   let knex;
   const {config} = app;
   
@@ -29,7 +30,7 @@ const init = async (app) => {
 
   await knex.raw('select 1+1 as result');
 
-  app.connection = knex;
+  app.connection = bookshelf(knex);
 
   return knex;
 };

@@ -3,7 +3,10 @@
 const ConsoleCommandManager = require(`./cli/ConsoleCommandManager`);
 const chalk = require(`chalk`);
 const {
-  server
+  server,
+  migrate,
+  refresh,
+  seed
 } = require(`./cli/commands`);
 
 const command = process.argv[2];
@@ -17,7 +20,10 @@ const commandManager = new ConsoleCommandManager(
 /* eslint-enable */
 
 commandManager
-  .add(`--server`, `запускает http-server`, server, [`port`])
+  .add(`--server`, `запускает http server`, server, [`port`])
+  .add(`--migrate`, `миграции БД`, migrate)
+  .add(`--refresh`, `перезапустить миграции`, refresh)
+  .add(`--seed`, `заполнить БД начальными данными`, seed)
   .execute(command, args)
   .catch((err) => {
     console.log(chalk.red(`Ошибка`));

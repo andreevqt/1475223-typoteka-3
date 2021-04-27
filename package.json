@@ -16,10 +16,10 @@
     "test": "cross-env NODE_ENV=test npm run test::rest",
     "test::rest": "jest --runInBand",
     "eslint": "eslint --ext .js src/",
-    "migrate": "sequelize-cli db:migrate",
+    "migrate": "node ./src/service/service.js --migrate",
     "migrate::rollback": "sequelize-cli db:migrate:undo:all",
-    "migrate::refresh": "npm run migrate::rollback & npm run migrate",
-    "filldb": "node ./src/service/service.js --filldb 200"
+    "migrate::refresh": "node ./src/service/service.js --refresh",
+    "filldb": "node ./src/service/service.js --seed 200"
   },
   "repository": {
     "type": "git",

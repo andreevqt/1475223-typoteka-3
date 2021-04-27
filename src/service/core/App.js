@@ -27,6 +27,7 @@ class App {
     this.router = new Router();
     this.log = logger({}, `logs/server.log`);
     this.dir = path.resolve(__dirname, `..`);
+    this.models = new Map;
 
     this.isLoaded = false;
   }
@@ -40,7 +41,6 @@ class App {
     this.api = modules.api;
 
     await bootstrap(this);
-    console.log(this.routes);
 
     this.db = createDatabase(this);
     await this.db.init();
@@ -50,9 +50,18 @@ class App {
     }));
 
     this.app.use(express.json());
+
+    // mount routes
+    mountRoutes(this);
+
+    this.app.use(API_PREFIX, this.router);
     this.app.use((_req, res) => res.status(http.NOT_FOUND).send(`Not found`))
 
     this.isLoaded = true;
+  }
+
+  async destroy() {
+    await this.db.destroy();
   }
 
   async start() {

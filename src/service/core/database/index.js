@@ -1,6 +1,7 @@
 'use strict';
-const initKnex = require(`./knex`)
+
 const bookshelf = require(`./bookshelf`);
+const buildQuery = require(`./buildQuery`);
 
 class Database {
   constructor(app) {
@@ -10,14 +11,13 @@ class Database {
   }
 
   async init() {
-
     if (this.isInitialized) {
       return;
     }
     
     try {
-      this.connector = bookshelf(this.app);
-      await this.connector.initialize();      
+      this.bookshelf = bookshelf(this.app);
+      await this.bookshelf.initialize();      
     } catch(err) {
       this.app.log.error(`Ошибка при соединении с БД: ${err.message}`);
       throw err;
@@ -28,8 +28,18 @@ class Database {
     this.isInitialized = true;
   }
 
+  getModel(name) {
+    const key = _.toLower(name);
+    return this.models.get(key);
+  }
+
+  query(entity) {
+    const model = this.getModel(entity);
+    return this.bookshelf.queries({model, app: this.app});
+  }
+
   async destroy() {
-    await this.connector.close();
+    await this.bookshelf.close();
   }
 }
 
@@ -37,5 +47,4 @@ module.exports = {
   createDatabase(app) {
     return new Database(app);
   }
-}
-
+};
