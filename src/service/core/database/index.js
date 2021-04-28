@@ -1,5 +1,6 @@
 'use strict';
 
+const _ = require(`lodash`);
 const bookshelf = require(`./bookshelf`);
 const buildQuery = require(`./buildQuery`);
 
@@ -30,7 +31,7 @@ class Database {
 
   getModel(name) {
     const key = _.toLower(name);
-    return this.models.get(key);
+    return _.get(this.app, [`models`, key]);
   }
 
   query(entity) {

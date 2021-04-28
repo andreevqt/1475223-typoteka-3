@@ -13,6 +13,7 @@ const loadModules = require(`./load/loadModules`);
 const path = require(`path`);
 const bootstrap = require(`./load/bootstrap`);
 const mountRoutes = require(`./mount/mountRoutes`);
+const createEntityService = require(`./services/entityService`);
 
 class App {
   constructor(opts = {}) {
@@ -44,6 +45,8 @@ class App {
 
     this.db = createDatabase(this);
     await this.db.init();
+
+    this.entityService = createEntityService({db: this.db});
 
     this.app.use(express.urlencoded({
       extended: true
@@ -79,6 +82,10 @@ class App {
       .catch((err) => {
         this.log.error(`[ERROR] ${err.msg}`);
       });
+  }
+
+  async query(entity) {
+    return this.db.query(entity);
   }
 }
 
