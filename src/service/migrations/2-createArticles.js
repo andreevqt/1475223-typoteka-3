@@ -6,11 +6,11 @@ module.exports.up = function (knex) {
       table.increments(`id`).primary();
       table.string(`title`, 255);
       table.string(`announce`, 512);
-      table.text(`fullText`);
-      /* table.json(`picture`);
-      table.integer(`authorId`).unsigned();
-      table.foreign(`authorId`).references(`users.id`);
-      table.timestamps(); */
+      table.text(`full_text`);
+      table.text(`picture`);
+      table.integer(`author_id`).unsigned();
+      table.foreign(`author_id`).references(`users.id`);
+      table.timestamps();
     })
 };
 
