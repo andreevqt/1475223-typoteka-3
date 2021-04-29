@@ -35,7 +35,7 @@ module.exports = ({model, app}) => {
 
   const find = (params, populate, {transacting} = {}) => {
     const filters = convertParams(params);
-    const query = buildQuery({filters});
+    const query = buildQuery({filters, model});
     return model
       .query(query)
       .fetchAll({

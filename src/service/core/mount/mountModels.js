@@ -4,12 +4,24 @@ const _ = require(`lodash`);
 const createBaseModel = require(`../baseModel`);
 
 const mountModels = (app) => {
-  const baseModel = createBaseModel(app);
   const bookshelf = app.connection;
+  
 
   _.forIn(app.models, (definition, key) => {
-    const loadedModel = _.assign(baseModel, definition);
-    app.models[key] = bookshelf.Model.extend(loadedModel);   
+    definition.relationships = definition.relationships || {};
+    _.forIn(definition.relationships, (relation, key) => {
+      if (relation.type === `oneToMany` && master == true) {
+        definition[key] = function () {
+          return this.belongsTo()
+        }
+      }            
+    });
+
+    const loadedModel = _.assign({
+      requireFetch: true,
+    }, definition);
+
+    app.models[key] = bookshelf.model(key, bookshelf.Model.extend(loadedModel));
   });
 
 }

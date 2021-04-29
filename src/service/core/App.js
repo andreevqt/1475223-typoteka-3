@@ -17,7 +17,7 @@ const createEntityService = require(`./services/entityService`);
 
 class App {
   constructor(opts = {}) {
-    const {port} = opts;
+    const {port, dir} = opts;
 
     this.config = config;
     if (port) {
@@ -27,7 +27,7 @@ class App {
     this.app = express();
     this.router = new Router();
     this.log = logger({}, `logs/server.log`);
-    this.dir = path.resolve(__dirname, `..`);
+    this.dir = dir || path.resolve(__dirname, `..`);
     this.models = new Map;
 
     this.isLoaded = false;

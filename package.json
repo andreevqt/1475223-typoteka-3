@@ -42,6 +42,7 @@
   "dependencies": {
     "axios": "0.19.2",
     "bookshelf": "1.2.0",
+    "bookshelf-relationships": "1.0.1",
     "chalk": "4.0.0",
     "cross-env": "^7.0.2",
     "dotenv": "8.2.0",

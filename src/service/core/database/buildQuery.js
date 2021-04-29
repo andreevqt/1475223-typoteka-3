@@ -10,32 +10,7 @@ const {convertFilters} = require(`./convertFilters`);
  * @param {String} options.operator 
  * @param {*} options.value 
  */
-const buildWhereClause = ({qb, field, operator, value}) => {
-  switch (operator) {
-    case `eq`:
-      return qb.where(field, value);
-    case `ne`:
-      return qb.where(field, `!=`, value);
-    case `lt`:
-      return qb.where(field, `<`, value);
-    case `lte`:
-      return qb.where(field, `<=`, value);
-    case `gt`:
-      return qb.where(field, `>`, value);
-    case `gte`:
-      return qb.where(field, `>=`, value);
-    case `in`:
-      return qb.whereIn(field, Array.isArray(value) ? value : [value]);
-    case `nin`:
-      return qb.whereNotIn(field, Array.isArray(value) ? value : [value]);
-    case `contains`:
-      return qb.whereRaw(`LOWER(??) LIKE LOWER(?)`, [field, `%${value}%`]);
-    case `null`:
-      return value ? qb.whereNull(field) : qb.whereNotNull(field);
-    default:
-      throw new Error(`Unhandled whereClause : ${field} ${operator} ${value}`);
-  }
-}
+
 
 /**
  * 
@@ -45,6 +20,59 @@ const buildWhereClause = ({qb, field, operator, value}) => {
  * @param {Object} options.qb - knex query builder 
  */
 const buildQuery = ({model, filters}) => (qb) => {
+
+  const buildWhereClause = ({ field, operator, value}) => {
+    switch (operator) {
+      case `eq`:
+        return qb.where(field, value);
+      case `ne`:
+        return qb.where(field, `!=`, value);
+      case `lt`:
+        return qb.where(field, `<`, value);
+      case `lte`:
+        return qb.where(field, `<=`, value);
+      case `gt`:
+        return qb.where(field, `>`, value);
+      case `gte`:
+        return qb.where(field, `>=`, value);
+      case `in`:
+        return qb.whereIn(field, Array.isArray(value) ? value : [value]);
+      case `nin`:
+        return qb.whereNotIn(field, Array.isArray(value) ? value : [value]);
+      case `contains`:
+        return qb.whereRaw(`LOWER(??) LIKE LOWER(?)`, [field, `%${value}%`]);
+      case `null`:
+        return value ? qb.whereNull(field) : qb.whereNotNull(field);
+      default:
+        throw new Error(`Unhandled whereClause : ${field} ${operator} ${value}`);
+    }
+  }
+
+  const findRelation = (key) => {
+    const relations = model.relationships();
+    console.log(`hello`)
+  }
+  
+  const generateJoins = (field) => {
+    const [key, ...parts] = field.split(`.`);
+    const relation = findRelation(key);
+  }
+  
+  const buildWhereClauses = ({ whereClauses }) => {
+    whereClauses.map((clause) => {
+      const {field, operator, value} = clause;
+  
+      const path = generateJoins(field);
+  
+      return {
+        field: path,
+        operator,
+        value
+      }
+  
+    })  
+  }
+
   if (_.has(filters, 'where')) {
     qb.distinct();
   }
@@ -58,15 +86,10 @@ const buildQuery = ({model, filters}) => (qb) => {
   }
 
   if (_.has(filters, 'where')) {
-    const whereClauses = filters.where;
-    Object.keys(whereClauses).forEach((key) => {
-      const clause = whereClauses[key];
-      buildWhereClause({qb, ...clause});
-    });
+    buildWhereClauses({whereClauses: filters.where});
   }
 };
 
 module.exports = {
-  buildQuery,
-  buildWhereClause
+  buildQuery
 };
