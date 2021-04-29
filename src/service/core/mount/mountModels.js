@@ -12,7 +12,7 @@ const mountModels = (app) => {
     _.forIn(definition.relationships, (relation, key) => {
       if (relation.type === `oneToMany` && master == true) {
         definition[key] = function () {
-          return this.belongsTo()
+          return this.belongsTo(relation.target, )
         }
       }            
     });
