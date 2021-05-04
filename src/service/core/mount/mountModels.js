@@ -16,7 +16,7 @@ const mountModels = (app) => {
         }
       }
     });
-
+  
     const loadedModel = _.assign({
       requireFetch: true,
     }, definition);
