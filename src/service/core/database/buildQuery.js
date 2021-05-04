@@ -49,13 +49,23 @@ const buildQuery = ({model, filters}) => (qb) => {
   }
 
   const findRelation = (key) => {
-    const relations = model.relationships();
-    console.log(`hello`)
+    const {relationships = {}} = model.forge();
+    let found
+    _.forIn(relationships, (relation, relationKey) => {
+      if (relationKey === key) {
+        found = relation;
+        return false;
+      }
+    })
+    return found;
   }
   
   const generateJoins = (field) => {
     const [key, ...parts] = field.split(`.`);
     const relation = findRelation(key);
+    if (!relation) {
+      
+    }
   }
   
   const buildWhereClauses = ({ whereClauses }) => {

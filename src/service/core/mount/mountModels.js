@@ -10,11 +10,11 @@ const mountModels = (app) => {
   _.forIn(app.models, (definition, key) => {
     definition.relationships = definition.relationships || {};
     _.forIn(definition.relationships, (relation, key) => {
-      if (relation.type === `oneToMany` && master == true) {
+      if (relation.type === `oneToMany` && relation.master == true) {
         definition[key] = function () {
-          return this.belongsTo(relation.target, )
+          return this.belongsTo(relation.target)
         }
-      }            
+      }
     });
 
     const loadedModel = _.assign({
