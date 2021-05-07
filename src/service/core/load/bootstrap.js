@@ -14,6 +14,7 @@ module.exports = async (app) => {
     for (let modelName in api.models) {
       const model = app.api[apiName].models[modelName];
       model.modelName = modelName;
+      model.tableName = model.tableName || pluralize(modelName);
 
       const { service, controller } = createCoreApi({model, api, app});
 

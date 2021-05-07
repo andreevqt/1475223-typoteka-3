@@ -1,6 +1,7 @@
 'use strict';
 
 const _ = require(`lodash`);
+const {defaults} = require("pg");
 const {convertFilters} = require(`./convertFilters`);
 
 /**
@@ -43,13 +44,13 @@ const buildQuery = ({model, filters}) => (qb) => {
         return qb.whereRaw(`LOWER(??) LIKE LOWER(?)`, [field, `%${value}%`]);
       case `null`:
         return value ? qb.whereNull(field) : qb.whereNotNull(field);
-        
+      default:
         throw new Error(`Unhandled whereClause : ${field} ${operator} ${value}`);
     }
   }
 
   const findRelation = (key) => {
-    const {relationships = {}} = model.forge();
+    const {relationships} = model;
     let found
     _.forIn(relationships, (relation, relationKey) => {
       if (relationKey === key) {
@@ -64,8 +65,10 @@ const buildQuery = ({model, filters}) => (qb) => {
     const [key, ...parts] = field.split(`.`);
     const relation = findRelation(key);
     if (!relation) {
-      
+      return `${model.tableName}.${key}`
     }
+
+    const relationModel = app.db.getModel(key);
   }
   
   const buildWhereClauses = ({ whereClauses }) => {
