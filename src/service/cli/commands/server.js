@@ -1,12 +1,13 @@
 'use strict';
 
-const {logger} = require(`../../../utils`).logger;
+const logger = require(`../../logger`);
 const config = require(`../../../../config`);
 const express = require(`express`);
 const {once} = require(`events`);
 const api = require(`../../api/routes`);
 const {ValidationError} = require(`express-validation`);
 const {logRequests} = require(`../../api/middleware`);
+const {translateMessage} = require(`../../../utils`);
 const {
   API_PREFIX,
   http
@@ -31,7 +32,18 @@ const server = async (manager, args) => {
 
   app.use((err, req, res, _next) => {
     if (err instanceof ValidationError) {
-      res.status(err.statusCode).json(err.details);
+      const results = err.details;
+      const errors = Object.keys(results)
+        .reduce((acc, parameter) => {
+          return ({
+            ...acc,
+            [parameter]: results[parameter].reduce(
+                (inner, el) => ({...inner, [el.context.key]: translateMessage(el)}),
+                {}
+            )
+          });
+        }, {});
+      res.status(err.statusCode).json(errors.body);
       return;
     }
 

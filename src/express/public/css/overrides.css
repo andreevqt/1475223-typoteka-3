@@ -21,9 +21,31 @@ body {
   width: 1px !important;
 }
 
+.popup {
+  overflow: hidden;
+}
+
 .popup--new-publication {
   margin: 140px auto 0 auto;
   padding: 20px 40px;
+}
+
+.popup--loading .popup__loader {
+  visibility: visible;
+  opacity: 1;
+}
+
+.popup__loader {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, .8);
+  transition: opacity .3s ease, visibility .3s ease ;
+  visibility: hidden;
+  opacity: 0;
 }
 
 .ovh {
@@ -221,4 +243,28 @@ body {
 
 .pagination__item--disabled:hover {
   opacity: 1;
+}
+
+.form__field--invalid {
+  border-bottom-color: #eb5757;
+}
+
+.form__helper,
+.category__helper {
+  margin-top: 10px;
+  color: #eb5757;
+}
+
+.category__add-form--invalid input,
+.category__add-form--invalid input:focus,
+.category__add-form--invalid input:hover,
+.category__list-item--invalid input {
+  border-bottom-color: #eb5757;
+  color: #eb5757;
+}
+
+
+.category__list-item {
+  display: flex;
+  flex-direction: column;
 }

@@ -10,5 +10,6 @@ module.exports = {
   getMocks: require(`./getMocks`),
   logger: require(`./logger`),
   isClass: require(`./isClass`),
-  readData: require(`./readData`)
+  readData: require(`./readData`),
+  translateMessage: require(`./translateMessage`)
 };

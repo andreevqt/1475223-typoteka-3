@@ -5,6 +5,7 @@ module.exports = {
   popularArticles: require(`./popularArticles`),
   latestComments: require(`./latestComments`),
   insertAt: require(`./insertAt`),
+  logger: require(`./logger`),
   Collection: require(`./Collection`),
   Paginator: require(`./paginator/Paginator`)
 };

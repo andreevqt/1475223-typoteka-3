@@ -9,10 +9,10 @@ const {API_PREFIX} = require(`../../service/constants`);
 
 const url = `${config.app.url}:${config.server.port}${API_PREFIX}`;
 
-const articles = new Articles(url, `/articles`);
-const categories = new Categories(url, `/categories`);
-const search = new Search(url, `/search`);
-const comments = new Comments(url, `/articles`);
+const articles = new Articles(url, `articles`);
+const categories = new Categories(url, `categories`);
+const search = new Search(url, `search`);
+const comments = new Comments(url, `articles`);
 
 module.exports = {
   articles,

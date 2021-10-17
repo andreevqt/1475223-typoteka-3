@@ -36,7 +36,11 @@ const filldb = async (manager, args) => {
   // categories
   await service.bulkDelete(`categories`);
   const categoriesText = await readData(`${root}/categories.txt`);
-  const categories = await Category.bulkCreate(categoriesText.map((name) => ({name})));
+  const categories = await Category.bulkCreate(categoriesText.map((name) => ({
+    name,
+    createdAt: generateDate(),
+    updatedAt: generateDate()
+  })));
 
   /* eslint-disable indent */
   // articles

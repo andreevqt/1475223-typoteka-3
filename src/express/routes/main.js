@@ -1,7 +1,7 @@
 'use strict';
 
 const {Router} = require(`express`);
-const {logger} = require(`../../utils`).logger;
+const {logger} = require(`../helpers`);
 const api = require(`../api-services`);
 
 const router = new Router();
@@ -21,7 +21,11 @@ module.exports = (_app) => {
 
       empty = !articles.length;
     } catch (err) {
-      logger.error(`[ERROR] route: ${req.url}, message: status - ${err.response.status}, data - ${err.response.data}`);
+      logger.info(err);
+      if (err.response) {
+        logger.error(`[ERROR] route: ${req.url}, message: status - ${err.response.status}, data - ${err.response.data}`);
+      }
+
     }
 
     res.render(`pages/index`, {popular, articles, comments, empty});

@@ -3,7 +3,7 @@
 const config = require(`../../config`);
 const express = require(`express`);
 const path = require(`path`);
-const {logger} = require(`../utils`).logger;
+const {logger} = require(`./helpers`);
 const {once} = require(`events`);
 const {API_PREFIX, http} = require(`../service/constants`);
 const api = require(`./api-services`);
@@ -23,6 +23,7 @@ const apiUrl = `${config.app.url}:${config.server.port}${API_PREFIX}`;
 app.set(`app_url`, appUrl);
 app.set(`api_url`, apiUrl);
 
+app.use(express.json());
 app.use(express.urlencoded({
   extended: true
 }));
@@ -30,10 +31,14 @@ app.use(express.urlencoded({
 app.use(async (req, res, next) => {
   let cats = [];
   try {
-    cats = await api.categories.fetch();
+    cats = await api.categories.fetch({
+      order: `desc`,
+      limit: 50
+    });
   } catch (err) {
-    console.log(err);
-    logger.error(`[ERROR] route: ${req.url}, message: status - ${err.response.status}, data - ${err.response.data}`);
+    if (err.response) {
+      logger.error(`[ERROR] route: ${req.url}, message: status - ${err.response.status}, data - ${err.response.data}`);
+    }
   }
   res.locals.categories = cats;
   res.locals.formData = {

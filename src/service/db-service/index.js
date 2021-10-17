@@ -4,7 +4,7 @@
 
 const {Sequelize} = require(`sequelize`);
 const config = require(`../../../config`);
-const {logger} = require(`../../utils`).logger;
+const logger = require(`../logger`);
 
 class DbService {
   constructor(db) {
@@ -21,7 +21,7 @@ class DbService {
       throw err;
     }
 
-    logger.error(`Аутентификация пользователя успешна`);
+    logger.info(`Аутентификация пользователя успешна`);
     return res;
   }
 
@@ -35,7 +35,7 @@ class DbService {
       throw err;
     }
 
-    logger.error(`БД успешно синхронизирована`);
+    logger.info(`БД успешно синхронизирована`);
     return res;
   }
 
@@ -49,7 +49,7 @@ class DbService {
       throw err;
     }
 
-    logger.error(`Таблицы успешно удалены`);
+    logger.info(`Таблицы успешно удалены`);
     return res;
   }
 
@@ -63,7 +63,7 @@ class DbService {
       throw err;
     }
 
-    logger.error(`Соединение с бд закрыто`);
+    logger.info(`Соединение с бд закрыто`);
     return res;
   }
 
@@ -85,55 +85,26 @@ const create = (obj = null) => {
     return new DbService(obj);
   }
 
-  let sequelize;
-  switch (config.env) {
-    case `production`:
-      sequelize = new Sequelize(
-        config.db.production.database,
-        config.db.production.username,
-        config.db.production.password, {
-        host: config.db.production.host,
-        dialect: `postgres`,
-        pool: {
-          max: 5,
-          min: 0,
-          idle: 10000
-        },
-        logging: false
-      }
-      );
-      break;
-    case `test`:
-      sequelize = new Sequelize(
-        config.db.test.database,
-        config.db.test.username,
-        config.db.test.password, {
-        host: config.db.test.host,
-        dialect: `postgres`,
-        pool: {
-          max: 1,
-          min: 0,
-          idle: 10000,
-          evict: 0
-        },
-        logging: false
-      });
-      break;
-    default:
-      sequelize = new Sequelize(
-        config.db.development.database,
-        config.db.development.username,
-        config.db.development.password, {
-        host: config.db.development.host,
-        dialect: `postgres`,
-        pool: {
-          max: 5,
-          min: 0,
-          idle: 10000
-        },
-        logging: false
-      });
-  }
+
+  const logging = process.env.SEQUELIZE_LOGGING === `true` ? console.log : false;
+
+  const sequelize = process.env.NODE_ENV === `test`
+    ? new Sequelize(`sqlite::memory:`, {
+      logging,
+    })
+    : new Sequelize(
+      config.db.database,
+      config.db.username,
+      config.db.password, {
+      host: config.db.host,
+      dialect: `postgres`,
+      pool: {
+        max: 5,
+        min: 0,
+        idle: 10000
+      },
+      logging
+    });
 
   return new DbService(sequelize);
 };

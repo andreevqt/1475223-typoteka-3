@@ -9,10 +9,10 @@
   "scripts": {
     "generate": "node ./src/service/service.js --generate 20",
     "fill": "node ./src/service/service.js --fill 20",
-    "start": "cross-env LOG_LEVEL=error nodemon ./src/service/service.js --server 3000 > ./logs/server.log",
-    "start::debug": "cross-env LOG_LEVEL=info nodemon ./src/service/service.js --server 3000 | pino-pretty",
-    "start-front-server": "cross-env LOG_LEVEL=info nodemon ./src/express > ./logs/app.log",
-    "start-front-server::debug": "cross-env LOG_LEVEL=info nodemon ./src/express | pino-pretty",
+    "start": "cross-env NODE_ENV=production LOG_LEVEL=error nodemon ./src/service/service.js --server 3000",
+    "start::debug": "cross-env LOG_LEVEL=debug nodemon ./src/service/service.js --server 3000",
+    "start-front-server": "cross-env NODE_ENV=production LOG_LEVEL=info nodemon ./src/express",
+    "start-front-server::debug": "cross-env LOG_LEVEL=debug nodemon ./src/express",
     "test": "cross-env NODE_ENV=test npm run test::rest",
     "test::rest": "jest --runInBand",
     "eslint": "eslint --ext .js src/",
@@ -37,6 +37,7 @@
     "jest": "26.1.0",
     "pino-pretty": "4.0.0",
     "sequelize-cli": "6.2.0",
+    "sqlite3": "5.0.2",
     "supertest": "4.0.2"
   },
   "dependencies": {

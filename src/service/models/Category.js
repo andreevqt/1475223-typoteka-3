@@ -1,6 +1,7 @@
 'use strict';
 
 const BaseModel = require(`./BaseModel`);
+const moment = require(`moment`);
 
 module.exports = (sequelize, DataTypes) => {
   class Category extends BaseModel {
@@ -32,7 +33,19 @@ module.exports = (sequelize, DataTypes) => {
   }
 
   Category.init({
-    name: DataTypes.STRING
+    name: DataTypes.STRING,
+    createdAt: {
+      type: DataTypes.DATE,
+      get() {
+        return moment(this.getDataValue(`createdAt`)).format(`YYYY-MM-DD, hh:mm`);
+      }
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      get() {
+        return moment(this.getDataValue(`createdAt`)).format(`YYYY-MM-DD, hh:mm`);
+      }
+    }
   }, {
     sequelize,
     modelName: `Category`,
