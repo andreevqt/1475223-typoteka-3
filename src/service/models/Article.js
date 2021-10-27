@@ -27,10 +27,11 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     static findByCategory(page, limit, categoryId) {
+      const escaped = Sequelize.escape(categoryId);
       return this.paginate(page, limit, {
         where: {
           id: {
-            [Sequelize.Op.in]: [sequelize.literal(`(SELECT "articleId" FROM "articles_categories" WHERE "categoryId" = ${categoryId})`)]
+            [Sequelize.Op.in]: [sequelize.literal(`(SELECT "articleId" FROM "articles_categories" WHERE "categoryId" = ${escaped})`)]
           }
         }
       });
