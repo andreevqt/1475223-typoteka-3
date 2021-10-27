@@ -13,7 +13,7 @@ const articleAttrs = {
   category: [1, 2, 3],
   fullText: `При покупке с меня бесплатная доставка в черте города. Две страницы заляпаны свежим кофе. Пользовались бережно и только по большим праздникам., Бонусом отдам все аксессуары.`,
   announce: `Этот смартфон — настоящая находка. Большой и яркий экран, мощнейший процессор — всё это в небольшом гаджете.`,
-  title: `Рок — это протест`,
+  title: `Рок — это протест, протест внутри вас. Кричите об этом, пусть люди знают...`,
   picture: `forest@2x.jpg`
 };
 
@@ -88,10 +88,33 @@ describe(`${API_PREFIX}/articles api endpoint`, () => {
     });
 
     test(`Should return 400 error if wrong attributes`, async () => {
-      const response = await request(server)
+      let response = await request(server)
         .post(`${API_PREFIX}/articles`)
         .send({...articleAttrs, wrongAttribute: true});
+      expect(response.status).toBe(http.BAD_REQUEST);
 
+      // title.length < 30
+      response = await request(server)
+        .post(`${API_PREFIX}/articles`)
+        .send({...articleAttrs, title: `123`});
+      expect(response.status).toBe(http.BAD_REQUEST);
+
+      // title.length > 250
+      response = await request(server)
+        .post(`${API_PREFIX}/articles`)
+        .send({...articleAttrs, title: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus cursus est velit. Vestibulum vitae dolor sed erat posuere sodales. Praesent aliquet ex at condimentum tincidunt. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aenean luctus tempor sagittis. Donec eget molestie lacus. Mauris ut faucibus libero. Nulla ullamcorper aliquam erat, vitae dapibus lectus eleifend eget. Aenean id dolor et erat porttitor mollis in non purus. Maecenas commodo arcu eu mi auctor, quis feugiat massa fringilla. Ut id nulla nec velit ornare blandit. Nullam vulputate nibh nisi, et lobortis felis hendrerit non.`});
+      expect(response.status).toBe(http.BAD_REQUEST);
+
+      // no title
+      response = await request(server)
+        .post(`${API_PREFIX}/articles`)
+        .send({...articleAttrs, title: null});
+      expect(response.status).toBe(http.BAD_REQUEST);
+
+      // no category
+      response = await request(server)
+        .post(`${API_PREFIX}/articles`)
+        .send({...articleAttrs, category: []});
       expect(response.status).toBe(http.BAD_REQUEST);
     });
   });

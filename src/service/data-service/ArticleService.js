@@ -1,6 +1,7 @@
 'use strict';
 
 const BaseService = require(`./BaseService`);
+const imageService = require(`../image-service`);
 
 class ArticleService extends BaseService {
   async getCategory(ids) {
@@ -15,6 +16,10 @@ class ArticleService extends BaseService {
     const attrsCopy = {...attrs};
     if (!Array.isArray(attrsCopy.category)) {
       attrsCopy.category = [attrsCopy.category];
+    }
+
+    if (attrsCopy.picture) {
+      attrsCopy.picture = await imageService.makeThumbnail(attrsCopy.picture, 460, 240);
     }
 
     if (!attrsCopy.authorId) {
@@ -38,9 +43,10 @@ class ArticleService extends BaseService {
       categories = await this.getCategory(attrs.category);
     }
 
-    if (!attrs.picture) {
-      delete attrs.picture;
-    }
+    await imageService.removeThumbnail(offer.picture.small);
+    attrs.picture = attrs.picture
+      ? await imageService.makeThumbnail(attrs.picture)
+      : undefined;
 
     await article.update(attrs);
 

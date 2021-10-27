@@ -22,7 +22,8 @@ module.exports = (_app) => {
   });
 
   router.post(`/add`, upload.single(`picture`), async (req, res, next) => {
-    const filename = req.file ? req.file.filename : null;
+    console.log(req.file);
+    const filename = req.file ? req.file.buffer.toString(`base64`) : null;
     const formData = {
       picture: filename, category: [], ...req.body
     };
@@ -42,8 +43,6 @@ module.exports = (_app) => {
     res.json({
       redirectTo: `/my`
     });
-
-    // res.redirect(`/my`);
   });
 
   router.get(`/:id`, async (req, res) => {

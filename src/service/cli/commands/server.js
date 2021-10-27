@@ -1,6 +1,6 @@
 'use strict';
 
-const logger = require(`../../logger`);
+const {logger} = require(`../../helpers`);
 const config = require(`../../../../config`);
 const express = require(`express`);
 const {once} = require(`events`);
@@ -18,9 +18,13 @@ const server = async (manager, args) => {
 
   const app = express();
   app.use(express.urlencoded({
-    extended: true
+    extended: true,
+    limit: `20mb`
   }));
-  app.use(express.json());
+  
+  app.use(express.json({
+    limit: `20mb`
+  }));
   app.use(logRequests);
 
   app.use(API_PREFIX, (req, res, next) => {
