@@ -18,7 +18,7 @@ block content
               +category(category)
         if article.picture
           .post__picture
-            img(src=article.picture.orig alt='пейзаж море, скалы, пляж')
+            img(src=article.picture.orig alt=article.title)
         .post__text
           h3 #{article.title}
           p #{article.fullText}

@@ -25,3 +25,6 @@ mocks.json
 
 # env
 .env
+
+# uploads
+uploads/

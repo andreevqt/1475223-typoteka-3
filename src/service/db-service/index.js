@@ -4,7 +4,7 @@
 
 const {Sequelize} = require(`sequelize`);
 const config = require(`../../../config`);
-const logger = require(`../logger`);
+const {logger} = require(`../helpers`);
 
 class DbService {
   constructor(db) {

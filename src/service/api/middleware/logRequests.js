@@ -1,6 +1,6 @@
 'use strict';
 
-const logger = require(`../../logger`);
+const {logger} = require(`../../helpers`);
 
 const logRequests = (req, res, next) => {
   logger.debug(`[REQUEST]: method - ${req.method}, url - ${req.url}, body - ${JSON.stringify(req.body)}`);

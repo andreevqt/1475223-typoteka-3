@@ -27,7 +27,6 @@ module.exports = (_app) => {
     try {
       await api.categories.update(id, req.body);
     } catch (err) {
-      console.log(err.response.data);
       res.render(`pages/all-categories`, {errors: {update: {id: +id, ...err.response.data}}, old: {update: req.body}});
       return;
     }

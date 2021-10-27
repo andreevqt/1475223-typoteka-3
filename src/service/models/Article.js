@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     static findByCategory(page, limit, categoryId) {
-      const escaped = Sequelize.escape(categoryId);
+      const escaped = sequelize.escape(categoryId);
       return this.paginate(page, limit, {
         where: {
           id: {
@@ -89,14 +89,14 @@ module.exports = (sequelize, DataTypes) => {
     },
     picture: {
       type: DataTypes.JSON,
-      set: function (value) {
+      /* set: function (value) {
         const picture = {
           orig: `/img/${value}`,
           big: `/img/${value}`,
           small: `/img/${value}`
         };
         this.setDataValue(`picture`, picture);
-      }
+      } */
     }
   }, {
     sequelize,
