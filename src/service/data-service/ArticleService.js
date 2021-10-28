@@ -19,7 +19,7 @@ class ArticleService extends BaseService {
     }
 
     if (attrsCopy.picture) {
-      attrsCopy.picture = await imageService.makeThumbnail(attrsCopy.picture, 460, 240);
+      attrsCopy.picture = await imageService.makeFromBuffer(attrsCopy.picture, 460, 240);
     }
 
     if (!attrsCopy.authorId) {
@@ -43,9 +43,9 @@ class ArticleService extends BaseService {
       categories = await this.getCategory(attrs.category);
     }
 
-    await imageService.removeThumbnail(offer.picture.small);
+    await imageService.remove(article.picture);
     attrs.picture = attrs.picture
-      ? await imageService.makeThumbnail(attrs.picture)
+      ? await imageService.makeFromBuffer(attrs.picture)
       : undefined;
 
     await article.update(attrs);

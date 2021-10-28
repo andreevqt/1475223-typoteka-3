@@ -132,7 +132,7 @@ const imageExtension = (joi) => ({
 
       validate(value, helpers, {allowed}) {
         const {ext} = getType(value);
-        if (!allowed.includes(ext)) {
+        if (!allowed.includes(ext) && allowed !== null) {
           return helpers.error(`image.allowed`, {allowed: allowed.join(`, `)});
         }
 

@@ -1,6 +1,8 @@
 'use strict';
 
-const {Joi} = require(`express-validation`);
+const BaseJoi = require(`joi`);
+const {imageExtension} = require(`../../helpers`);
+const Joi = BaseJoi.extend(imageExtension);
 
 module.exports = {
   create: {
@@ -12,7 +14,7 @@ module.exports = {
         Joi.array().required().min(1),
         Joi.string().required()
       ],
-      picture: Joi.string().allow(null),
+      picture: Joi.image().label(`Изображение`).allowed([`jpg`, `png`]).allow(null).max(5000),
       createdAt: Joi.string().allow(``).allow(null)
     })
   },
@@ -25,7 +27,7 @@ module.exports = {
         Joi.array().min(1),
         Joi.string()
       ],
-      picture: Joi.string().allow(null),
+      picture: Joi.image().label(`Изображение`).allowed([`jpg`, `png`]).allow(null).max(5000),
       createdAt: Joi.string().allow(``).allow(null)
     })
   }

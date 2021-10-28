@@ -22,14 +22,13 @@ module.exports = (_app) => {
   });
 
   router.post(`/add`, upload.single(`picture`), async (req, res, next) => {
-    console.log(req.file);
-    const filename = req.file ? req.file.buffer.toString(`base64`) : null;
-    const formData = {
-      picture: filename, category: [], ...req.body
+    const picture = req.file && req.file.buffer.toString(`base64`);
+    const attrs = {
+      picture, category: [], ...req.body
     };
 
     try {
-      await api.articles.create(formData);
+      await api.articles.create(attrs);
     } catch (err) {
       if (err && err.response.status === 400) {
         res.json({errors: err.response.data});

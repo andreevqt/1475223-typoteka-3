@@ -2,6 +2,9 @@
 
 const {Category, Article, Comment, User, service} = require(`../../models`);
 const moment = require(`moment`);
+const config = require(`../../../../config`);
+
+const url = `${config.app.url}:${config.app.port}/img`;
 
 const {
   readData,
@@ -13,7 +16,15 @@ const {data} = require(`../../test-setup`);
 
 const generatePicture = () => {
   const pictures = [`forest@2x.jpg`, `sea@2x.jpg`, `skyscraper@2x.jpg`];
-  return pictures[randomInt(0, pictures.length - 1)];
+  const orig = `${url}/${pictures[randomInt(0, pictures.length - 1)]}`;
+  const big = orig;
+  const small = orig.replace(/\@(.*)\./, `@1x.`);
+  return {
+    orig,
+    small,
+    big
+  };
+  // return pictures[randomInt(0, pictures.length - 1)];
 };
 
 const generateDate = () => {

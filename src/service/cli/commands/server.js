@@ -8,6 +8,7 @@ const api = require(`../../api/routes`);
 const {ValidationError} = require(`express-validation`);
 const {logRequests} = require(`../../api/middleware`);
 const {translateMessage} = require(`../../../utils`);
+const path = require(`path`);
 const {
   API_PREFIX,
   http
@@ -19,18 +20,20 @@ const server = async (manager, args) => {
   const app = express();
   app.use(express.urlencoded({
     extended: true,
-    limit: `20mb`
   }));
-  
+
   app.use(express.json({
     limit: `20mb`
   }));
+
   app.use(logRequests);
 
   app.use(API_PREFIX, (req, res, next) => {
     logger.error(`[ROUTE]: ${req.method} ${req.url}`);
     next();
   }, api.router);
+
+  app.use(express.static(path.resolve(__dirname, `../../public`)));
 
   app.use((req, res) => res.status(http.NOT_FOUND).send(`Not found`));
 
