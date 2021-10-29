@@ -18,7 +18,7 @@ module.exports = (app, services) => {
   router
     .route(`/`)
     .get(parseQuery, controller.list)
-    .post(validate(categories.create), controller.create);
+    .post(validate(categories.create, {}, {abortEarly: false}), controller.create);
 
   router
     .route(`/:categoryId`)

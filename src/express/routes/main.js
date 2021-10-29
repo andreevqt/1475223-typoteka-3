@@ -3,6 +3,7 @@
 const {Router} = require(`express`);
 const {logger} = require(`../helpers`);
 const api = require(`../api-services`);
+const upload = require(`../middleware/upload`);
 
 const router = new Router();
 
@@ -47,7 +48,41 @@ module.exports = (_app) => {
     res.render(`pages/search`, {articles, query});
   });
 
-  router.get(`/login`, (_req, res, _next) => res.render(`pages/register`));
+  router.get(`/login`, (_req, res, _next) => res.render(`pages/login`));
+
+  router.post(`/register`, upload.single(`avatar`), async (req, res, next) => {
+    const avatar = req.file && req.file.buffer.toString(`base64`);
+    const {name, lastName, password, confirmPassword, email} = req.body;
+
+    if (password !== confirmPassword) {
+      res.json({errors: {password: `Пароли должны совпадать`}});
+      return;
+    }
+
+    const attrs = {
+      avatar,
+      name: `${name} ${lastName}`,
+      password,
+      email
+    };
+
+    try {
+      await api.users.create(attrs);
+    } catch (err) {
+      if (err.response && err.response.status === 400) {
+        res.json({errors: err.response.data});
+        return;
+      }
+
+      next(err);
+      return;
+    }
+
+    res.json({
+      redirectTo: `/login`
+    });
+  });
+
   router.get(`/register`, (_req, res, _next) => res.render(`pages/register`));
 
   return router;

@@ -80,11 +80,10 @@ class DbService {
   }
 }
 
-const create = (obj = null) => {
-  if (obj) {
-    return new DbService(obj);
+const create = (options = null) => {
+  if (options) {
+    return new DbService(options);
   }
-
 
   const logging = process.env.SEQUELIZE_LOGGING === `true` ? console.log : false;
 

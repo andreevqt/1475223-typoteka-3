@@ -11,8 +11,8 @@ module.exports = {
       announce: Joi.string().label(`Анонс публикации`).required(),
       fullText: Joi.string().label(`Полный текст публикации`).required().max(1000),
       category: [
-        Joi.array().required().min(1),
-        Joi.string().required()
+        Joi.array().label(`Категория`).required().min(1),
+        Joi.string().label(`Категория`).required()
       ],
       picture: Joi.image().label(`Изображение`).allowed([`jpg`, `png`]).allow(null).max(5000),
       createdAt: Joi.string().allow(``).allow(null)

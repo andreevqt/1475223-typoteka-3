@@ -5,5 +5,6 @@ module.exports = {
   CommentService: require(`./CommentService`),
   CategoryService: require(`./CategoryService`),
   SearchService: require(`./SearchService`),
-  UserService: require(`./UserService`)
+  UserService: require(`./UserService`),
+  JWTService: require(`./JWTService`)
 };

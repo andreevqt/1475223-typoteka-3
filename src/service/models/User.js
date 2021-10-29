@@ -1,9 +1,33 @@
 'use strict';
 
 const BaseModel = require(`./BaseModel`);
+const cryptoService = require(`../crypto-service`);
+const jwt = require(`jsonwebtoken`);
+const config = require(`../../../config`);
 
 module.exports = (sequelize, DataTypes) => {
   class User extends BaseModel {
+
+    toExclude() {
+      return [`password`, `createdAt`, `updatedAt`];
+    }
+
+    generateToken() {
+      if (!config.jwt.secret.access) {
+        throw Error(`JWT secret key is missing`);
+      }
+
+      const data = this.getData();
+      return jwt.sign(data, config.jwt.secret.access, {expiresIn: config.jwt.expiresIn});
+    }
+
+    getData() {
+      return {
+        userId: this.id,
+        email: this.email
+      };
+    }
+
     static associate(models) {
       User.hasMany(models.Article, {
         foreignKey: `authorId`
@@ -13,9 +37,22 @@ module.exports = (sequelize, DataTypes) => {
 
   User.init({
     name: DataTypes.STRING,
-    password: DataTypes.STRING,
-    avatar: DataTypes.STRING,
-    email: DataTypes.STRING
+    password: {
+      type: DataTypes.STRING,
+      set(pass) {
+        this.setDataValue(`password`, cryptoService.hash(pass));
+      }
+    },
+    avatar: {
+      type: DataTypes.JSON,
+    },
+    email: {
+      type: DataTypes.STRING,
+      unique: {
+        args: true,
+        msg: `Email address already in use`
+      }
+    }
   }, {
     sequelize,
     modelName: `User`,

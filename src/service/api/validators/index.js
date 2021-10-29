@@ -4,4 +4,5 @@ module.exports = {
   articles: require(`./articles`),
   comments: require(`./comments`),
   categories: require(`./categories`),
+  users: require(`./users`)
 };

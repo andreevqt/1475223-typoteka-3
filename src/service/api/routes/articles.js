@@ -19,18 +19,18 @@ module.exports = (app, services) => {
   router
     .route(`/`)
     .get(parseQuery, controller.list)
-    .post(validate(articles.create), controller.create);
+    .post(validate(articles.create, {}, {abortEarly: false}), controller.create);
 
   router
     .route(`/:articleId`)
     .get(controller.get)
-    .put(validate(articles.update), controller.update)
+    .put(validate(articles.update, {}, {abortEarly: false}), controller.update)
     .delete(controller.delete);
 
   router
     .route(`/:articleId/comments`)
     .get(controller.comments.list)
-    .post(validate(comments.create), controller.comments.create);
+    .post(validate(comments.create, {}, {abortEarly: false}), controller.comments.create);
 
   router
     .route(`/:articleId/comments/:commentId`)
