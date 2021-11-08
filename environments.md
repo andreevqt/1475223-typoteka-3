@@ -17,19 +17,19 @@ APP_PORT
 ## API сервер
 ```sh
 # порт api сервера
-SERVER_PORT  
+SERVER_PORT
+# Включает логирование sql запросов
+SEQUELIZE_LOGGING  
 ```
 
 ## СУБД
-Для каждой переменной окружения NODE_ENV своя переменная с учетными данными для подключения 
-к БД, например для `NODE_ENV=production`:
 ```sh
 # хост БД
-DB_HOST_PRODUCTION
+DB_HOST=localhost
 # имя БД
-DB_NAME_PRODUCTION
+DB_NAME
 # пользователь
-DB_USER_PRODUCTION
+DB_USER
 # пароль
-DB_PASSWORD_PRODUCTION
+DB_PASSWORD
 ```

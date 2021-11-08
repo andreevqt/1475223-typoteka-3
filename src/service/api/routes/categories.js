@@ -3,6 +3,8 @@
 const {Router} = require(`express`);
 const controllers = require(`../controllers`);
 const {parseQuery} = require(`../middleware`);
+const {categories} = require(`../validators`);
+const {validate} = require(`express-validation`);
 
 const router = new Router();
 
@@ -15,9 +17,12 @@ module.exports = (app, services) => {
 
   router
     .route(`/`)
-    .get(parseQuery, controller.list);
+    .get(parseQuery, controller.list)
+    .post(validate(categories.create), controller.create);
 
   router
     .route(`/:categoryId`)
-    .get(controller.get);
+    .get(controller.get)
+    .put(validate(categories.update), controller.update)
+    .delete(controller.delete);
 };

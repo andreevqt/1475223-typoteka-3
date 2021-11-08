@@ -5,12 +5,12 @@ const {Joi} = require(`express-validation`);
 module.exports = {
   create: {
     body: Joi.object({
-      text: Joi.string().label(`Текст комментария`).required(),
+      name: Joi.string().label(`Заголовок категории`).min(3).required(),
     })
   },
   update: {
     body: Joi.object({
-      text: Joi.string().label(`Текст комментария`).required(),
+      name: Joi.string().label(`Заголовок категории`).min(3),
     })
   }
 };

@@ -1,12 +1,12 @@
 'use strict';
 
-const {logger} = require(`../../../utils`).logger;
+const {logger} = require(`../../helpers`);
 
 const logRequests = (req, res, next) => {
-  logger.debug(`[REQUEST]: ${req.url}`);
+  logger.debug(`[REQUEST]: method - ${req.method}, url - ${req.url}, body - ${JSON.stringify(req.body)}`);
 
   const afterResponse = () => {
-    logger.info(`[RESPONSE]: ${res.statusCode}`);
+    logger.debug(`[RESPONSE]: method - ${req.method}, url - ${req.url}, status - ${res.statusCode}`);
     if (res.statusCode === 404) {
       logger.info(`[ERROR]: 404 - not found. Url: ${req.url}`);
     }

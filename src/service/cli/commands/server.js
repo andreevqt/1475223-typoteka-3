@@ -1,12 +1,14 @@
 'use strict';
 
-const {logger} = require(`../../../utils`).logger;
+const {logger} = require(`../../helpers`);
 const config = require(`../../../../config`);
 const express = require(`express`);
 const {once} = require(`events`);
 const api = require(`../../api/routes`);
 const {ValidationError} = require(`express-validation`);
 const {logRequests} = require(`../../api/middleware`);
+const {translateMessage} = require(`../../../utils`);
+const path = require(`path`);
 const {
   API_PREFIX,
   http
@@ -17,9 +19,13 @@ const server = async (manager, args) => {
 
   const app = express();
   app.use(express.urlencoded({
-    extended: true
+    extended: true,
   }));
-  app.use(express.json());
+
+  app.use(express.json({
+    limit: `20mb`
+  }));
+
   app.use(logRequests);
 
   app.use(API_PREFIX, (req, res, next) => {
@@ -27,11 +33,24 @@ const server = async (manager, args) => {
     next();
   }, api.router);
 
+  app.use(express.static(path.resolve(__dirname, `../../public`)));
+
   app.use((req, res) => res.status(http.NOT_FOUND).send(`Not found`));
 
   app.use((err, req, res, _next) => {
     if (err instanceof ValidationError) {
-      res.status(err.statusCode).json(err.details);
+      const results = err.details;
+      const errors = Object.keys(results)
+        .reduce((acc, parameter) => {
+          return ({
+            ...acc,
+            [parameter]: results[parameter].reduce(
+                (inner, el) => ({...inner, [el.context.key]: translateMessage(el)}),
+                {}
+            )
+          });
+        }, {});
+      res.status(err.statusCode).json(errors.body);
       return;
     }
 

@@ -38,6 +38,15 @@ class BaseService {
     return this._model.create(attrs);
   }
 
+  async update(idOrObj, attrs) {
+    const model = typeof idOrObj === `number` ? await this._model.findByPk(idOrObj) : idOrObj;
+    if (model) {
+      await model.update(attrs);
+    }
+
+    return model.reload();
+  }
+
   async findOne(opts = {}) {
     const model = this._model;
     return model.findOne({...model.getQueryOptions(), ...opts});

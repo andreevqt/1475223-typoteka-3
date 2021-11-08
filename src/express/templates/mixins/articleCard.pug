@@ -6,7 +6,7 @@ mixin articleCard(article)
             a.preview__breadcrumbs-link(href=`/articles/category/${category.id}`) #{category.name}
     if article.picture
       .preview__background
-        img.preview__background-image(src=article.picture.small, srcset=`${article.picture.small} 1x, ${article.picture.big} 2x` alt=`Фотография небоскреба`)
+        img.preview__background-image(src=article.picture.small, srcset=`${article.picture.small} 1x, ${article.picture.big} 2x` alt=article.title)
     time.preview__time(datetime='2019-03-21T20:33') #{article.createdAt}
     h3.preview__name
       a.preview__name-link(href=`/articles/${article.id}`) #{article.title}

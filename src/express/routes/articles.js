@@ -2,7 +2,7 @@
 
 const {Router} = require(`express`);
 const router = new Router();
-const {logger} = require(`../../utils`).logger;
+/* const {logger} = require(`../helpers`); */
 const upload = require(`../middleware/upload`);
 const api = require(`../api-services`);
 
@@ -21,21 +21,27 @@ module.exports = (_app) => {
     res.render(`pages/new-post`);
   });
 
-  router.post(`/add`, upload.single(`picture`), async (req, res) => {
-    const filename = req.file ? req.file.filename : null;
-    const formData = {
-      picture: filename, category: [], ...req.body
+  router.post(`/add`, upload.single(`picture`), async (req, res, next) => {
+    const picture = req.file && req.file.buffer.toString(`base64`);
+    const attrs = {
+      picture, category: [], ...req.body
     };
 
     try {
-      await api.articles.create(formData);
+      await api.articles.create(attrs);
     } catch (err) {
-      logger.info(err.response.data);
-      res.render(`pages/new-post`, {formData});
+      if (err && err.response.status === 400) {
+        res.json({errors: err.response.data});
+        return;
+      }
+
+      next(err);
       return;
     }
 
-    res.redirect(`/my`);
+    res.json({
+      redirectTo: `/my`
+    });
   });
 
   router.get(`/:id`, async (req, res) => {
@@ -51,6 +57,26 @@ module.exports = (_app) => {
     }
 
     res.render(`pages/post`, {article});
+  });
+
+
+  router.post(`/:id/comments`, async (req, res, next) => {
+    const {id} = req.params;
+    const attrs = req.body;
+
+    try {
+      await api.comments.create(id, attrs);
+    } catch (err) {
+      if (err.response && err.response.status === 400) {
+        res.json({errors: err.response.data});
+        return;
+      }
+
+      next(err);
+      return;
+    }
+
+    res.redirect(`back`);
   });
 
   router.get(`/edit/:id`, async (req, res) => {
@@ -71,7 +97,7 @@ module.exports = (_app) => {
     res.render(`pages/new-post`, {formData: {...formData, ...article}});
   });
 
-  router.post(`/edit/:id`, upload.single(`picture`), async (req, res) => {
+  router.post(`/edit/:id`, upload.single(`picture`), async (req, res, next) => {
     const {id} = req.params;
     const filename = req.file ? req.file.filename : null;
     const formData = {picture: filename, category: [], ...req.body};
@@ -79,12 +105,25 @@ module.exports = (_app) => {
     try {
       await api.articles.update(id, formData);
     } catch (err) {
-      logger.info(err.response.data);
-      res.status(404).render(`errors/404`);
+      if (err.response) {
+        if (err.response.status === 404) {
+          res.status(404).send(`Not found`);
+          return;
+        }
+
+        if (err.response.status === 400) {
+          res.json({errors: err.response.data});
+          return;
+        }
+      }
+
+      next(err);
       return;
     }
 
-    res.redirect(`/my`);
+    res.json({
+      redirectTo: `/my`
+    });
   });
 
   router.get(`/category/:categoryId`, async (req, res) => {

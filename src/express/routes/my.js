@@ -2,7 +2,7 @@
 
 const {Router} = require(`express`);
 const router = new Router();
-const {logger} = require(`../../utils`).logger;
+const {logger} = require(`../helpers`);
 const api = require(`../api-services`);
 
 module.exports = (_app) => {

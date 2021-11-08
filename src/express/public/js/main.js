@@ -1,20 +1,98 @@
 'use strict';
 
 // vendor.js hackfix
-let enableScrolling = () => {
+const enableScrolling = () => {
   document.body.removeAttribute("style");
   document.body.classList.remove("body-fixed");
 };
 
 enableScrolling();
 
+// create post form
+const formsPopup = document.querySelector('#modalNewPost .popup');
+if (formsPopup) {
+  const form = formsPopup.querySelector('form');
+  const action = form.getAttribute('action');
+  form.addEventListener('submit', async (e) => {
+    formsPopup.classList.add('popup--loading');
+
+    e.preventDefault();
+    const formData = new FormData(form);
+    const response = await fetch(action, {
+      method: `POST`,
+      body: formData
+    });
+
+    const result = await response.json();
+
+    formsPopup.classList.remove('popup--loading');
+
+    // clear all invalid values
+    const formFields = form.querySelectorAll('.form__field');
+    if (formFields) {
+      formFields.forEach((wrapper) => {
+        wrapper.classList.remove('form__field--invalid');
+      });
+    }
+
+    const errorHelpers = form.querySelectorAll('.form__helper');
+    if (errorHelpers) {
+      errorHelpers.forEach((helper) => {
+        helper.remove();
+      });
+    }
+
+    if (result.errors) {
+      const errors = result.errors;
+
+      Object.keys(errors).forEach((key) => {
+        let input = form.querySelector('[name="' + key + '"]');
+        if (input) {
+          const wrapper = input.closest(`.form__field`);
+          wrapper.classList.add(`form__field--invalid`);
+
+          const errorHelper = document.createElement('div');
+          errorHelper.classList.add(`form__helper`);
+          errorHelper.innerHTML = errors[key];
+          wrapper.after(errorHelper);
+        }
+      });
+
+      return;
+    }
+
+    if (result.redirectTo) {
+      window.location.replace(result.redirectTo);
+    }
+
+  });
+}
+
+// delete btn
+const deleteBtns = document.querySelectorAll('[data-delete]');
+deleteBtns.forEach((btn) => {
+  const url = btn.dataset.delete;
+
+  btn.addEventListener('click', async (e) => {
+    e.preventDefault();
+
+    if (window.confirm(`Действительно хотите удалить?`)) {
+      await fetch(url, {
+        method: `POST`,
+      });
+
+      location.reload();
+    }
+  });
+});
+
 // модальное окно
-let toggles = document.querySelectorAll('.modal-toggle');
-let onModalClick = (evt) => {
+const toggles = document.querySelectorAll('.modal-toggle');
+const onModalClick = (evt) => {
   evt.preventDefault();
-  let toggle = evt.target;
-  let {target} = toggle.dataset;
-  let modal = document.querySelector(target);
+  const toggle = evt.target;
+  const {target} = toggle.dataset;
+  const modal = document.querySelector(target);
 
   modal.classList.add('modal--is-shown');
   document.body.classList.add('ovh');
@@ -24,7 +102,7 @@ toggles.forEach((toggle) => {
   toggle.addEventListener('click', onModalClick);
 });
 
-let onCloseClick = (evt) => {
+const onCloseClick = (evt) => {
   evt.preventDefault();
   const el = evt.target;
   const parent = el.closest('.modal');
@@ -34,18 +112,18 @@ let onCloseClick = (evt) => {
   };
 }
 
-let closeBtns = document.querySelectorAll('.modal__close');
+const closeBtns = document.querySelectorAll('.modal__close');
 closeBtns.forEach((el) => {
   el.addEventListener('click', onCloseClick);
 });
 
 // select
-var selects = document.querySelectorAll('.js-multiple-select');
+const selects = document.querySelectorAll('.js-multiple-select');
 for (var i = 0; i < selects.length; i++) {
-  var placeholder = selects[i].getAttribute('data-label');
+  const placeholder = selects[i].getAttribute('data-label');
   const options = JSON.parse(selects[i].dataset.options);
   const data = options;
-  var SS = new Selectr(selects[i], {
+  const SS = new Selectr(selects[i], {
     searchable: false,
     multiple: true,
     width: 222,
@@ -55,15 +133,14 @@ for (var i = 0; i < selects.length; i++) {
 }
 
 // логика выбора даты в календаре
-
-let calendar = document.querySelector('.calendar');
+const calendar = document.querySelector('.calendar');
 if (calendar) {
-  let dates = calendar.querySelector('.calendar__dates');
+  const dates = calendar.querySelector('.calendar__dates');
   let selectedDate = dates.querySelector('.calendar__date--selected');
 
-  let changeDateHandler = (evt) => { // переключает класс выбранной даты
+  const changeDateHandler = (evt) => { // переключает класс выбранной даты
     if (evt.target.classList.contains('calendar__date')) {
-      let date = evt.target;
+      const date = evt.target;
       if (!date.classList.contains('calendar__date--disabled')) {
         if (selectedDate) {
           selectedDate.classList.remove('calendar__date--selected');
@@ -108,7 +185,6 @@ if (popup) {
 }
 
 // меняет высоту поля textarea в блоке comments в зависимости от количества введенных в него строк.
-
 let comments = document.querySelector('.post__comments');
 let publication = document.querySelector('.new-publication');
 let textarea = null;
@@ -121,19 +197,19 @@ const map = (typeof Map === 'function') ? new Map() : (function () {
   const values = [];
 
   return {
-    has(key) {
+    has (key) {
       return keys.indexOf(key) > -1;
     },
-    get(key) {
+    get (key) {
       return values[keys.indexOf(key)];
     },
-    set(key, value) {
+    set (key, value) {
       if (keys.indexOf(key) === -1) {
         keys.push(key);
         values.push(value);
       }
     },
-    delete(key) {
+    delete (key) {
       const index = keys.indexOf(key);
       if (index > -1) {
         keys.splice(index, 1);
@@ -157,7 +233,7 @@ try {
   };
 }
 
-function assign(ta) {
+function assign (ta) {
   if (!ta || !ta.nodeName || ta.nodeName !== 'TEXTAREA' || map.has(ta)) {
     return;
   }
@@ -166,7 +242,7 @@ function assign(ta) {
   let clientWidth = null;
   let cachedHeight = null;
 
-  function init() {
+  function init () {
     const style = window.getComputedStyle(ta, null);
 
     if (style.resize === 'vertical') {
@@ -188,7 +264,7 @@ function assign(ta) {
     update();
   }
 
-  function changeOverflow(value) {
+  function changeOverflow (value) {
     {
       // Chrome/Safari-specific fix:
       // When the textarea y-overflow is hidden, Chrome/Safari do not reflow the text to account for the space
@@ -205,7 +281,7 @@ function assign(ta) {
     ta.style.overflowY = value;
   }
 
-  function getParentOverflows(el) {
+  function getParentOverflows (el) {
     const arr = [];
 
     while (el && el.parentNode && el.parentNode instanceof Element) {
@@ -221,7 +297,7 @@ function assign(ta) {
     return arr;
   }
 
-  function resize() {
+  function resize () {
     if (ta.scrollHeight === 0) {
       // If the scrollHeight is 0, then the element probably has display:none or is detached from the DOM.
       return;
@@ -246,7 +322,7 @@ function assign(ta) {
     }
   }
 
-  function renew() {
+  function renew () {
     resize();
 
     const styleHeight = Math.round(parseFloat(ta.style.height));
@@ -333,14 +409,14 @@ function assign(ta) {
   init();
 }
 
-function destroy(ta) {
+function destroy (ta) {
   const methods = map.get(ta);
   if (methods) {
     methods.destroy();
   }
 }
 
-function update(ta) {
+function update (ta) {
   const methods = map.get(ta);
   if (methods) {
     methods.update();
