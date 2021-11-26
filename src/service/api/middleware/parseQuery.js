@@ -24,7 +24,7 @@ const makeOrder = (order) => {
   return [];
 };
 
-module.exports = (req, _res, next) => {
+module.exports = (req, res, next) => {
   const {query} = req;
 
   let parsed = {
@@ -48,7 +48,6 @@ module.exports = (req, _res, next) => {
     parsed.page = +page;
   }
 
-  req.locals = req.locals || {};
-  req.locals.parsed = parsed;
+  res.locals.parsed = parsed;
   next();
 };

@@ -10,6 +10,14 @@ const categoryAttrs = {
   name: `Test category`
 };
 
+const testUserAttrs = {
+  name: `Джон Доу`,
+  email: `test@email.com`,
+  password: `123456aa`,
+  isEditor: true
+};
+
+
 beforeAll(async () => {
   await setup();
 });
@@ -20,6 +28,17 @@ afterAll(async () => {
 
 describe(`Categories api endpoint`, () => {
   let testCategory;
+  let testUser;
+
+  beforeEach(async () => {
+    await services.users.create(testUserAttrs);
+    testUser = await services.users.login(testUserAttrs.email, testUserAttrs.password);
+  });
+
+  afterEach(async () => {
+    await services.users.logout(testUser.tokens.access);
+    await services.users.delete(testUser.id);
+  });
 
   beforeEach(async () => {
     const category = await services.categories.create(categoryAttrs);
@@ -45,6 +64,7 @@ describe(`Categories api endpoint`, () => {
     test(`Should create an category`, async () => {
       const response = await request(server)
         .post(`${API_PREFIX}/categories`)
+        .set(`authorization`, testUser.tokens.access)
         .send(categoryAttrs)
         .expect(http.CREATED);
 
@@ -55,6 +75,7 @@ describe(`Categories api endpoint`, () => {
     test(`Should return 400 error if wrong attributes`, async () => {
       const response = await request(server)
         .post(`${API_PREFIX}/categories`)
+        .set(`authorization`, testUser.tokens.access)
         .send({...categoryAttrs, wrongAttribute: true});
 
       expect(response.status).toBe(http.BAD_REQUEST);
@@ -69,6 +90,7 @@ describe(`Categories api endpoint`, () => {
     test(`Should update a category`, async () => {
       let response = await request(server)
         .put(`${API_PREFIX}/categories/${testCategory.id}`)
+        .set(`authorization`, testUser.tokens.access)
         .send(toUpdate)
         .expect(http.OK);
 
@@ -86,6 +108,7 @@ describe(`Categories api endpoint`, () => {
     test(`Should return 404 error if categoryId is wrong`, async () => {
       const respone = await request(server)
         .put(`${API_PREFIX}/categories/1234`)
+        .set(`authorization`, testUser.tokens.access)
         .send(toUpdate);
 
       expect(respone.status).toBe(http.NOT_FOUND);
@@ -96,6 +119,7 @@ describe(`Categories api endpoint`, () => {
     test(`Should delete a category`, async () => {
       let response = await request(server)
         .delete(`${API_PREFIX}/categories/${testCategory.id}`)
+        .set(`authorization`, testUser.tokens.access)
         .expect(http.OK);
 
       const deleted = response.body;
@@ -109,7 +133,8 @@ describe(`Categories api endpoint`, () => {
 
     test(`Should return 404 error if categoryId is wrong`, async () => {
       const response = await request(server)
-        .delete(`${API_PREFIX}/categories/1234`);
+        .delete(`${API_PREFIX}/categories/1234`)
+        .set(`authorization`, testUser.tokens.access);
 
       expect(response.status).toBe(http.NOT_FOUND);
     });

@@ -2,17 +2,18 @@
 <html lang="ru">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Личный блог Типотека">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>new publication</title>
+  <title>Типотека</title>
   <link rel="preload" href="./fonts/Inter-Regular.woff2" as="font" crossorigin="anonymous">
   <link rel="preload" href="./fonts/Inter-Medium.woff2" as="font" crossorigin="anonymous">
   <link rel="preload" href="./fonts/SFProDisplay-Regular.woff2" as="font" crossorigin="anonymous">
   <link rel="stylesheet" href="css/style.min.css">
 </head>
 
-<body style="height: 1050px;">
+<body>
   <div class="wrapper">
     <header class="header">
       <a class="header__logo logo" href="#">
@@ -23,51 +24,18 @@
       <div class="header__dropdown">
         <a href="#" class="button button--burger header__burger">Открыть меню</a>
         <ul class="navigation header__navigation">
-          <li class="navigation__item"><a href="index.html">index.html --- все ссылки</a></li>
-          <li class="navigation__item"><a href="main.html">main.html --- Главная страница</a></li>
-          <li class="navigation__item"><a href="main-variation.html">main-variation.html --- Главная страница (варианты вида)</a></li>
-          <li class="navigation__item"><a href="main-no-news.html">main-no-news.html --- Страница без новостей и комментов</a></li>
-          <li class="navigation__item"><a href="admin-my-publications-2.html">admin-my-publications-2.html --- Мои записи</a></li>
-          <li class="navigation__item"><a href="admin-categories.html">admin-categories.html --- Категории</a></li>
-          <li class="navigation__item"><a href="admin-my-publications-1.html">admin-my-publications-1.html --- Комментарии</a></li>
-          <li class="navigation__item"><a href="new-post-photo.html">new-post-photo.html --- Страница для нового поста</a></li>
-          <li class="navigation__item"><a href="new-post-photo-1.html">new-post-photo-1.html --- Страница добавления нового поста</a></li>
-          <li class="navigation__item"><a href="new-post-photo-2.html">new-post-photo-2.html --- Страница добавления нового поста (выбор даты)</a></li>
-          <li class="navigation__item"><a href="new-post-photo-3.html">new-post-photo-3.html --- Страница добавления нового поста (заполненная)</a>
-          </li>
-          <li class="navigation__item"><a href="main-empty.html">main-empty.html --- Главная страница пустая</a></li>
-          <li class="navigation__item"><a href="registration.html">registration.html --- Регистрация</a></li>
-          <li class="navigation__item"><a href="sign-in-error-1.html">sign-in-error-1.html.html --- Регистрация c ошибками</a></li>
-          <li class="navigation__item"><a href="sign-in-error-2.html">sign-in-error-2.html--- Регистрация c
-              ошибкой поля email</a></li>
-          <li class="navigation__item"><a href="sign-in-error-3.html">sign-in-error-3.html--- Регистрация c
-              ошибкой поля пароль</a></li>
-          <li class="navigation__item"><a href="publications-by-category.html">publications-by-category.html --- Список публикаций в категории</a></li>
-          <li class="navigation__item"><a href="404.html">404.html --- Страница для отображения ошибок</a></li>
-          <li class="navigation__item"><a href="500.html">500.html --- Страница для отображения ошибок</a></li>
-          <li class="navigation__item"><a href="search.html">search.html --- Страница поиска</a></li>
-          <li class="navigation__item"><a href="search-2.html">search-2.html --- Страница поиска с результатами</a></li>
-          <li class="navigation__item"><a href="search-3.html">search-3.html --- Страница поиска пустая</a></li>
-          <li class="navigation__item"><a href="post-user.html">post-user.html --- Страница поcта (для пользователя)</a></li>
-          <li class="navigation__item"><a href="post-visitor-no-tags.html">post-visitor-no-tags.html --- Страница поcта (для посетителя) без тегов</a>
-          </li><li class="navigation__item"><a href="post-visitor-no-comments.html">post-visitor-no-comments.html --- Страница поcта (для посетителя) без
-              комментариев</a>
-          </li>
-          <li class="navigation__item"><a href="post-visitor-no-photo.html">post-visitor-no-photo.html --- Страница поcта (для посетителя) без
-              фотографии</a>
-          </li>
-          <li class="navigation__item"><a href="post-user-2.html">post-user-2.html --- Страница поcта (для пользователя) с
-              ошибкой отправки комментария</a>
-          </li>
-          <li class="navigation__item"><a href="uikit.html">uikit.html --- UI KIT</a></li>
+          <li class="navigation__item"><a href="main.html">Пункт меню</a></li>
+          <li class="navigation__item"><a href="main.html">Пункт меню</a></li>
+          <li class="navigation__item"><a href="main.html">Пункт меню</a></li>
+          <li class="navigation__item"><a href="main.html">Пункт меню</a></li>
         </ul>
       </div>
       <a class="header__search button button--search" href="#" aria-label="поиск по сайту"></a>
     </header>
 
     <main>
-      <section class="modal modal--flex">
-        <div class="popup popup--new-publication popup--flex">
+      <section>
+        <div class="popup popup--new-publication popup--anti">
           <div class="new-publication">
             <form action="#" method="POST">
               <div class="new-publication__header">
@@ -77,38 +45,40 @@
                   <div class="new-publication__date-form-division">
                     <div class="new-publication__date-block">
                       <label for="new-publication-date" aria-label="Календарь"></label>
-                      <input type="text" name="login" id="new-publication-date" placeholder="21.03.2019">
+                      <input type="text" name="date" id="new-publication-date" placeholder="2019-03-21">
                     </div>
                   </div>
                 </div>
                 <button type="submit" class="new-publication__button button button--colored">Опубликовать</button>
               </div>
-              <button type="button" class="popup__button button button--popup-close" aria-label="Закрыть окно">Закрыть
-                окно</button>
+              <a class="popup__button button button--popup-close" aria-label="Закрыть окно">Закрыть
+                окно</a>
               <div class="new-publication__form form">
                 <div class="form__wrapper form__wrapper--intro">
                   <div class="form__field">
-                    <label><input type="text" placeholder="Заголовок" value="Как правильно заводить машину" required=""></label>
+                    <label><input type="text" name="title" placeholder="Заголовок" value="Как правильно заводить машину" required=""></label>
                   </div>
                   <div class="form__field form__field--post-image">
-                    <label><input id="image-name-field" type="text" value="moya_mashinka.jpg" placeholder="Фотография" readonly=""></label>
+                    <label><input id="image-name-field" type="text" name="photo" value="moya_mashinka.jpg" placeholder="Фотография" readonly=""></label>
                     <div class="form__image-loader form__image-loader--publication">
-                      <label><input class="visually-hidden" type="file">Обзор</label>
+                      <label><input class="visually-hidden" type="file" name="upload">Обзор</label>
                     </div>
                     <button class="button button--transparent">Удалить</button>
                   </div>
-                  <div class="new-publication__checkbox new-publication__checkbox--auto">
-                    <input type="checkbox" name="checkbox-auto" id="checkbox-auto">
-                    <label for="checkbox-auto">Автомобили</label>
+                  <div class="new-publication__category-wrapper">
+                    <div class="new-publication__checkbox new-publication__checkbox--auto">
+                      <input type="checkbox" name="category-1" id="checkbox-auto">
+                      <label for="checkbox-auto">Автомобили</label>
+                    </div>
+                    <a class="new-publication__form-link button button--transparent" href="#">Добавить категорию</a>
                   </div>
-                  <a class="new-publication__form-link button button--transparent" href="#">Добавить категорию</a>
                 </div>
                 <div class="form__wrapper form__wrapper--text">
                   <div class="form__field form__field--publication-text">
-                    <label><textarea rows="2" placeholder="Анонс публикации">Материнский холдинг возглавит гендиректор Google Сундар Пичаи. При этом больше половины голосов в компании останется у Пейджа и Брина.</textarea></label>
+                    <label><textarea rows="5" name="announcement" placeholder="Анонс публикации">Материнский холдинг возглавит гендиректор Google Сундар Пичаи. При этом больше половины голосов в компании останется у Пейджа и Брина.</textarea></label>
                   </div>
                   <div class="form__field form__field--publication-text">
-                    <label><textarea rows="5" placeholder="Полный текст публикации">Основатели Google Ларри Пейдж и Сергей Брин отойдут от руководства материнским холдингом Alphabet, сказано в сообщении компании. Пейдж занимал пост гендиректора, а Брин — президента Alphabet.
+                    <label><textarea rows="10" name="full-text" placeholder="Полный текст публикации">Основатели Google Ларри Пейдж и Сергей Брин отойдут от руководства материнским холдингом Alphabet, сказано в сообщении компании. Пейдж занимал пост гендиректора, а Брин — президента Alphabet.
 
 Alphabet возглавит гендиректор Google Сундар Пичаи, он также продолжит руководить Google. Должность президента холдинга будет упразднена.</textarea></label>
                   </div>
@@ -117,10 +87,18 @@ Alphabet возглавит гендиректор Google Сундар Пича�
             </form>
           </div>
         </div>
-        <div class="modal__overlay"></div>
       </section>
     </main>
+
+    <footer class="footer">
+      <a class="footer__copyright" href="#" aria-label="HTMLAcademy">
+        <img src="img/icons/HTMLAcademyLogo.svg" width="112" height="50" alt="HTMLAcademy">
+      </a>
+      <span class="footer__dot"></span>
+      <p class="footer__text">Типотека, 2019</p>
+    </footer>
   </div>
+
   <script src="js/vendor.js"></script>
   <script src="js/main.js"></script>
 </body>

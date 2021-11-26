@@ -5,5 +5,7 @@ module.exports = {
   parseQuery: require(`./parseQuery`),
   auth: require(`./auth`),
   authorize: require(`./authorize`),
-  isCurrentUser: require(`./isCurrentUser`)
+  isCurrentUser: require(`./isCurrentUser`),
+  checkStatus: require(`./checkStatus`),
+  isEditor: require(`./isEditor`)
 };

@@ -1,0 +1,14 @@
+extends ../layouts/main
+
+block variables
+  - let mainClass = `main-page`
+
+block content
+  h1.visually-hidden Страница новостей личного блога Типотека
+
+  if !empty
+    include ../partials/categories
+    include ../partials/preview
+  else
+    .main-page__empty-wrapper
+      .main-page__empty-text Здесь пока пусто

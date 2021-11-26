@@ -1,5 +1,7 @@
 'use strict';
 
+const csrf = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
 // vendor.js hackfix
 const enableScrolling = () => {
   document.body.removeAttribute("style");
@@ -8,101 +10,91 @@ const enableScrolling = () => {
 
 enableScrolling();
 
-const reverseString = (str) => {
-  return str.split("").reverse().join("");
-};
-
-const clearString = (str) => {
-  const newString = reverseString(str);
-
-  if (newString.indexOf("\\") === -1) {
-    return reverseString(newString);
-  } else {
-    const number = newString.indexOf("\\");
-    return reverseString(newString.slice(0, number));
-  }
-};
-
-// image-loader
-/* const loader = document.querySelector('.form__image-loader');
-if (loader) {
-  const cloned = loader.cloneNode(true);
-  loader.replaceWith(cloned);
-  const loaderFile = cloned.querySelector('input[type="file"]');
-  const loaderText = cloned.closest('input[type="text"]');
-  loaderFile.addEventListener('change', (e) => {
+const backBtn = document.querySelector('.button--backwards');
+if (backBtn) {
+  backBtn.addEventListener('click', (e) => {
     e.preventDefault();
-    loaderText.value = clearString(loaderFile.value);
+    history.go(-1);
   });
-} */
+}
 
 // create post form
-const formsPopup = document.querySelector('[data-ajax-form] .popup');
-if (formsPopup) {
-  const forms = formsPopup.querySelectorAll('form');
-  forms.forEach((form) => {
-    const action = form.getAttribute('action');
-    form.addEventListener('submit', async (e) => {
-      formsPopup.classList.add('popup--loading');
+const popups = document.querySelectorAll('[data-ajax-form] .popup');
+popups.forEach((container) => {
+  if (container) {
+    const forms = container.querySelectorAll('form');
+    forms.forEach((form) => {
+      const action = form.getAttribute('action');
+      const enctype = form.getAttribute('enctype');
+      form.addEventListener('submit', async (e) => {
+        container.classList.add('popup--loading');
+        e.preventDefault();
 
-      e.preventDefault();
-      const formData = new FormData(form);
-      const response = await fetch(action, {
-        method: `POST`,
-        body: formData
+        const headers = {}
+        if (enctype !== 'multipart/form-data') {
+          headers['Content-Type'] = 'application/json';
+        }
+        headers['CSRF-Token'] = csrf;
+
+        const formData = new FormData(form);
+        const response = await fetch(action, {
+          method: `POST`,
+          headers,
+          body: enctype === 'multipart/form-data' ? formData : JSON.stringify(Object.fromEntries(formData))
+        });
+
+        const result = await response.json();
+
+        container.classList.remove('popup--loading');
+
+        // clear all invalid values
+        const formFields = form.querySelectorAll('.form__field');
+        if (formFields) {
+          formFields.forEach((wrapper) => {
+            wrapper.classList.remove('form__field--invalid');
+          });
+        }
+
+        const errorHelpers = form.querySelectorAll('.form__helper');
+        if (errorHelpers) {
+          errorHelpers.forEach((helper) => {
+            helper.remove();
+          });
+        }
+
+        if (result.errors) {
+          const errors = result.errors;
+
+          // clear password values
+          const passwordFields = form.querySelectorAll(`input[type="password"]`);
+          passwordFields.forEach((field) => {
+            field.value = ``;
+          });
+
+          Object.keys(errors).forEach((key) => {
+            let input = form.querySelector('[name="' + key + '"]');
+            if (input) {
+              const wrapper = input.closest(`.form__field`);
+              wrapper.classList.add(`form__field--invalid`);
+
+              const errorHelper = document.createElement('div');
+              errorHelper.classList.add(`form__helper`);
+              errorHelper.innerHTML = errors[key];
+              wrapper.after(errorHelper);
+            }
+          });
+
+          return;
+        }
+
+        if (result.redirectTo) {
+          window.location.replace(result.redirectTo);
+        }
+
       });
-
-      const result = await response.json();
-
-      formsPopup.classList.remove('popup--loading');
-
-      // clear all invalid values
-      const formFields = form.querySelectorAll('.form__field');
-      if (formFields) {
-        formFields.forEach((wrapper) => {
-          wrapper.classList.remove('form__field--invalid');
-        });
-      }
-
-      const errorHelpers = form.querySelectorAll('.form__helper');
-      if (errorHelpers) {
-        errorHelpers.forEach((helper) => {
-          helper.remove();
-        });
-      }
-
-      if (result.errors) {
-        const errors = result.errors;
-
-        // clear password values
-        const passwordFields = form.querySelectorAll(`input[type="password"]`);
-        passwordFields.forEach((field) => {
-          field.value = ``;
-        });
-
-        Object.keys(errors).forEach((key) => {
-          let input = form.querySelector('[name="' + key + '"]');
-          if (input) {
-            const wrapper = input.closest(`.form__field`);
-            wrapper.classList.add(`form__field--invalid`);
-
-            const errorHelper = document.createElement('div');
-            errorHelper.classList.add(`form__helper`);
-            errorHelper.innerHTML = errors[key];
-            wrapper.after(errorHelper);
-          }
-        });
-
-        return;
-      }
-
-      if (result.redirectTo) {
-        window.location.replace(result.redirectTo);
-      }
-
-    });
-  })
-}
+    })
+  }
+})
 
 // delete btn
 const deleteBtns = document.querySelectorAll('[data-delete]');
@@ -115,6 +107,9 @@ deleteBtns.forEach((btn) => {
     if (window.confirm(`Действительно хотите удалить?`)) {
       await fetch(url, {
         method: `POST`,
+        headers: {
+          'CSRF-Token': csrf
+        }
       });
 
       location.reload();

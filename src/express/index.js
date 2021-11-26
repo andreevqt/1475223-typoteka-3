@@ -7,7 +7,11 @@ const {logger} = require(`./helpers`);
 const {once} = require(`events`);
 const {API_PREFIX, http} = require(`../service/constants`);
 const api = require(`./api-services`);
-
+const auth = require(`./middleware/auth`);
+const checkAuth = require(`./middleware/checkAuth`);
+const isEditor = require(`./middleware/isEditor`);
+const csrf = require(`./middleware/csrf`);
+const cookieParser = require(`cookie-parser`);
 const {
   main,
   articles,
@@ -25,8 +29,16 @@ app.set(`api_url`, apiUrl);
 
 app.use(express.json());
 app.use(express.urlencoded({
-  extended: true
+  extended: false
 }));
+app.use(cookieParser(config.app.key));
+app.use(express.static(path.resolve(__dirname, `public`)));
+app.use(csrf);
+
+app.use(async (req, res, next) => {
+  const status = await api.status.getStatus();
+  next(status === `down` && new Error(`API server недоступен`));
+});
 
 app.use(async (req, res, next) => {
   let cats = [];
@@ -45,19 +57,19 @@ app.use(async (req, res, next) => {
     action: `/articles/add`,
     category: []
   };
+  res.locals.login = true;
   next();
 });
 
+app.use(auth);
 // routes
 app.use(`/`, main(app));
-app.use(`/my`, my(app));
+app.use(`/my`, [checkAuth, isEditor], my(app));
 app.use(`/articles`, articles(app));
-app.use(`/categories`, categories(app));
+app.use(`/categories`, [checkAuth, isEditor], categories(app));
 
-app.use(express.static(path.resolve(__dirname, `public`)));
-
-app.use((req, res) => res.status(http.NOT_FOUND).render(`errors/404`));
-app.use((req, res) => res.status(http.INTERNAL_SERVER_ERROR).render(`errors/500`));
+app.use((_req, res) => res.status(http.NOT_FOUND).render(`errors/404`));
+app.use((err, _req, res, _next) => res.status(http.INTERNAL_SERVER_ERROR).render(`errors/500`, {message: err.message}));
 
 app.set(`views`, path.join(__dirname, `templates`));
 app.set(`view engine`, `pug`);

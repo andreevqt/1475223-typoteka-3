@@ -1,0 +1,39 @@
+extends header-base
+
+block header_content
+  if currentUser && currentUser.isEditor
+    button.modal-toggle.button.button--colored.header__button-new(data-target="#modalNewPost") Новая запись
+    .header__dropdown
+      a.button.button--burger.header__burger(href='#') Открыть меню
+      ul.navigation.header__navigation
+        li.navigation__item
+          a(href='/') Главная
+        li.navigation__item
+          a(href='/categories') Категории
+        li.navigation__item
+          a(href='/my') Мои публикации
+        li.navigation__item
+          a(href='/my/comments') Мои комментарии
+        li.navigation__item
+          a(href='/articles/add') Новая публикация
+        li.navigation__item
+          a(href='/search') Поиск
+        li.navigation__item
+          a(href='/logout') Выйти
+  else if currentUser
+    nav.header__nav
+      ul.header__nav-list
+        li.header__list-item
+          p #{currentUser.name}
+        li.header__list-item
+          a.header__exit(href='/logout') Выйти
+    a.header__avatar.avatar
+      if currentUser.avatar 
+        img(src=currentUser.avatar.small alt='аватар пользователя') 
+  else    
+    nav.header__nav
+      ul.header__nav-list
+        li.header__list-item
+          a.header__registration(href="/articles") Публикации
+        li.header__list-item
+          a.header__enter.modal-toggle(href="/login", data-target="#modalRegister") Вход с паролем

@@ -13,10 +13,11 @@ module.exports = {
   app: {
     key: process.env.APP_KEY,
     url: process.env.APP_URL || `http://localhost`,
-    port: process.env.APP_PORT || 8080
+    port: process.env.APP_PORT || 8080,
   },
   server: {
     port: process.env.SERVER_PORT || 3000,
+    enabled: (process.env.API_ENABLED === `true`) || true
   },
   db: {
     username: process.env.DB_USER,
@@ -24,5 +25,5 @@ module.exports = {
     database: process.env.DB_NAME,
     host: process.env.DB_HOST || `localhost`,
     dialect: `postgres`
-  },
+  }
 };

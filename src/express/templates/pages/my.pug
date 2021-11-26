@@ -1,4 +1,4 @@
-extends ../layouts/main-2
+extends ../layouts/main
 
 block variables
   - let mainClass = `main-page main-page--padding`
@@ -10,7 +10,8 @@ block content
     ul.notes__list
       - for (article of articles)
           li.notes__list-item
-            time.notes__item-time(datetime='2019-03-21T20:33') #{article.createdDate}
-            a.notes__item-text(href='#') #{article.title}
-            button.notes__button.button.button--close-item(type='button')
+            time.notes__item-time(datetime='2019-03-21T20:33') #{article.createdAt}
+            a.notes__item-text(href=`/articles/${article.id}`) #{article.title}
+            button.notes__button.button.button--close-item(type='button', data-delete=`/my/delete/${article.id}`)
               span.visually-hidden Закрыть строку списка
+    div !{articles.links()}

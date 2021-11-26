@@ -5,17 +5,21 @@ const Base = require(`./Base`);
 const {Collection} = require(`../helpers`);
 
 class Comments extends Base {
-  async latest(limit = 5) {
-    const items = (await axios.get(`${this.baseUrl}/comments?order=latest&limit=${limit}`)).data;
-    return new Collection(items);
+  async latest({limit, page = 1}) {
+    const items = (await axios.get(`${this.baseUrl}/comments?order=latest&limit=${limit}&page=${page}`)).data;
+    return new Collection(items, items.totalPages, items.currentPage);
   }
 
   async fetch(articleId, params) {
     return (await axios.get(`${this.url}/${articleId}/comments`, {params})).data;
   }
 
-  async create(offerId, attrs) {
-    return (await axios.post(`${this.url}/${offerId}/comments`, attrs)).data;
+  async create(articleId, attrs) {
+    return (await axios.post(`${this.url}/${articleId}/comments`, attrs)).data;
+  }
+
+  async delete(articleId, commentId) {
+    return (await axios.delete(`${this.url}/${articleId}/comments/${commentId}`)).data;
   }
 }
 

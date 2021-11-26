@@ -4,8 +4,19 @@ const {Router} = require(`express`);
 const {logger} = require(`../helpers`);
 const api = require(`../api-services`);
 const upload = require(`../middleware/upload`);
+const checkAuth = require(`../middleware/checkAuth`);
 
 const router = new Router();
+
+const setCookies = (res, tokens) => {
+  res.cookie(`access_token`, tokens.access);
+  res.cookie(`refresh_token`, tokens.refresh, {httpOnly: true});
+};
+
+const clearCookies = (res) => {
+  res.clearCookie(`access_token`);
+  res.clearCookie(`refresh_token`);
+};
 
 module.exports = (_app) => {
   router.get(`/`, async (req, res) => {
@@ -18,15 +29,18 @@ module.exports = (_app) => {
     try {
       articles = await api.articles.fetch({order: `latest`, query, page});
       popular = await api.articles.fetch({order: `popular`});
-      comments = await api.comments.latest();
-
+      comments = await api.comments.latest({limit: 5});
+      comments.items.forEach((comment) => {
+        if (comment.text.length > 100) {
+          comment.text = `${comment.text.slice(0, 100)}...`;
+        }
+      });
       empty = !articles.length;
     } catch (err) {
-      logger.info(err);
+      console.log(err);
       if (err.response) {
         logger.error(`[ERROR] route: ${req.url}, message: status - ${err.response.status}, data - ${err.response.data}`);
       }
-
     }
 
     res.render(`pages/index`, {popular, articles, comments, empty});
@@ -50,6 +64,21 @@ module.exports = (_app) => {
 
   router.get(`/login`, (_req, res, _next) => res.render(`pages/login`));
 
+  router.post(`/login`, async (req, res, next) => {
+    const {email, password} = req.body;
+    try {
+      const {result, errors} = await api.users.login(email, password);
+      if (errors) {
+        res.json({errors});
+        return;
+      }
+      setCookies(res, result.tokens);
+      res.json({redirectTo: result.isEditor ? `/my` : `/`});
+    } catch (err) {
+      next(err);
+    }
+  });
+
   router.post(`/register`, upload.single(`avatar`), async (req, res, next) => {
     const avatar = req.file && req.file.buffer.toString(`base64`);
     const {name, lastName, password, confirmPassword, email} = req.body;
@@ -67,7 +96,7 @@ module.exports = (_app) => {
     };
 
     try {
-      await api.users.create(attrs);
+      await api.users.register(attrs);
     } catch (err) {
       if (err.response && err.response.status === 400) {
         res.json({errors: err.response.data});
@@ -85,5 +114,15 @@ module.exports = (_app) => {
 
   router.get(`/register`, (_req, res, _next) => res.render(`pages/register`));
 
+  router.get(`/logout`, checkAuth, async (req, res, next) => {
+    try {
+      const token = req.cookies.access_token;
+      await api.users.logout(token);
+      clearCookies(res);
+      res.redirect(`/login`);
+    } catch (err) {
+      next(err);
+    }
+  });
   return router;
 };

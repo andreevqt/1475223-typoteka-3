@@ -1,4 +1,4 @@
-extends ../layouts/main-2
+extends ../layouts/main
 
 block variables
   - let mainClass = `main-page main-page--padding`
@@ -8,14 +8,15 @@ block content
   section.main-page__publication.publication
     h1.publication__title Комментарии
     ul.publication__list
-      - for(let article of articles)
-          each comment in article.comments
-            li.publication__list-item
-              .publication__header
-                img.publication__list-image(src='/img/avatar-small-2.png' width='20' height='20' alt='Аватар пользователя')
-                b.publication__list-name #{comment.author.name}
-                time.publication__item-time(datetime='2019-03-21T20:33') #{comment.createdAt}
-              a.publication__item-text(href='#') #{article.title}
-              p.publication__text-strong #{comment.text}
-              button.publication__button.button.button--close-item(type='button')
-                span.visually-hidden Закрыть строку списка
+      - for (comment of comments)
+          li.publication__list-item
+            .publication__header
+              if (comment.author.avatar)
+                img.publication__list-image(src=comment.author.avatar.orig width='20' height='20' alt=comment.author.name)
+              b.publication__list-name #{comment.author.name}
+              time.publication__item-time(datetime='2019-03-21T20:33') #{comment.createdAt}
+            a.publication__item-text(href=`/articles/${comment.article.id}#comment-${comment.id}`) #{comment.article.title}
+            p.publication__text-strong #{comment.text}
+            button.publication__button.button.button--close-item(type='button', data-delete=`/my/delete/${comment.article.id}/${comment.id}`)
+              span.visually-hidden Закрыть строку списка
+    div !{comments.links()}

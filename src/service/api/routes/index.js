@@ -7,6 +7,7 @@ const search = require(`./search`);
 const categories = require(`./categories`);
 const comments = require(`./comments`);
 const users = require(`./users`);
+const status = require(`./status`);
 const {
   Article,
   Category,
@@ -39,6 +40,7 @@ search(router, services);
 categories(router, services);
 comments(router, services);
 users(router, services);
+status(router, services);
 
 module.exports = {
   router,

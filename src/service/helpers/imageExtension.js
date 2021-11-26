@@ -1,7 +1,7 @@
 'use strict';
+/* eslint-disable */
 
 const compare = (a, b, operator) => {
-  /* eslint-disable indent */
   switch (operator) {
     case `=`: return a === b;
     case `>`: return a > b;
@@ -11,7 +11,6 @@ const compare = (a, b, operator) => {
   }
 
   return null;
-  /* eslint-enable */
 };
 
 const isNumber = (value) => {

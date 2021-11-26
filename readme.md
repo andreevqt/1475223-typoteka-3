@@ -1,7 +1,7 @@
 # Личный проект «Типотека» [![Build status][travis-image]][travis-url]
 
 * Студент: [Александр Андреев](https://up.htmlacademy.ru/nodejs/3/user/1475223).
-* Наставник: [Артемий Бойков](https://htmlacademy.ru/profile/id607755).
+* Наставник: [Вадим Осюков](https://htmlacademy.ru/profile/id1411353).
 
 ---
 

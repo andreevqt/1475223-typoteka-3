@@ -6,7 +6,7 @@ const express = require(`express`);
 const {once} = require(`events`);
 const api = require(`../../api/routes`);
 const {ValidationError} = require(`express-validation`);
-const {logRequests} = require(`../../api/middleware`);
+const {logRequests, checkStatus} = require(`../../api/middleware`);
 const {translateMessage} = require(`../../../utils`);
 const path = require(`path`);
 const {
@@ -27,6 +27,7 @@ const server = async (manager, args) => {
   }));
 
   app.use(logRequests);
+  app.use(checkStatus);
 
   app.use(API_PREFIX, (req, res, next) => {
     logger.error(`[ROUTE]: ${req.method} ${req.url}`);
