@@ -1,0 +1,47 @@
+section#modalRegister.modal(data-ajax-form)
+  .popup.popup--registration
+    .popup__loader
+    button.modal__close.popup__button.button.button--popup-close(type='button' aria-label='Закрыть окно') Закрыть окно
+    h2.visually-hidden Форма регистрации
+    ul.popup__tabs
+      li(class=`popup__tab  popup__tab--register ${register ? "popup__tab--active" : ""}`)
+        button.popup__tab-switcher.button(type='button') Регистрация
+      li(class=`popup__tab  popup__tab--log-in ${login ? "popup__tab--active" : ""}`)
+        button.popup__tab-switcher.button(type='button') Войти
+    div(class=`popup__form form form--register ${register ? "popup__form--active" : "popup__form--hidden"}`)
+      form(action='/register' method='post' enctype=`multipart/form-data`)
+        .form__field
+          label
+            input(name='email' type='email' placeholder='Электронная почта' required='')
+        .form__field
+          label
+            input(name='name' type='text' placeholder='Имя' required='')
+        .form__field
+          label
+            input(name='lastName' type='text' placeholder='Фамилия')
+        .form__field
+          label
+            input(name='password' type='password' placeholder='Пароль' required='')
+        .form__field
+          label
+            input(name='confirmPassword' type='password' placeholder='Повтор пароля' required='')
+        .form__field.form__field--post-image
+          a.form__avatar.avatar
+            img(src='/img/icons/smile.svg' alt='аватар пользователя')
+          label
+            input#image-name-field(type=`text`, placeholder=`Фотография`, readonly=true)
+          .form__image-loader.form__image-loader--publication
+            label
+              input.visually-hidden(name='avatar' type='file')
+              | Загрузить фото профиля
+        button.form__submit-btn.form__submit-btn--register.button.button--colored(type='submit') Зарегистрироваться
+    div(class=`popup__form  form form--log-in ${login ? "popup__form--active" : "popup__form--hidden"}`)
+      form(action='/login' method='post' enctype=`multipart/form-data`)
+        .form__field
+          label
+            input(type='email' placeholder='Электронная почта' required='')
+        .form__field
+          label
+            input(type='password' placeholder='Пароль' required='')
+        button.form__submit-btn.form__submit-btn--log-in.button.button--colored(type='submit') Войти
+  .modal__overlay

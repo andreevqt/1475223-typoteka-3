@@ -8,64 +8,100 @@ const enableScrolling = () => {
 
 enableScrolling();
 
-// create post form
-const formsPopup = document.querySelector('#modalNewPost .popup');
-if (formsPopup) {
-  const form = formsPopup.querySelector('form');
-  const action = form.getAttribute('action');
-  form.addEventListener('submit', async (e) => {
-    formsPopup.classList.add('popup--loading');
+const reverseString = (str) => {
+  return str.split("").reverse().join("");
+};
 
+const clearString = (str) => {
+  const newString = reverseString(str);
+
+  if (newString.indexOf("\\") === -1) {
+    return reverseString(newString);
+  } else {
+    const number = newString.indexOf("\\");
+    return reverseString(newString.slice(0, number));
+  }
+};
+
+// image-loader
+/* const loader = document.querySelector('.form__image-loader');
+if (loader) {
+  const cloned = loader.cloneNode(true);
+  loader.replaceWith(cloned);
+  const loaderFile = cloned.querySelector('input[type="file"]');
+  const loaderText = cloned.closest('input[type="text"]');
+  loaderFile.addEventListener('change', (e) => {
     e.preventDefault();
-    const formData = new FormData(form);
-    const response = await fetch(action, {
-      method: `POST`,
-      body: formData
-    });
-
-    const result = await response.json();
-
-    formsPopup.classList.remove('popup--loading');
-
-    // clear all invalid values
-    const formFields = form.querySelectorAll('.form__field');
-    if (formFields) {
-      formFields.forEach((wrapper) => {
-        wrapper.classList.remove('form__field--invalid');
-      });
-    }
-
-    const errorHelpers = form.querySelectorAll('.form__helper');
-    if (errorHelpers) {
-      errorHelpers.forEach((helper) => {
-        helper.remove();
-      });
-    }
-
-    if (result.errors) {
-      const errors = result.errors;
-
-      Object.keys(errors).forEach((key) => {
-        let input = form.querySelector('[name="' + key + '"]');
-        if (input) {
-          const wrapper = input.closest(`.form__field`);
-          wrapper.classList.add(`form__field--invalid`);
-
-          const errorHelper = document.createElement('div');
-          errorHelper.classList.add(`form__helper`);
-          errorHelper.innerHTML = errors[key];
-          wrapper.after(errorHelper);
-        }
-      });
-
-      return;
-    }
-
-    if (result.redirectTo) {
-      window.location.replace(result.redirectTo);
-    }
-
+    loaderText.value = clearString(loaderFile.value);
   });
+} */
+
+// create post form
+const formsPopup = document.querySelector('[data-ajax-form] .popup');
+if (formsPopup) {
+  const forms = formsPopup.querySelectorAll('form');
+  forms.forEach((form) => {
+    const action = form.getAttribute('action');
+    form.addEventListener('submit', async (e) => {
+      formsPopup.classList.add('popup--loading');
+
+      e.preventDefault();
+      const formData = new FormData(form);
+      const response = await fetch(action, {
+        method: `POST`,
+        body: formData
+      });
+
+      const result = await response.json();
+
+      formsPopup.classList.remove('popup--loading');
+
+      // clear all invalid values
+      const formFields = form.querySelectorAll('.form__field');
+      if (formFields) {
+        formFields.forEach((wrapper) => {
+          wrapper.classList.remove('form__field--invalid');
+        });
+      }
+
+      const errorHelpers = form.querySelectorAll('.form__helper');
+      if (errorHelpers) {
+        errorHelpers.forEach((helper) => {
+          helper.remove();
+        });
+      }
+
+      if (result.errors) {
+        const errors = result.errors;
+
+        // clear password values
+        const passwordFields = form.querySelectorAll(`input[type="password"]`);
+        passwordFields.forEach((field) => {
+          field.value = ``;
+        });
+
+        Object.keys(errors).forEach((key) => {
+          let input = form.querySelector('[name="' + key + '"]');
+          if (input) {
+            const wrapper = input.closest(`.form__field`);
+            wrapper.classList.add(`form__field--invalid`);
+
+            const errorHelper = document.createElement('div');
+            errorHelper.classList.add(`form__helper`);
+            errorHelper.innerHTML = errors[key];
+            wrapper.after(errorHelper);
+          }
+        });
+
+        return;
+      }
+
+      if (result.redirectTo) {
+        window.location.replace(result.redirectTo);
+      }
+
+    });
+  })
 }
 
 // delete btn
@@ -192,24 +228,24 @@ let textarea = null;
 if (comments || publication) {
   textarea = document.querySelectorAll('textarea');
 }
-const map = (typeof Map === 'function') ? new Map() : (function () {
+const map = (typeof Map === 'function') ? new Map() : (function() {
   const keys = [];
   const values = [];
 
   return {
-    has (key) {
+    has(key) {
       return keys.indexOf(key) > -1;
     },
-    get (key) {
+    get(key) {
       return values[keys.indexOf(key)];
     },
-    set (key, value) {
+    set(key, value) {
       if (keys.indexOf(key) === -1) {
         keys.push(key);
         values.push(value);
       }
     },
-    delete (key) {
+    delete(key) {
       const index = keys.indexOf(key);
       if (index > -1) {
         keys.splice(index, 1);
@@ -233,7 +269,7 @@ try {
   };
 }
 
-function assign (ta) {
+function assign(ta) {
   if (!ta || !ta.nodeName || ta.nodeName !== 'TEXTAREA' || map.has(ta)) {
     return;
   }
@@ -242,7 +278,7 @@ function assign (ta) {
   let clientWidth = null;
   let cachedHeight = null;
 
-  function init () {
+  function init() {
     const style = window.getComputedStyle(ta, null);
 
     if (style.resize === 'vertical') {
@@ -264,7 +300,7 @@ function assign (ta) {
     update();
   }
 
-  function changeOverflow (value) {
+  function changeOverflow(value) {
     {
       // Chrome/Safari-specific fix:
       // When the textarea y-overflow is hidden, Chrome/Safari do not reflow the text to account for the space
@@ -281,7 +317,7 @@ function assign (ta) {
     ta.style.overflowY = value;
   }
 
-  function getParentOverflows (el) {
+  function getParentOverflows(el) {
     const arr = [];
 
     while (el && el.parentNode && el.parentNode instanceof Element) {
@@ -297,7 +333,7 @@ function assign (ta) {
     return arr;
   }
 
-  function resize () {
+  function resize() {
     if (ta.scrollHeight === 0) {
       // If the scrollHeight is 0, then the element probably has display:none or is detached from the DOM.
       return;
@@ -322,7 +358,7 @@ function assign (ta) {
     }
   }
 
-  function renew () {
+  function renew() {
     resize();
 
     const styleHeight = Math.round(parseFloat(ta.style.height));
@@ -409,14 +445,14 @@ function assign (ta) {
   init();
 }
 
-function destroy (ta) {
+function destroy(ta) {
   const methods = map.get(ta);
   if (methods) {
     methods.destroy();
   }
 }
 
-function update (ta) {
+function update(ta) {
   const methods = map.get(ta);
   if (methods) {
     methods.update();

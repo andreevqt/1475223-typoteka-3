@@ -249,6 +249,14 @@ body {
   border-bottom-color: #eb5757;
 }
 
+.form__image-loader--publication label {
+  padding: 10px 20px;
+}
+
+.form__field--image {
+
+}
+
 .form__helper,
 .category__helper {
   margin-top: 10px;

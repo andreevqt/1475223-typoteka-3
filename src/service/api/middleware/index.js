@@ -2,5 +2,8 @@
 
 module.exports = {
   logRequests: require(`./logRequests`),
-  parseQuery: require(`./parseQuery`)
+  parseQuery: require(`./parseQuery`),
+  auth: require(`./auth`),
+  authorize: require(`./authorize`),
+  isCurrentUser: require(`./isCurrentUser`)
 };

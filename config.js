@@ -3,7 +3,15 @@
 require(`dotenv`).config();
 
 module.exports = {
+  jwt: {
+    secret: {
+      access: process.env.JWT_SECRET_ACCESS,
+      refresh: process.env.JWT_SECRET_REFRESH
+    },
+    expiresIn: process.env.JWT_EXPIRES_IN || `15m`
+  },
   app: {
+    key: process.env.APP_KEY,
     url: process.env.APP_URL || `http://localhost`,
     port: process.env.APP_PORT || 8080
   },

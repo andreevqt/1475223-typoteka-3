@@ -30,7 +30,7 @@ module.exports = (_app) => {
     try {
       await api.articles.create(attrs);
     } catch (err) {
-      if (err && err.response.status === 400) {
+      if (err.response && err.response.status === 400) {
         res.json({errors: err.response.data});
         return;
       }
@@ -46,7 +46,7 @@ module.exports = (_app) => {
 
   router.get(`/:id`, async (req, res) => {
     const {id} = req.params;
-    let article = null;
+    let article;
 
     try {
       article = await api.articles.get(id);

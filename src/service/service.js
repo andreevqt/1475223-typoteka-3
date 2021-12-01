@@ -8,7 +8,8 @@ const {
   help,
   server,
   fill,
-  filldb
+  filldb,
+  secret
 } = require(`./cli/commands`);
 
 const command = process.argv[2];
@@ -25,6 +26,7 @@ commandManager
   .add(`--generate`, `формирует файл mocks.json`, generate, [`count`])
   .add(`--fill`, `генерирует файл fill-db.sql со сформированными запросами для создания n-публикаций`, fill, [`n`])
   .add(`--version`, `выводит номер версии`, version)
+  .add(`--secret`, `генерирует ключи`, secret)
   .add(`--help`, `печатает этот текст`, help)
   .add(`--server`, `запускает http-server`, server, [`port`])
   .add(`--filldb`, `заполняет базу данных объявлениями`, filldb, [`n`])
