@@ -113,7 +113,6 @@ class Paginator {
   }
 
   links() {
-    console.log(this.totalPages);
     return pug.renderFile(this._template, {paginator: this});
   }
 

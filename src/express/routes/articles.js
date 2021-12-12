@@ -83,7 +83,7 @@ module.exports = (_app) => {
 
   router.post(`/:articleId/comments`, async (req, res, next) => {
     const {article} = res.locals;
-    const attrs = req.body;
+    const {_csrf, ...attrs} = req.body;
 
     try {
       await api.comments.create(article.id, attrs);

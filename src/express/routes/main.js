@@ -40,7 +40,6 @@ module.exports = (_app) => {
       });
       empty = !articles.length;
     } catch (err) {
-      console.log(err);
       if (err.response) {
         logger.error(`[ERROR] route: ${req.url}, message: status - ${err.response.status}, data - ${err.response.data}`);
       }

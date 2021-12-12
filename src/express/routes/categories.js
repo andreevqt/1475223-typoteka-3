@@ -15,7 +15,6 @@ module.exports = (_app) => {
     try {
       await api.categories.create(attrs);
     } catch (err) {
-      console.log(err.response.data);
       res.render(`pages/all-categories`, {errors: {create: err.response.data}, old: {create: req.body}});
       return;
     }

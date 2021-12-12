@@ -12,7 +12,7 @@ module.exports = {
       fullText: Joi.string().label(`Полный текст публикации`).required().max(1000),
       category: [
         Joi.array().label(`Категория`).required().min(1),
-        Joi.string().label(`Категория`).required()
+        Joi.number().label(`Категория`).required()
       ],
       picture: Joi.image().label(`Изображение`).allowed([`jpg`, `png`]).allow(null).max(5000),
       createdAt: Joi.string().allow(``).allow(null)
@@ -25,7 +25,7 @@ module.exports = {
       fullText: Joi.string().label(`Полный текст публикации`).max(1000),
       category: [
         Joi.array().min(1),
-        Joi.string()
+        Joi.number()
       ],
       picture: Joi.image().label(`Изображение`).allowed([`jpg`, `png`]).allow(null).max(5000),
       createdAt: Joi.string().allow(``).allow(null)

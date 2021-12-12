@@ -61,8 +61,6 @@ module.exports = (services) => ({
   },
 
   logout: async (req, res) => {
-    console.log(`logout`);
-    console.log(req.body);
     const {token} = req.body;
     if (!token) {
       res.sendStatus(http.BAD_REQUEST);

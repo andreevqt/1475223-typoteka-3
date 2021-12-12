@@ -25,9 +25,13 @@ section#modalNewPost.modal(data-ajax-form)
                 label
                   input.form__image-loader-input.visually-hidden(type=`file`, name=`picture`)
                   | Обзор
-            .form__field
-              select#category-field.form__select.js-multiple-select(name=`category`, data-label=`Выбрать категории публикации`, data-options=JSON.stringify(categories.items.map(cat => ({text: cat.name, value: cat.id, selected: formData.category.some((el) => el.id === cat.id) }))))
-          .form__wrapper.form__wrapper--text
+            .form-field.new-publication__category-wrapper()
+              - for (cat of categories)
+                  .new-publication__checkbox.new-publication__checkbox--auto
+                    input(id=`#checkbox-auto-${cat.id}`, type='checkbox', name='category[]', value=cat.id, checked=(formData.category.some((el) => el.id === cat.id)))
+                    label(for=`#checkbox-auto-${cat.id}`) #{cat.name}
+              a.new-publication__form-link.button.button--transparent(href='/categories', target='blank') Добавить категорию
+          .form__wrapper.form__wrapper--text(data-category=category)
             .form__field.form__field--publication-text
               label
                 textarea(rows='1', placeholder='Анонс публикации', name=`announce`) #{formData.announce}
