@@ -29,6 +29,9 @@ module.exports = (_app) => {
     try {
       articles = await api.articles.fetch({order: `latest`, query, page});
       popular = await api.articles.fetch({order: `popular`});
+      if (popular.items.every((item) => !item.commentsCount)) {
+        popular.items = [];
+      }
       comments = await api.comments.latest({limit: 5});
       comments.items.forEach((comment) => {
         if (comment.text.length > 100) {

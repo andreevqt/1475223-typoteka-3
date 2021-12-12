@@ -113,8 +113,8 @@ module.exports = (_app) => {
 
   router.post(`/edit/:articleId`, [isEditor, upload.single(`picture`)], async (req, res, next) => {
     const {article} = res.locals;
-    const filename = req.file ? req.file.filename : null;
-    const formData = {picture: filename, category: [], ...req.body};
+    const picture = req.file && req.file.buffer.toString(`base64`);
+    const formData = {picture, category: [], ...req.body};
 
     try {
       await api.articles.update(article.id, formData);

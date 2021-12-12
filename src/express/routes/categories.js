@@ -11,9 +11,11 @@ module.exports = (_app) => {
   });
 
   router.post(`/`, async (req, res) => {
+    const {_csrf, ...attrs} = req.body
     try {
-      await api.categories.create(req.body);
+      await api.categories.create(attrs);
     } catch (err) {
+      console.log(err.response.data);
       res.render(`pages/all-categories`, {errors: {create: err.response.data}, old: {create: req.body}});
       return;
     }

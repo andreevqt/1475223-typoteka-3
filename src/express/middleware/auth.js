@@ -32,12 +32,14 @@ const auth = async (req, res, next) => {
         userId = getUID(accessToken);
       } catch (err) {
         // refresh
-        const tokens = await api.users.refresh(refreshToken);
+        try {
+          const tokens = await api.users.refresh(refreshToken);
+          setHeaders(tokens.access);
+          setCookies(tokens);
+          userId = getUID(tokens.access);
+        } catch (_err) {
 
-        setHeaders(tokens.access);
-        setCookies(tokens);
-
-        userId = getUID(tokens.access);
+        }
       }
 
       try {
