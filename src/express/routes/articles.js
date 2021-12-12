@@ -83,7 +83,7 @@ module.exports = (_app) => {
 
   router.post(`/:articleId/comments`, async (req, res, next) => {
     const {article} = res.locals;
-    const {_csrf, ...attrs} = req.body;
+    const {_csrf, ...attrs} = req.body;  // eslint-disable-line
 
     try {
       await api.comments.create(article.id, attrs);

@@ -11,7 +11,7 @@ module.exports = (_app) => {
   });
 
   router.post(`/`, async (req, res) => {
-    const {_csrf, ...attrs} = req.body
+    const {_csrf, ...attrs} = req.body;  // eslint-disable-line
     try {
       await api.categories.create(attrs);
     } catch (err) {

@@ -37,9 +37,7 @@ const auth = async (req, res, next) => {
           setHeaders(tokens.access);
           setCookies(tokens);
           userId = getUID(tokens.access);
-        } catch (_err) {
-
-        }
+        } catch (_err) {}  // eslint-disable-line
       }
 
       try {
