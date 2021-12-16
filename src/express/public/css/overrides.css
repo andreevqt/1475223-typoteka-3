@@ -4,7 +4,7 @@ body {
 
 .modal {
   display: none;
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   /* Required for overflow: auto */
@@ -258,7 +258,9 @@ body {
 }
 
 .form__helper,
-.category__helper {
+.category__helper,
+.comments__helper {
+  font-weight: 700;
   margin-top: 10px;
   color: #eb5757;
 }
@@ -271,8 +273,15 @@ body {
   color: #eb5757;
 }
 
-
 .category__list-item {
   display: flex;
   flex-direction: column;
+}
+
+.header--error .header__logo--403::before {
+    content: '/ 403';
+}
+
+.mt-15 {
+  margin-top: 15px !important;
 }

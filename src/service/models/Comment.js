@@ -27,11 +27,15 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     static getQueryOptions() {
-      const {User} = sequelize.models;
+      const {User, Article} = sequelize.models;
       const include = [{
         model: User,
         as: `author`,
         attributes: [`id`, `name`, `email`, `avatar`]
+      }, {
+        model: Article,
+        as: `article`,
+        attributes: [`id`, `title`]
       }];
       const exclude = [`authorId`];
       return {include: include, attributes: {exclude: exclude}};

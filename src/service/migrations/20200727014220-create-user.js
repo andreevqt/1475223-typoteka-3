@@ -9,6 +9,10 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      isEditor: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
+      },
       name: {
         type: Sequelize.STRING
       },

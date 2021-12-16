@@ -1,4 +1,4 @@
-extends ../layouts/main-2.pug
+extends ../layouts/main.pug
 
 block variables
   - let mainClass = `main-page main-page--padding`
@@ -9,6 +9,7 @@ block content
     if errors && errors.create
       .category__add-form.category__add-form--invalid
         form(action='/categories' method='POST')
+          input(type=`hidden` name=`_csrf` value=csrf)
           input#add-form-add-category(type='text' name='name' placeholder='Новая категория' value=old.create.name required)
           label(for='add-form-add-category')
             span.visually-hidden Добавить категорию
@@ -17,6 +18,7 @@ block content
     else 
       .category__add-form
         form(action='/categories' method='POST')
+          input(type=`hidden` name=`_csrf` value=csrf)
           input#add-form-add-category(type='text' name='name' placeholder='Новая категория')
           label(for='add-form-add-category')
             span.visually-hidden Добавить категорию
@@ -26,6 +28,7 @@ block content
         if errors && errors.update && errors.update.id === category.id
           li.category__list-item.category__list-item--invalid
             form(action=`/categories/update/${category.id}` method='POST')
+              input(type=`hidden` name=`_csrf` value=csrf)
               input(id=`#modify-form-category-${category.id}` type='text' name='name' value=old.update.name required)
               label(for=`modify-form-category-${category.id}`)
                 span.visually-hidden Редактировать категорию
@@ -35,6 +38,7 @@ block content
         else
           li.category__list-item
             form(action=`/categories/update/${category.id}` method='POST')
+              input(type=`hidden` name=`_csrf` value=csrf)
               input(id=`#modify-form-category-${category.id}` type='text' name='name' value=category.name required)
               label(for=`modify-form-category-${category.id}`)
                 span.visually-hidden Редактировать категорию

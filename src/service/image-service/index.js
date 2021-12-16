@@ -4,6 +4,8 @@ const sharp = require(`sharp`);
 const path = require(`path`);
 const config = require(`../../../config`);
 const fs = require(`fs`).promises;
+const {logger} = require(`../helpers`);
+
 
 const url = `${config.app.url}:${config.server.port}/uploads`;
 const uploadPath = path.resolve(__dirname, `../public/uploads`);
@@ -49,9 +51,13 @@ const remove = async (picture) => {
   const orig = `${uploadPath}/${path.basename(picture.orig)}`;
   const big = `${uploadPath}/${path.basename(picture.big)}`;
 
-  await fs.unlink(orig);
-  await fs.unlink(small);
-  await fs.unlink(big);
+  try {
+    await fs.unlink(orig);
+    await fs.unlink(small);
+    await fs.unlink(big);
+  } catch (err) {
+    logger.error(`[ERROR] cannot delete picture. ${err.message}`);
+  }
 };
 
 module.exports = {

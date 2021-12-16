@@ -47,7 +47,7 @@ class BaseModel extends Model {
 
   static getThumbnail(name) {
     return function () {
-      const picture = this.getDataValue(name);
+      const picture = this.getDataValue(name); // eslint-disable-line
       if (!picture) {
         return null;
       }

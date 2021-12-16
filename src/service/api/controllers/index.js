@@ -5,5 +5,6 @@ module.exports = {
   categories: require(`./categories`),
   search: require(`./search`),
   comments: require(`./comments`),
+  status: require(`./status`),
   users: require(`./users`)
 };

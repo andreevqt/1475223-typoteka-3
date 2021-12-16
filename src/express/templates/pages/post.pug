@@ -1,4 +1,4 @@
-extends ../layouts/main-2.pug
+extends ../layouts/main.pug
 
 block variables
   - let mainClass = ``
@@ -19,30 +19,51 @@ block content
         if article.picture
           .post__picture
             img(src=article.picture.orig alt=article.title)
+        if currentUser && currentUser.isEditor 
+          a.button.button--colored.mt-15(href=`/articles/edit/${article.id}`) Редактировать
         .post__text
           h3 #{article.title}
           p #{article.fullText}
 
-    if article.comments
-      .post__wrapper.post__wrapper--comments
-        section.post__comments.comments
+    
+    .post__wrapper.post__wrapper--comments
+      section.post__comments.comments
+        if article.comments.length > 0
           h2.comments__title.title.title--middle Комментарии
           if article.comments
             ul.comments__list
               each comment in article.comments
-                li.comments__comment
+                li.comments__comment(id=`comment-${comment.id}`)
                   .comments__avatar.avatar
-                    img(src='/img/avatar-1.png' alt='аватар пользователя')
+                    if (article.author.avatar)
+                      img(src=article.author.avatar alt=article.author.name)
                   .comments__text
                     .comments__head
                       p #{article.author.name} •
                       time.comments__date(datetime='2019-03-21T20:33') #{article.createdAt}
                     p.comments__message #{comment.text}
+        else
+          h2.comments__title.title.title--middle Комментарии отсутствуют
 
+        if currentUser
           .comments__footer.comments__footer--user
             form(action=`/articles/${article.id}/comments` method='POST')
+              input(type="hidden", name="_csrf", value=csrf)
+              input(type="hidden", name="authorId", value=currentUser.id)
               .comments__avatar.avatar
-                img(src='/img/avatar-2.png' alt='аватар пользователя')
+                if currentUser.avatar
+                  img(src=currentUser.avatar.orig alt=currentUser.avatar.name)
               label
                 textarea(rows='1' name='text' placeholder='Присоединиться к обсуждению')
+                if errors && errors.text
+                  .comments__helper #{errors.text}
+                  
               button.comments__button.button.button--colored(type='submit') Опубликовать
+        else
+          .comments__footer.comments__footer--visitor
+            button.modal-toggle.comments__button.button.button--colored(type='button' data-target='#modalRegister') Войти
+            .comments__registration
+              p.text.text--signature
+                b.title.title--small Регистрация
+                | Чтобы присоединиться к переписке нужно зарегистрироваться
+

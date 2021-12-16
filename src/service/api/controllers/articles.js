@@ -9,12 +9,12 @@ module.exports = (services) => ({
       return;
     }
 
-    req.locals = {article};
+    res.locals.article = article;
     next();
   },
 
   checkComment: async (req, res, next, id) => {
-    const {article} = req.locals;
+    const {article} = res.locals;
 
     const comment = await services.comments.findOne({
       where: {
@@ -28,19 +28,18 @@ module.exports = (services) => ({
       return;
     }
 
-    req.locals = req.locals || {};
-    req.locals.comment = comment;
+    res.locals.comment = comment;
     next();
   },
 
   list: async (req, res) => {
-    const {page, limit, ...rest} = req.locals.parsed;
+    const {page, limit, ...rest} = res.locals.parsed;
     const articles = await services.articles.paginate(page, limit, rest);
     res.status(http.OK).json(articles);
   },
 
   get: (req, res) => {
-    const {article} = req.locals;
+    const {article} = res.locals;
     res.status(http.OK).json(article);
   },
 
@@ -50,32 +49,32 @@ module.exports = (services) => ({
   },
 
   update: async (req, res) => {
-    const {article} = req.locals;
+    const {article} = res.locals;
     const updated = await services.articles.update(article, req.body);
     res.status(http.OK).json(updated);
   },
 
   delete: async (req, res) => {
-    const {article} = req.locals;
+    const {article} = res.locals;
     const deleted = await services.articles.delete(article);
     res.status(http.OK).json(deleted);
   },
 
   comments: {
     list: async (req, res) => {
-      const {article} = req.locals;
+      const {article} = res.locals;
       const comments = await services.comments.findAll(article);
       res.status(http.OK).json(comments);
     },
 
     create: async (req, res) => {
-      const {article} = req.locals;
+      const {article} = res.locals;
       const comment = await services.comments.create(article, req.body);
       res.status(http.CREATED).json(comment);
     },
 
     delete: async (req, res) => {
-      const {comment} = req.locals;
+      const {comment} = res.locals;
       const deleted = await services.comments.delete(comment);
       res.status(http.OK).json(deleted);
     }
@@ -84,7 +83,7 @@ module.exports = (services) => ({
   categories: {
     get: async (req, res) => {
       const {categoryId} = req.params;
-      const {page, limit} = req.locals.parsed;
+      const {page, limit} = res.locals.parsed;
 
       const articles = await services.articles.findByCategory(page, limit, categoryId);
       if (!articles) {

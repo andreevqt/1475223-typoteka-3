@@ -9,18 +9,18 @@ module.exports = (services) => ({
       return;
     }
 
-    req.locals = {category};
+    res.locals.category = category;
     next();
   },
 
   list: async (req, res) => {
-    const {page, limit, ...rest} = req.locals.parsed;
+    const {page, limit, ...rest} = res.locals.parsed;
     const categories = await services.categories.paginate(page, limit, rest);
     res.status(http.OK).json(categories);
   },
 
   get: async (req, res) => {
-    const {category} = req.locals;
+    const {category} = res.locals;
     res.status(http.OK).json(category);
   },
 
@@ -30,13 +30,13 @@ module.exports = (services) => ({
   },
 
   update: async (req, res) => {
-    const {category} = req.locals;
+    const {category} = res.locals;
     const updated = await services.categories.update(category, req.body);
     res.status(http.OK).json(updated);
   },
 
   delete: async (req, res) => {
-    const {category} = req.locals;
+    const {category} = res.locals;
     const deleted = await services.categories.delete(category);
     res.status(http.OK).json(deleted);
   }

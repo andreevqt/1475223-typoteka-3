@@ -17,6 +17,13 @@ const articleAttrs = {
   title: `Рок — это протест, протест внутри вас. Кричите об этом, пусть люди знают...`,
 };
 
+const testUserAttrs = {
+  name: `Джон Доу`,
+  email: `test@email.com`,
+  password: `123456aa`,
+  isEditor: true
+};
+
 const commentAttrs = {
   text: `Какой-то комментарий`
 };
@@ -32,12 +39,23 @@ afterAll(async () => {
 describe(`${API_PREFIX}/articles api endpoint`, () => {
   let testArticle;
   let testComment;
+  let testUser;
 
   beforeEach(async () => {
-    const article = await services.articles.create(articleAttrs);
-    const comment = await services.comments.create(article, commentAttrs);
+    await services.users.create(testUserAttrs);
+    testUser = await services.users.login(testUserAttrs.email, testUserAttrs.password);
+
+    const article = await services.articles.create({authorId: testUser.id, ...articleAttrs});
+    const comment = await services.comments.create(article, {...commentAttrs, authorId: testUser.id});
     testArticle = (await article.reload()).convertToJSON();
     testComment = comment.convertToJSON();
+  });
+
+  afterEach(async () => {
+    await services.articles.delete(testArticle.id);
+    await services.comments.delete(testComment.id);
+    await services.users.logout(testUser.tokens.access);
+    await services.users.delete(testUser.id);
   });
 
   describe(`GET ${API_PREFIX}/articles`, () => {
@@ -77,6 +95,7 @@ describe(`${API_PREFIX}/articles api endpoint`, () => {
     test(`Should create an article`, async () => {
       const response = await request(server)
         .post(`${API_PREFIX}/articles`)
+        .set(`authorization`, testUser.tokens.access)
         .send(articleAttrs)
         .expect(http.CREATED);
 
@@ -90,42 +109,49 @@ describe(`${API_PREFIX}/articles api endpoint`, () => {
     test(`Should return 400 error if wrong attributes`, async () => {
       let response = await request(server)
         .post(`${API_PREFIX}/articles`)
+        .set(`authorization`, testUser.tokens.access)
         .send({...articleAttrs, wrongAttribute: true});
       expect(response.status).toBe(http.BAD_REQUEST);
 
       // title.length < 30
       response = await request(server)
         .post(`${API_PREFIX}/articles`)
+        .set(`authorization`, testUser.tokens.access)
         .send({...articleAttrs, title: `123`});
       expect(response.status).toBe(http.BAD_REQUEST);
 
       // title.length > 250
       response = await request(server)
         .post(`${API_PREFIX}/articles`)
+        .set(`authorization`, testUser.tokens.access)
         .send({...articleAttrs, title: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus cursus est velit. Vestibulum vitae dolor sed erat posuere sodales. Praesent aliquet ex at condimentum tincidunt. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aenean luctus tempor sagittis. Donec eget molestie lacus. Mauris ut faucibus libero. Nulla ullamcorper aliquam erat, vitae dapibus lectus eleifend eget. Aenean id dolor et erat porttitor mollis in non purus. Maecenas commodo arcu eu mi auctor, quis feugiat massa fringilla. Ut id nulla nec velit ornare blandit. Nullam vulputate nibh nisi, et lobortis felis hendrerit non.`});
       expect(response.status).toBe(http.BAD_REQUEST);
 
       // no title
       response = await request(server)
         .post(`${API_PREFIX}/articles`)
+        .set(`authorization`, testUser.tokens.access)
         .send({...articleAttrs, title: null});
       expect(response.status).toBe(http.BAD_REQUEST);
 
       // no category
       response = await request(server)
         .post(`${API_PREFIX}/articles`)
+        .set(`authorization`, testUser.tokens.access)
         .send({...articleAttrs, category: []});
       expect(response.status).toBe(http.BAD_REQUEST);
 
       // wrong image format
       response = await request(server)
         .post(`${API_PREFIX}/articles`)
+        .set(`authorization`, testUser.tokens.access)
         .send({...articleAttrs, picture: data.images.gif});
       expect(response.status).toBe(http.BAD_REQUEST);
 
       // full text > 1000
       response = await request(server)
         .post(`${API_PREFIX}/articles`)
+        .set(`authorization`, testUser.tokens.access)
         .send({...articleAttrs, text: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc commodo dictum viverra. In et molestie mi. Donec lacinia purus nec eros vulputate auctor. Mauris tincidunt ex ac turpis hendrerit accumsan. Nulla consequat lorem eu quam vestibulum, quis vehicula sem tincidunt. Cras gravida nulla eu tellus pretium faucibus. Duis finibus purus in sapien pellentesque ultrices. Etiam consequat nulla nisl, in hendrerit nunc facilisis pellentesque. Vivamus suscipit, mauris a volutpat iaculis, ex odio aliquam quam, eget semper elit turpis a odio. Fusce egestas venenatis faucibus. Phasellus scelerisque ut arcu sit amet consequat. Quisque maximus risus sit amet quam tincidunt laoreet. Aliquam fermentum sodales rhoncus. Nam id dictum mauris. Pellentesque imperdiet eleifend commodo. Aliquam leo dolor, venenatis nec pretium vel, lobortis id tellus. Quisque quis convallis mi. Sed et est ut urna blandit sollicitudin id a lectus. Nullam a diam eget massa ultrices varius a eget neque. Maecenas tristique purus vel est cursus, et scelerisque orci fermentum. Maecenas a ligula porttitor, finibus ligula nec, auctor lectus. Nam sed scelerisque ligula. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Quisque vel tempor urna. Donec non nisl iaculis nisi imperdiet hendrerit sed et mauris. Nunc scelerisque pretium feugiat. Ut rhoncus tempor ipsum, sit amet convallis augue tempus vel. Quisque vestibulum condimentum libero, id sodales nisi feugiat ac. Morbi quis rutrum sapien. Praesent sit amet semper ante. Donec tortor lacus, efficitur eu risus ac, aliquam dapibus felis. Aenean ullamcorper vitae quam id mattis. Maecenas vestibulum vel mauris at dignissim. Maecenas condimentum mauris et pulvinar scelerisque. Donec sit amet mi nunc. Vivamus at tellus convallis, rutrum quam eget, posuere nisi. Sed ornare enim eu dui pulvinar volutpat. Suspendisse ipsum elit, gravida ut quam et, finibus congue velit. In tortor erat, vestibulum et tortor et, placerat dapibus magna. Donec malesuada tempus erat, id eleifend libero tempus ornare. Nunc aliquet lobortis convallis. Mauris eu tincidunt orci. Maecenas in dolor id nisi porttitor luctus. Donec odio ante, efficitur at quam nec, elementum blandit erat. Fusce at mi quis ligula tincidunt sollicitudin convallis sed risus.`});
       expect(response.status).toBe(http.BAD_REQUEST);
     });
@@ -141,6 +167,7 @@ describe(`${API_PREFIX}/articles api endpoint`, () => {
     test(`Should update an article`, async () => {
       let response = await request(server)
         .put(`${API_PREFIX}/articles/${testArticle.id}`)
+        .set(`authorization`, testUser.tokens.access)
         .send(toUpdate)
         .expect(http.OK);
 
@@ -168,6 +195,7 @@ describe(`${API_PREFIX}/articles api endpoint`, () => {
     test(`Should delete an article`, async () => {
       let response = await request(server)
         .delete(`${API_PREFIX}/articles/${testArticle.id}`)
+        .set(`authorization`, testUser.tokens.access)
         .expect(http.OK);
 
       const deleted = response.body;
@@ -181,7 +209,8 @@ describe(`${API_PREFIX}/articles api endpoint`, () => {
 
     test(`Should return 404 error if articleId is wrong`, async () => {
       const response = await request(server)
-        .delete(`${API_PREFIX}/articles/1234`);
+        .delete(`${API_PREFIX}/articles/1234`)
+        .set(`authorization`, testUser.tokens.access);
 
       expect(response.status).toBe(http.NOT_FOUND);
     });
@@ -211,6 +240,7 @@ describe(`${API_PREFIX}/articles api endpoint`, () => {
     test(`Should delete comment by id`, async () => {
       let response = await request(server)
         .delete(`${API_PREFIX}/articles/${testArticle.id}/comments/${testComment.id}`)
+        .set(`authorization`, testUser.tokens.access)
         .expect(http.OK);
 
       const comment = response.body;
@@ -224,7 +254,8 @@ describe(`${API_PREFIX}/articles api endpoint`, () => {
 
     test(`Should return 404 error if articleId is wrong`, async () => {
       const response = await request(server)
-        .delete(`${API_PREFIX}/articles/1234/comments/${testComment.id}`);
+        .delete(`${API_PREFIX}/articles/1234/comments/${testComment.id}`)
+        .set(`authorization`, testUser.tokens.access);
 
       expect(response.status).toBe(http.NOT_FOUND);
     });
@@ -232,12 +263,14 @@ describe(`${API_PREFIX}/articles api endpoint`, () => {
 
   describe(`POST ${API_PREFIX}/articles/:articleId/comments`, () => {
     const toCreate = {
-      text: `Новый комментарий`
+      text: `Новый комментарий`,
+      authorId: 1
     };
 
     test(`Should create a comment`, async () => {
       let response = await request(server)
         .post(`${API_PREFIX}/articles/${testArticle.id}/comments`)
+        .set(`authorization`, testUser.tokens.access)
         .send(toCreate)
         .expect(http.CREATED);
 
@@ -261,6 +294,7 @@ describe(`${API_PREFIX}/articles api endpoint`, () => {
     test(`Should return 404 error if articleId is wrong`, async () => {
       const response = await request(server)
         .post(`${API_PREFIX}/articles/1234`)
+        .set(`authorization`, testUser.tokens.access)
         .send(toCreate);
 
       expect(response.status).toBe(http.NOT_FOUND);
@@ -269,6 +303,7 @@ describe(`${API_PREFIX}/articles api endpoint`, () => {
     test(`Should return 400 error if wrong attributes`, async () => {
       const response = await request(server)
         .post(`${API_PREFIX}/articles/${testArticle.id}/comments`)
+        .set(`authorization`, testUser.tokens.access)
         .send({...toCreate, someWrongAttr: true});
 
       expect(response.status).toBe(http.BAD_REQUEST);

@@ -43,10 +43,12 @@ class ArticleService extends BaseService {
       categories = await this.getCategory(attrs.category);
     }
 
-    await imageService.remove(article.picture);
-    attrs.picture = attrs.picture
-      ? await imageService.makeFromBuffer(attrs.picture)
-      : undefined;
+    if (attrs.picture) {
+      attrs.picture = await imageService.makeFromBuffer(attrs.picture, 460, 240);
+      await imageService.remove(article.picture);
+    } else {
+      attrs.picture = article.picture;
+    }
 
     await article.update(attrs);
 

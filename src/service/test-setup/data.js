@@ -4,13 +4,14 @@ module.exports = {
   users: [{
     name: `Евгений Cмирнов`,
     email: `evgen2002@ya.ru`,
-    avatar: {orig: `/img/avatar02.jpg`, small: `/img/avatar02.jpg`, big: `/img/avatar02.jpg`},
-    password: `5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5`,
+    avatar: null,
+    password: `12345`,
+    isEditor: true
   }, {
     name: `Василий Уткин`,
     email: `vas12121@ya.ru`,
-    avatar: {orig: `/img/avatar.jpg`, small: `/img/avatar.jpg`, big: `/img/avatar.jpg`},
-    password: `5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5`,
+    avatar: null,
+    password: `12345`
   }],
   categories: [
     `Разное`,

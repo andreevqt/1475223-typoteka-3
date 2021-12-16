@@ -3,7 +3,7 @@ const {http} = require(`../../constants`);
 
 module.exports = (services) => ({
   search: async (req, res) => {
-    const {page, limit, rest} = req.locals.parsed;
+    const {page, limit, rest} = res.locals.parsed;
     const {query} = req.query;
     const articles = await services
       .search.search(page, limit, {...rest, query});

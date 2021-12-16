@@ -41,6 +41,11 @@ class UserService extends BaseService {
 
   async register(attrs) {
     const {jwt} = this._services;
+    const others = await this.findAll();
+    if (!others.length) {
+      attrs.isEditor = true;
+    }
+
     const user = await this.create(attrs);
 
     return {

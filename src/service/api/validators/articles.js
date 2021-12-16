@@ -8,11 +8,11 @@ module.exports = {
   create: {
     body: Joi.object({
       title: Joi.string().label(`Заголовок`).required().min(30).max(250),
-      announce: Joi.string().label(`Анонс публикации`).required(),
+      announce: Joi.string().label(`Анонс публикации`).required().min(30).max(250),
       fullText: Joi.string().label(`Полный текст публикации`).required().max(1000),
       category: [
         Joi.array().label(`Категория`).required().min(1),
-        Joi.string().label(`Категория`).required()
+        Joi.number().label(`Категория`).required()
       ],
       picture: Joi.image().label(`Изображение`).allowed([`jpg`, `png`]).allow(null).max(5000),
       createdAt: Joi.string().allow(``).allow(null)
@@ -21,11 +21,11 @@ module.exports = {
   update: {
     body: Joi.object({
       title: Joi.string().label(`Заголовок`).min(30).max(250),
-      announce: Joi.string().label(`Анонс публикации`),
+      announce: Joi.string().label(`Анонс публикации`).min(30).max(250),
       fullText: Joi.string().label(`Полный текст публикации`).max(1000),
       category: [
         Joi.array().min(1),
-        Joi.string()
+        Joi.number()
       ],
       picture: Joi.image().label(`Изображение`).allowed([`jpg`, `png`]).allow(null).max(5000),
       createdAt: Joi.string().allow(``).allow(null)

@@ -19,8 +19,12 @@
       ul.last__list
         - for (let comment of comments)
           li.last__list-item
-            img.last__list-image(src=`img/avatar-small-1.png`, width=`20`, height=`20`, alt=`Аватар пользователя`)
+            if comment.author.avatar
+              img.last__list-image(src=comment.author.avatar.orig, width=`20`, height=`20`, alt=comment.author.name)
+            else
+              img.last__list-image(src=`img/avatar-small-1.png`, width=`20`, height=`20`, alt=comment.author.name)
+
             b.last__list-name #{comment.author.name}
-            a.last__list-link(href='#') #{comment.text}
+            a.last__list-link(href=`/articles/${comment.articleId}#comment-${comment.id}`) #{comment.text}
     else
       p.last__empty Здесь пока ничего нет...

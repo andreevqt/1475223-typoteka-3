@@ -1,0 +1,10 @@
+extends main-base
+
+block before_content
+  if currentUser && currentUser.isEditor
+    include ../partials/new-post
+  else
+    include ../partials/registerForm
+
+block header
+  include header

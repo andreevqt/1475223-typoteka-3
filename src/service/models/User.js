@@ -36,6 +36,10 @@ module.exports = (sequelize, DataTypes) => {
   }
 
   User.init({
+    isEditor: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    },
     name: DataTypes.STRING,
     password: {
       type: DataTypes.STRING,
