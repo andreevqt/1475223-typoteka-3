@@ -19,7 +19,11 @@ APP_PORT
 # порт api сервера
 SERVER_PORT
 # Включает логирование sql запросов
-SEQUELIZE_LOGGING  
+SEQUELIZE_LOGGING 
+# Время жизни jwt токена, по-умолчанию 15 мин
+JWT_EXPIRES_IN
+# Состояение api сервера true/false если false то все routes возвращают 503 ошибку
+API_ENABLED
 ```
 
 ## СУБД
