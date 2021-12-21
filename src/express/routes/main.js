@@ -28,11 +28,11 @@ module.exports = (_app) => {
 
     try {
       articles = await api.articles.fetch({order: `latest`, query, page});
-      popular = await api.articles.fetch({order: `popular`});
+      popular = await api.articles.fetch({order: `popular`, limit: 4});
       if (popular.items.every((item) => !item.commentsCount)) {
         popular.items = [];
       }
-      comments = await api.comments.latest({limit: 5});
+      comments = await api.comments.latest({limit: 4});
       comments.items.forEach((comment) => {
         if (comment.text.length > 100) {
           comment.text = `${comment.text.slice(0, 100)}...`;

@@ -2,4 +2,6 @@ section.main-page__theme-list(data-cat=category)
   h2.visually-hidden Список тем
   ul.themes
     - for (cat of categories)
+        if cat.articlesCount == 0
+          - break
         +category(cat, category && category.id == cat.id)

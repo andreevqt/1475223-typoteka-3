@@ -27,7 +27,16 @@ class Base {
   }
 
   async get(id) {
-    return (await axios.get(`${this.url}/${id}`)).data;
+    try {
+      const result = (await axios.get(`${this.url}/${id}`)).data;
+      return result;
+    } catch (err) {
+      if (err.response && err.response.status === 404) {
+        return null;
+      }
+
+      throw err;
+    }
   }
 }
 
