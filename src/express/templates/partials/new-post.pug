@@ -15,27 +15,27 @@ section#modalNewPost.modal(data-ajax-form)
         button.modal__close.popup__button.button.button--popup-close(type='button' aria-label='Закрыть окно') Закрыть окно
         .new-publication__form.form
           .form__wrapper.form__wrapper--intro
-            .form__field
+            .form__field(data-name='title')
               label
                 input(type=`text`, placeholder=`Заголовок`, name=`title` value=formData.title)
-            .form__field.form__field--post-image
+            .form__field.form__field--post-image(data-name='picture')
               label
                 input#image-name-field(type=`text`, placeholder=`Фотография`, readonly=true, value=formData.picture ? formData.picture.orig.split('/').pop() : '')
               .form__image-loader.form__image-loader--publication
                 label
                   input.form__image-loader-input.visually-hidden(type=`file`, name=`picture`)
                   | Обзор
-            .form-field.new-publication__category-wrapper()
+            .form-field.new-publication__category-wrapper(data-name='category')
               - for (cat of categories)
                   .new-publication__checkbox.new-publication__checkbox--auto
                     input(id=`#checkbox-auto-${cat.id}`, type='checkbox', name='category[]', value=cat.id, checked=(formData.category.some((el) => el.id === cat.id)))
                     label(for=`#checkbox-auto-${cat.id}`) #{cat.name}
               a.new-publication__form-link.button.button--transparent(href='/categories', target='blank') Добавить категорию
-          .form__wrapper.form__wrapper--text(data-category=category)
-            .form__field.form__field--publication-text
+          .form__wrapper.form__wrapper--text
+            .form__field.form__field--publication-text(data-name='announce')
               label
                 textarea(rows='1', placeholder='Анонс публикации', name=`announce`) #{formData.announce}
-            .form__field.form__field--publication-text
+            .form__field.form__field--publication-text(data-name='fulltext')
               label
                 textarea(rows=`1`, placeholder=`Полный текст публикации`, name=`fullText`) #{formData.fullText}
   .modal__overlay

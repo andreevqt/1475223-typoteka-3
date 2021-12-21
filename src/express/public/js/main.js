@@ -72,15 +72,13 @@ popups.forEach((container) => {
           });
 
           Object.keys(errors).forEach((key) => {
-            let input = form.querySelector('[name="' + key + '"]');
-            if (input) {
-              const wrapper = input.closest(`.form__field`);
-              wrapper.classList.add(`form__field--invalid`);
-
+            let field = form.querySelector('[data-name="' + key + '"]');
+            if (field) {
+              field.classList.add(`form__field--invalid`);
               const errorHelper = document.createElement('div');
               errorHelper.classList.add(`form__helper`);
               errorHelper.innerHTML = errors[key];
-              wrapper.after(errorHelper);
+              field.after(errorHelper);
             }
           });
 

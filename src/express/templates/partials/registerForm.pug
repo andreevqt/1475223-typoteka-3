@@ -10,22 +10,22 @@ section#modalRegister.modal(data-ajax-form)
         button.popup__tab-switcher.button(type='button') Войти
     div(class=`popup__form form form--register ${!login ? "popup__form--active" : "popup__form--hidden"}`)
       form(action='/register' method='post' enctype=`multipart/form-data`)
-        .form__field
+        .form__field(data-name='email')
           label
             input(name='email' type='email' placeholder='Электронная почта' required='')
-        .form__field
+        .form__field(data-name='name')
           label
             input(name='name' type='text' placeholder='Имя' required='')
-        .form__field
+        .form__field(data-name='lastName')
           label
             input(name='lastName' type='text' placeholder='Фамилия')
-        .form__field
+        .form__field(data-name='password')
           label
             input(name='password' type='password' placeholder='Пароль' required='')
-        .form__field
+        .form__field(data-name='confirmPassword')
           label
             input(name='confirmPassword' type='password' placeholder='Повтор пароля' required='')
-        .form__field.form__field--post-image
+        .form__field.form__field--post-image(data-name='avatar')
           a.form__avatar.avatar
             img(src='/img/icons/smile.svg' alt='аватар пользователя')
           label
@@ -37,10 +37,10 @@ section#modalRegister.modal(data-ajax-form)
         button.form__submit-btn.form__submit-btn--register.button.button--colored(type='submit') Зарегистрироваться
     div(class=`popup__form  form form--log-in ${login ? "popup__form--active" : "popup__form--hidden"}`)
       form(action='/login' method='post')
-        .form__field
+        .form__field(data-name='email')
           label
             input(name='email' type='email' placeholder='Электронная почта' required='')
-        .form__field
+        .form__field(data-name='password')
           label
             input(name='password' type='password' placeholder='Пароль' required='')
         button.form__submit-btn.form__submit-btn--log-in.button.button--colored(type='submit') Войти
