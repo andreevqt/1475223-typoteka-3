@@ -5,6 +5,7 @@ const {logger} = require(`../helpers`);
 const api = require(`../api-services`);
 const upload = require(`../middleware/upload`);
 const checkAuth = require(`../middleware/checkAuth`);
+const redirectIfUser = require(`../middleware/redirectIfUser`);
 
 const router = new Router();
 
@@ -64,7 +65,7 @@ module.exports = (_app) => {
     res.render(`pages/search`, {articles, query});
   });
 
-  router.get(`/login`, (_req, res, _next) => res.render(`pages/login`));
+  router.get(`/login`, redirectIfUser, (_req, res, _next) => res.render(`pages/login`));
 
   router.post(`/login`, async (req, res, next) => {
     const {email, password} = req.body;
@@ -114,7 +115,7 @@ module.exports = (_app) => {
     });
   });
 
-  router.get(`/register`, (_req, res, _next) => res.render(`pages/register`));
+  router.get(`/register`, redirectIfUser, (_req, res, _next) => res.render(`pages/register`));
 
   router.get(`/logout`, checkAuth, async (req, res, next) => {
     try {

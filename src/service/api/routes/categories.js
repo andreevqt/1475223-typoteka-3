@@ -24,5 +24,5 @@ module.exports = (app, services) => {
     .route(`/:categoryId`)
     .get(controller.get)
     .put([authorize(services), isEditor, validate(categories.update)], controller.update)
-    .delete([authorize(services), isEditor], controller.delete);
+    .delete([authorize(services), isEditor, controller.checkArticles], controller.delete);
 };
