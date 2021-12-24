@@ -59,7 +59,10 @@ module.exports = (_app) => {
     };
 
     try {
-      await api.articles.create(attrs);
+      const article = await api.articles.create(attrs);
+      res.json({
+        redirectTo: `/articles/${article.id}`
+      });
     } catch (err) {
       if (err.response && err.response.status === http.BAD_REQUEST) {
         res.json({errors: err.response.data});
@@ -70,9 +73,6 @@ module.exports = (_app) => {
       return;
     }
 
-    res.json({
-      redirectTo: `/my`
-    });
   });
 
   router.get(`/:articleId`, async (req, res) => {

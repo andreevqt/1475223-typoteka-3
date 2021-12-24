@@ -10,13 +10,13 @@ const enableScrolling = () => {
 
 enableScrolling();
 
-const backBtn = document.querySelector('.button--backwards');
+/* const backBtn = document.querySelector('.button--backwards');
 if (backBtn) {
   backBtn.addEventListener('click', (e) => {
     e.preventDefault();
     history.go(-1);
   });
-}
+} */
 
 // create post form
 const popups = document.querySelectorAll('[data-ajax-form] .popup');

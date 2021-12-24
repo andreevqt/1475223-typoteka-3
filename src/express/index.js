@@ -45,6 +45,7 @@ app.use(async (req, res, next) => {
   try {
     cats = await api.categories.fetch({
       order: `desc`,
+      hideEmpty: req.url !== `/categories`,
       limit: 50
     });
   } catch (err) {
@@ -57,7 +58,7 @@ app.use(async (req, res, next) => {
     action: `/articles/add`,
     category: []
   };
-  res.locals.login = true;
+  // res.locals.login = true;
   next();
 });
 

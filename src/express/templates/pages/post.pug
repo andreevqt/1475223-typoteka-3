@@ -10,8 +10,8 @@ block content
       h2.visually-hidden Основное содержание
       .post__wrapper
         .post__head
-          a.post__backwards.button.button--backwards(href='#') Назад
-          time.post__date(datetime='2019-03-21T20:33') 21.03.2019, 20:33
+          a.post__backwards.button.button--backwards(href='/articles') Назад
+          time.post__date #{article.createdAt}
           h2.post__title.title.title--main #{article.title}
           ul.post__themes.themes
             each category in article.category
@@ -40,7 +40,7 @@ block content
                   .comments__text
                     .comments__head
                       p #{article.author.name} •
-                      time.comments__date(datetime='2019-03-21T20:33') #{article.createdAt}
+                      time.comments__date #{comment.createdAt}
                     p.comments__message #{comment.text}
         else
           h2.comments__title.title.title--middle Комментарии отсутствуют

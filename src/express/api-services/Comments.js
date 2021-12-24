@@ -6,7 +6,7 @@ const {Collection} = require(`../helpers`);
 
 class Comments extends Base {
   async latest({limit, page = 1}) {
-    const items = (await axios.get(`${this.baseUrl}/comments?order=latest&limit=${limit}&page=${page}`)).data;
+    const items = (await axios.get(`${this.baseUrl}/comments?order=desc&limit=${limit}&page=${page}`)).data;
     return new Collection(items, items.totalPages, items.currentPage);
   }
 

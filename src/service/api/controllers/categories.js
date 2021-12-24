@@ -13,6 +13,16 @@ module.exports = (services) => ({
     next();
   },
 
+  checkArticles: async (req, res, next) => {
+    const {category} = res.locals;
+    if (+category.dataValues.articlesCount > 0) {
+      res.status(http.BAD_REQUEST).send(`Category ${category.name} has related articles`);
+      return;
+    }
+
+    next();
+  },
+
   list: async (req, res) => {
     const {page, limit, ...rest} = res.locals.parsed;
     const categories = await services.categories.paginate(page, limit, rest);
