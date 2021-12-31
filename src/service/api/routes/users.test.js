@@ -2,7 +2,7 @@
 /* eslint-disable no-undef, max-nested-callbacks */
 
 const request = require(`supertest`);
-const {API_PREFIX, http} = require(`../../constants`);
+const {API_PREFIX, Http} = require(`../../constants`);
 const {services} = require(`./`);
 const {server, setup, teardown} = require(`../../test-setup`);
 
@@ -36,7 +36,7 @@ describe(`Users api endpoint`, () => {
   describe(`GET ${API_PREFIX}/users`, () => {
     test(`Should return users list with proper object structure`, async () => {
       const response = await request(server).get(`${API_PREFIX}/users`)
-        .expect(http.OK);
+        .expect(Http.OK);
 
       const users = (await services.users.findAll())
         .map((user) => user.convertToJSON());
@@ -55,7 +55,7 @@ describe(`Users api endpoint`, () => {
 
       const response = await request(server)
         .get(`${API_PREFIX}/users/${storedUser.id}`)
-        .expect(http.OK);
+        .expect(Http.OK);
 
       const user = response.body;
       expect(storedUser).toEqual(expect.objectContaining(user));
@@ -65,14 +65,14 @@ describe(`Users api endpoint`, () => {
       const response = await request(server)
         .get(`${API_PREFIX}/users/1234`);
 
-      expect(response.status).toBe(http.NOT_FOUND);
+      expect(response.status).toBe(Http.NOT_FOUND);
     });
 
     test(`Should return 400 error if userId isn't a string`, async () => {
       const response = await request(server)
         .get(`${API_PREFIX}/users/123asd`);
 
-      expect(response.status).toBe(http.BAD_REQUEST);
+      expect(response.status).toBe(Http.BAD_REQUEST);
     });
   });
 
@@ -87,7 +87,7 @@ describe(`Users api endpoint`, () => {
       const response = await request(server)
         .post(`${API_PREFIX}/users`)
         .send(toCreate)
-        .expect(http.CREATED);
+        .expect(Http.CREATED);
 
       const user = response.body;
       expect(user.name).toEqual(toCreate.name);
@@ -103,25 +103,25 @@ describe(`Users api endpoint`, () => {
       response = await request(server)
         .post(`${API_PREFIX}/users`)
         .send({...toCreate, name: `sdsdsd`});
-      expect(response.status).toBe(http.BAD_REQUEST);
+      expect(response.status).toBe(Http.BAD_REQUEST);
 
       // duplicate email
       response = await request(server)
         .post(`${API_PREFIX}/users`)
         .send({...toCreate, email: attrs.email});
-      expect(response.status).toBe(http.BAD_REQUEST);
+      expect(response.status).toBe(Http.BAD_REQUEST);
 
       // password less than 6
       response = await request(server)
         .post(`${API_PREFIX}/users`)
         .send({...toCreate, password: `123`});
-      expect(response.status).toBe(http.BAD_REQUEST);
+      expect(response.status).toBe(Http.BAD_REQUEST);
 
       // email isn't valid
       response = await request(server)
         .post(`${API_PREFIX}/users`)
         .send({...toCreate, email: `asdad`});
-      expect(response.status).toBe(http.BAD_REQUEST);
+      expect(response.status).toBe(Http.BAD_REQUEST);
     });
   });
 
@@ -135,7 +135,7 @@ describe(`Users api endpoint`, () => {
         .put(`${API_PREFIX}/users/${testUser.id}`)
         .set(`authorization`, testUser.tokens.access)
         .send(toUpdate)
-        .expect(http.OK);
+        .expect(Http.OK);
 
       const updated = response.body;
       expect(updated).toEqual(expect.objectContaining(toUpdate));
@@ -147,7 +147,7 @@ describe(`Users api endpoint`, () => {
       const response = await request(server)
         .delete(`${API_PREFIX}/users/${testUser.id}`)
         .set(`authorization`, testUser.tokens.access)
-        .expect(http.OK);
+        .expect(Http.OK);
 
       const deleted = response.body;
       expect(testUser).toEqual(expect.objectContaining(deleted));

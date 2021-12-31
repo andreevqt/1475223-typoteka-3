@@ -1,6 +1,6 @@
 'use strict';
 
-const BaseService = require(`./BaseService`);
+const BaseService = require(`./base-service`);
 const {Op} = require(`sequelize`);
 
 class SearchService extends BaseService {

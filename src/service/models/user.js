@@ -1,7 +1,7 @@
 'use strict';
 
-const BaseModel = require(`./BaseModel`);
-const cryptoService = require(`../crypto-service`);
+const BaseModel = require(`./base-model`);
+const cryptoService = require(`../crypto-service/crypto-service`);
 const jwt = require(`jsonwebtoken`);
 const config = require(`../../../config`);
 

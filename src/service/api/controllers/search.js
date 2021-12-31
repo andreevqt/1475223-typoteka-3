@@ -1,5 +1,5 @@
 'use strict';
-const {http} = require(`../../constants`);
+const {Http} = require(`../../constants`);
 
 module.exports = (services) => ({
   search: async (req, res) => {
@@ -8,7 +8,7 @@ module.exports = (services) => ({
     const articles = await services
       .search.search(page, limit, {...rest, query});
 
-    res.status(articles.items.length > 0 ? http.OK : http.NOT_FOUND)
+    res.status(articles.items.length > 0 ? Http.OK : Http.NOT_FOUND)
       .json(articles);
   },
 });

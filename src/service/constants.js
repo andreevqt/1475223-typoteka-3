@@ -6,7 +6,7 @@ module.exports.ID_LEN = 6;
 module.exports.API_PREFIX = `/api`;
 module.exports.API_SERVER_DEFAULT_PORT = 3000;
 
-module.exports.http = {
+module.exports.Http = {
   OK: 200,
   CREATED: 201,
   NOT_FOUND: 404,

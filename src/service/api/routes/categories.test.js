@@ -2,7 +2,7 @@
 /* eslint-disable no-undef, max-nested-callbacks */
 
 const request = require(`supertest`);
-const {API_PREFIX, http} = require(`../../constants`);
+const {API_PREFIX, Http} = require(`../../constants`);
 const {services} = require(`./`);
 const {server, setup, teardown} = require(`../../test-setup`);
 
@@ -66,7 +66,7 @@ describe(`Categories api endpoint`, () => {
         .post(`${API_PREFIX}/categories`)
         .set(`authorization`, testUser.tokens.access)
         .send(categoryAttrs)
-        .expect(http.CREATED);
+        .expect(Http.CREATED);
 
       const category = response.body;
       expect(category.name).toEqual(categoryAttrs.name);
@@ -78,7 +78,7 @@ describe(`Categories api endpoint`, () => {
         .set(`authorization`, testUser.tokens.access)
         .send({...categoryAttrs, wrongAttribute: true});
 
-      expect(response.status).toBe(http.BAD_REQUEST);
+      expect(response.status).toBe(Http.BAD_REQUEST);
     });
   });
 
@@ -92,14 +92,14 @@ describe(`Categories api endpoint`, () => {
         .put(`${API_PREFIX}/categories/${testCategory.id}`)
         .set(`authorization`, testUser.tokens.access)
         .send(toUpdate)
-        .expect(http.OK);
+        .expect(Http.OK);
 
       const updated = response.body;
       expect(updated).toEqual(expect.objectContaining(toUpdate));
 
       response = await request(server)
         .get(`${API_PREFIX}/categories/${testCategory.id}`)
-        .expect(http.OK);
+        .expect(Http.OK);
 
       const received = response.body;
       expect(updated).toEqual(received);
@@ -111,7 +111,7 @@ describe(`Categories api endpoint`, () => {
         .set(`authorization`, testUser.tokens.access)
         .send(toUpdate);
 
-      expect(respone.status).toBe(http.NOT_FOUND);
+      expect(respone.status).toBe(Http.NOT_FOUND);
     });
   });
 
@@ -120,7 +120,7 @@ describe(`Categories api endpoint`, () => {
       let response = await request(server)
         .delete(`${API_PREFIX}/categories/${testCategory.id}`)
         .set(`authorization`, testUser.tokens.access)
-        .expect(http.OK);
+        .expect(Http.OK);
 
       const deleted = response.body;
       expect(testCategory).toEqual(expect.objectContaining(deleted));
@@ -128,7 +128,7 @@ describe(`Categories api endpoint`, () => {
       response = await request(server).
         get(`${API_PREFIX}/categories/${testCategory.id}`);
 
-      expect(response.status).toBe(http.NOT_FOUND);
+      expect(response.status).toBe(Http.NOT_FOUND);
     });
 
     test(`Should return 404 error if categoryId is wrong`, async () => {
@@ -136,7 +136,7 @@ describe(`Categories api endpoint`, () => {
         .delete(`${API_PREFIX}/categories/1234`)
         .set(`authorization`, testUser.tokens.access);
 
-      expect(response.status).toBe(http.NOT_FOUND);
+      expect(response.status).toBe(Http.NOT_FOUND);
     });
   });
 });

@@ -2,7 +2,7 @@
 
 /* eslint-disable object-shorthand */
 
-const BaseModel = require(`./BaseModel`);
+const BaseModel = require(`./base-model`);
 const {Sequelize} = require(`sequelize`);
 const moment = require(`moment`);
 

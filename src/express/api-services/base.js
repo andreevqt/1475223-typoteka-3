@@ -2,6 +2,7 @@
 
 const axios = require(`axios`);
 const {Collection} = require(`../helpers`);
+const {Http} = require(`../../service/constants`);
 
 class Base {
   constructor(baseUrl, route) {
@@ -31,7 +32,7 @@ class Base {
       const result = (await axios.get(`${this.url}/${id}`)).data;
       return result;
     } catch (err) {
-      if (err.response && err.response.status === 404) {
+      if (err.response && err.response.status === Http.NOT_FOUND) {
         return null;
       }
 

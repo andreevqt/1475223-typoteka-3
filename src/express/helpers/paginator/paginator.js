@@ -17,6 +17,30 @@ class Paginator {
     this._template = path.resolve(__dirname, `pagination.pug`);
   }
 
+  get items() {
+    return this._items;
+  }
+
+  get currentPage() {
+    return this._currentPage;
+  }
+
+  get totalPages() {
+    return this._totalPages;
+  }
+
+  get limit() {
+    return this._limit;
+  }
+
+  get params() {
+    return this._params;
+  }
+
+  set limit(limit) {
+    this._limit = limit;
+  }
+
   makeItems() {
     const {totalPages, currentPage, limit} = this;
     let items = [];
@@ -114,30 +138,6 @@ class Paginator {
 
   links() {
     return pug.renderFile(this._template, {paginator: this});
-  }
-
-  set limit(limit) {
-    this._limit = limit;
-  }
-
-  get items() {
-    return this._items;
-  }
-
-  get currentPage() {
-    return this._currentPage;
-  }
-
-  get totalPages() {
-    return this._totalPages;
-  }
-
-  get limit() {
-    return this._limit;
-  }
-
-  get params() {
-    return this._params;
   }
 }
 

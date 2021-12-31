@@ -1,6 +1,6 @@
 'use strict';
 
-const BaseService = require(`./BaseService`);
+const BaseService = require(`./base-service`);
 
 class CommentService extends BaseService {
   async findAll(article) {
