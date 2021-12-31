@@ -4,7 +4,7 @@ const {Router} = require(`express`);
 const router = new Router();
 const {logger} = require(`../helpers`);
 const api = require(`../api-services`);
-const {http} = require(`../../service/constants`);
+const {Http} = require(`../../service/constants`);
 
 module.exports = (_app) => {
   router.get(`/`, async (req, res) => {
@@ -42,10 +42,10 @@ module.exports = (_app) => {
     try {
       await api.articles.delete(id);
     } catch (err) {
-      res.status(http.OK).json({errors: err.response.data});
+      res.status(Http.OK).json({errors: err.response.data});
       return;
     }
-    res.status(http.OK).send(`OK`);
+    res.status(Http.OK).send(`OK`);
   });
 
   router.post(`/delete/:articleId/:commentId`, async (req, res) => {
@@ -53,10 +53,10 @@ module.exports = (_app) => {
     try {
       await api.comments.delete(articleId, commentId);
     } catch (err) {
-      res.status(http.OK).json({errors: err.response.data});
+      res.status(Http.OK).json({errors: err.response.data});
       return;
     }
-    res.status(http.OK).send(`OK`);
+    res.status(Http.OK).send(`OK`);
   });
 
   return router;

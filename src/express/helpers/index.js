@@ -1,11 +1,11 @@
 'use strict';
 
 module.exports = {
-  latestArticles: require(`./latestArticles`),
-  popularArticles: require(`./popularArticles`),
-  latestComments: require(`./latestComments`),
-  insertAt: require(`./insertAt`),
+  latestArticles: require(`./latest-articles`),
+  popularArticles: require(`./popular-articles`),
+  latestComments: require(`./latest-comments`),
+  insertAt: require(`./insert-at`),
   logger: require(`./logger`),
-  Collection: require(`./Collection`),
-  Paginator: require(`./paginator/Paginator`)
+  Collection: require(`./collection`),
+  Paginator: require(`./paginator/paginator`)
 };

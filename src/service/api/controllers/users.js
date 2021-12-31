@@ -1,17 +1,17 @@
 'use strict';
 
-const {http} = require(`../../constants`);
+const {Http} = require(`../../constants`);
 
 module.exports = (services) => ({
   checkUser: async (req, res, next, id) => {
     if (!/^[0-9]+$/.test(id)) {
-      res.status(http.BAD_REQUEST).send(`Id should be a number`);
+      res.status(Http.BAD_REQUEST).send(`Id should be a number`);
       return;
     }
 
     const user = await services.users.findById(id);
     if (!user) {
-      res.status(http.NOT_FOUND).send(`Not found`);
+      res.status(Http.NOT_FOUND).send(`Not found`);
       return;
     }
 
@@ -22,13 +22,13 @@ module.exports = (services) => ({
   list: async (req, res) => {
     const {page, limit} = res.locals.parsed;
     const users = await services.users.paginate(page, limit);
-    res.status(http.OK).json(users);
+    res.status(Http.OK).json(users);
   },
 
   create: async (req, res, next) => {
     try {
       const user = await services.users.register(req.body);
-      res.status(http.CREATED).send(user);
+      res.status(Http.CREATED).send(user);
     } catch (err) {
       next(services.users.checkDuplicateEmail(err));
     }
@@ -38,7 +38,7 @@ module.exports = (services) => ({
     try {
       const {user} = res.locals;
       const updated = await services.users.update(user, req.body);
-      res.status(http.OK).send(updated);
+      res.status(Http.OK).send(updated);
     } catch (err) {
       next(services.users.checkDuplicateEmail(err));
     }
@@ -46,35 +46,35 @@ module.exports = (services) => ({
 
   get: async (req, res) => {
     const {user} = res.locals;
-    res.status(http.OK).send(user);
+    res.status(Http.OK).send(user);
   },
 
   delete: async (req, res) => {
     const {user} = res.locals;
     const deleted = await services.users.delete(user);
-    res.status(http.OK).send(deleted);
+    res.status(Http.OK).send(deleted);
   },
 
   login: async (req, res) => {
     const {user} = res.locals;
-    res.status(http.OK).json(user);
+    res.status(Http.OK).json(user);
   },
 
   logout: async (req, res) => {
     const {token} = req.body;
     if (!token) {
-      res.sendStatus(http.BAD_REQUEST);
+      res.sendStatus(Http.BAD_REQUEST);
       return;
     }
 
     await services.users.logout(token);
-    res.status(http.NO_CONTENT).send(`No Content`);
+    res.status(Http.NO_CONTENT).send(`No Content`);
   },
 
   refresh: async (req, res) => {
     const {token} = req.body;
     if (!token) {
-      res.status(http.BAD_REQUEST).send(`Bad request`);
+      res.status(Http.BAD_REQUEST).send(`Bad request`);
       return;
     }
 
@@ -84,14 +84,14 @@ module.exports = (services) => ({
 
       const user = await services.users.findById(userId);
       if (!user) {
-        res.status(http.UNAUTHROIZED).send(`Unauthorized`);
+        res.status(Http.UNAUTHROIZED).send(`Unauthorized`);
         return;
       }
 
       const tokens = await services.jwt.generateTokens(user);
       res.status(200).json(tokens);
     } catch (err) {
-      res.status(http.FORBIDDEN).send(`Forbidden`);
+      res.status(Http.FORBIDDEN).send(`Forbidden`);
     }
   }
 });

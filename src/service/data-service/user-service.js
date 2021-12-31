@@ -1,12 +1,12 @@
 'use strict';
 
-const BaseService = require(`./BaseService`);
+const BaseService = require(`./base-service`);
 
 const {ValidationError} = require(`express-validation`);
 const {UniqueConstraintError} = require(`sequelize`);
-const cryptoService = require(`../crypto-service`);
-const imageService = require(`../image-service`);
-const {http} = require(`../constants`);
+const cryptoService = require(`../crypto-service/crypto-service`);
+const imageService = require(`../image-service/image-service`);
+const {Http} = require(`../constants`);
 
 class UserService extends BaseService {
   checkDuplicateEmail(err) {
@@ -23,7 +23,7 @@ class UserService extends BaseService {
 
     if (err instanceof UniqueConstraintError) {
       return new ValidationError(errors, {
-        statusCode: http.BAD_REQUEST
+        statusCode: Http.BAD_REQUEST
       });
     }
 

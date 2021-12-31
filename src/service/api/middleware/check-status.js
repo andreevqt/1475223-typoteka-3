@@ -1,7 +1,7 @@
 'use strict';
 
 const config = require(`../../../../config`);
-const {http} = require(`../../constants`);
+const {Http} = require(`../../constants`);
 
 const checkStatus = (req, res, next) => {
   const {enabled} = config.server;
@@ -12,7 +12,7 @@ const checkStatus = (req, res, next) => {
   }
 
   if (!enabled) {
-    res.status(http.SEVICE_UNAVAILABLE).send(`Service Unavailable`);
+    res.status(Http.SEVICE_UNAVAILABLE).send(`Service Unavailable`);
     return;
   }
 

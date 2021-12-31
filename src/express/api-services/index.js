@@ -1,15 +1,15 @@
 'use strict';
 
 const config = require(`../../../config`);
-const Articles = require(`./Articles`);
-const Categories = require(`./Categories`);
-const Search = require(`./Search`);
-const Comments = require(`./Comments`);
-const Users = require(`./Users`);
-const Status = require(`./Status`);
+const Articles = require(`./articles`);
+const Categories = require(`./categories`);
+const Search = require(`./search`);
+const Comments = require(`./comments`);
+const Users = require(`./users`);
+const Status = require(`./status`);
 const {API_PREFIX} = require(`../../service/constants`);
 
-const url = `${config.app.url}:${config.server.port}${API_PREFIX}`;
+const url = `${config.app.url}:${config.server.port}` + API_PREFIX;
 
 const articles = new Articles(url, `articles`);
 const categories = new Categories(url, `categories`);

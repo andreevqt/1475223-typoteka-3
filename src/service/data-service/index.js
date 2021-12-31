@@ -1,10 +1,10 @@
 'use strict';
 
 module.exports = {
-  ArticleService: require(`./ArticleService`),
-  CommentService: require(`./CommentService`),
-  CategoryService: require(`./CategoryService`),
-  SearchService: require(`./SearchService`),
-  UserService: require(`./UserService`),
-  JWTService: require(`./JWTService`)
+  ArticleService: require(`./article-service`),
+  CommentService: require(`./comment-service`),
+  CategoryService: require(`./category-service`),
+  SearchService: require(`./search-service`),
+  UserService: require(`./user-service`),
+  JWTService: require(`./jtw-service`)
 };

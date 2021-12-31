@@ -1,7 +1,7 @@
 'use strict';
 
 const {RefreshToken} = require(`../models`);
-const BaseService = require(`./BaseService`);
+const BaseService = require(`./base-service`);
 const jwt = require(`jsonwebtoken`);
 const config = require(`../../../config`);
 

@@ -1,7 +1,7 @@
 'use strict';
 
-const BaseService = require(`./BaseService`);
-const imageService = require(`../image-service`);
+const BaseService = require(`./base-service`);
+const imageService = require(`../image-service/image-service`);
 
 class ArticleService extends BaseService {
   async getCategory(ids) {

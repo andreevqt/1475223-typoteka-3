@@ -1,7 +1,7 @@
 
 'use strict';
 
-const Base = require(`./Base`);
+const Base = require(`src/express/api-services/base`);
 const axios = require(`axios`);
 const {Collection} = require(`../helpers`);
 

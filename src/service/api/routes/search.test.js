@@ -2,7 +2,7 @@
 /* eslint-disable no-undef, max-nested-callbacks */
 
 const request = require(`supertest`);
-const {API_PREFIX, http} = require(`../../constants`);
+const {API_PREFIX, Http} = require(`../../constants`);
 const {services} = require(`./`);
 const {server, setup, teardown} = require(`../../test-setup`);
 
@@ -29,7 +29,7 @@ describe.skip(`Search api endpoint`, () => {
       const response = await request(server)
         .get(`${API_PREFIX}/search`)
         .query({query})
-        .expect(http.OK);
+        .expect(Http.OK);
 
       const results = response.body.items;
       expect(Array.isArray(results)).toBe(true);
@@ -49,9 +49,9 @@ describe.skip(`Search api endpoint`, () => {
       const response = await request(server)
         .get(`${API_PREFIX}/search`)
         .query({query})
-        .expect(http.NOT_FOUND);
+        .expect(Http.NOT_FOUND);
 
-      expect(response.status).toBe(http.NOT_FOUND);
+      expect(response.status).toBe(Http.NOT_FOUND);
 
       const results = response.body.items;
       expect(Array.isArray(results)).toBe(true);

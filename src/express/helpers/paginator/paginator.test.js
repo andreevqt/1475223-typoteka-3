@@ -1,7 +1,7 @@
 'use strict';
 /* eslint-disable no-undef */
 
-const Paginator = require(`./Paginator`);
+const Paginator = require(`./paginator`);
 
 const getTestData = () => {
   return [{

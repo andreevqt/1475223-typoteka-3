@@ -1,11 +1,11 @@
 'use strict';
 
 module.exports = {
-  logRequests: require(`./logRequests`),
-  parseQuery: require(`./parseQuery`),
+  logRequests: require(`./log-requests`),
+  parseQuery: require(`./parse-query`),
   auth: require(`./auth`),
   authorize: require(`./authorize`),
-  isCurrentUser: require(`./isCurrentUser`),
-  checkStatus: require(`./checkStatus`),
-  isEditor: require(`./isEditor`)
+  isCurrentUser: require(`./is-current-user`),
+  checkStatus: require(`./check-status`),
+  isEditor: require(`./is-editor`)
 };

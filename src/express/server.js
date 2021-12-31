@@ -8,8 +8,8 @@ const {once} = require(`events`);
 const {API_PREFIX, http} = require(`../service/constants`);
 const api = require(`./api-services`);
 const auth = require(`./middleware/auth`);
-const checkAuth = require(`./middleware/checkAuth`);
-const isEditor = require(`./middleware/isEditor`);
+const checkAuth = require(`src/express/middleware/check-auth`);
+const isEditor = require(`src/express/middleware/is-editor`);
 const csrf = require(`./middleware/csrf`);
 const cookieParser = require(`cookie-parser`);
 const {
@@ -22,7 +22,7 @@ const {
 const app = express();
 
 const appUrl = `${config.app.url}:${config.app.port}`;
-const apiUrl = `${config.app.url}:${config.server.port}${API_PREFIX}`;
+const apiUrl = `${config.app.url}:${config.server.port}` + API_PREFIX;
 
 app.set(`app_url`, appUrl);
 app.set(`api_url`, apiUrl);

@@ -1,11 +1,11 @@
 'use strict';
-const {http} = require(`../../constants`);
+const {Http} = require(`../../constants`);
 
 module.exports = (services) => ({
   checkArticle: async (req, res, next, id) => {
     const article = await services.articles.findById(id);
     if (!article) {
-      res.status(http.NOT_FOUND).send(`Not found`);
+      res.status(Http.NOT_FOUND).send(`Not found`);
       return;
     }
 
@@ -24,7 +24,7 @@ module.exports = (services) => ({
     });
 
     if (!comment) {
-      res.status(http.NOT_FOUND).send(`Not found`);
+      res.status(Http.NOT_FOUND).send(`Not found`);
       return;
     }
 
@@ -35,48 +35,48 @@ module.exports = (services) => ({
   list: async (req, res) => {
     const {page, limit, ...rest} = res.locals.parsed;
     const articles = await services.articles.paginate(page, limit, rest);
-    res.status(http.OK).json(articles);
+    res.status(Http.OK).json(articles);
   },
 
   get: (req, res) => {
     const {article} = res.locals;
-    res.status(http.OK).json(article);
+    res.status(Http.OK).json(article);
   },
 
   create: async (req, res) => {
     const article = await services.articles.create(req.body);
-    res.status(http.CREATED).json(article);
+    res.status(Http.CREATED).json(article);
   },
 
   update: async (req, res) => {
     const {article} = res.locals;
     const updated = await services.articles.update(article, req.body);
-    res.status(http.OK).json(updated);
+    res.status(Http.OK).json(updated);
   },
 
   delete: async (req, res) => {
     const {article} = res.locals;
     const deleted = await services.articles.delete(article);
-    res.status(http.OK).json(deleted);
+    res.status(Http.OK).json(deleted);
   },
 
   comments: {
     list: async (req, res) => {
       const {article} = res.locals;
       const comments = await services.comments.findAll(article);
-      res.status(http.OK).json(comments);
+      res.status(Http.OK).json(comments);
     },
 
     create: async (req, res) => {
       const {article} = res.locals;
       const comment = await services.comments.create(article, req.body);
-      res.status(http.CREATED).json(comment);
+      res.status(Http.CREATED).json(comment);
     },
 
     delete: async (req, res) => {
       const {comment} = res.locals;
       const deleted = await services.comments.delete(comment);
-      res.status(http.OK).json(deleted);
+      res.status(Http.OK).json(deleted);
     }
   },
 
@@ -87,11 +87,11 @@ module.exports = (services) => ({
 
       const articles = await services.articles.findByCategory(page, limit, categoryId);
       if (!articles) {
-        res.status(http.NOT_FOUND).send(`404 Not found`);
+        res.status(Http.NOT_FOUND).send(`404 Not found`);
         return;
       }
 
-      res.status(http.OK).json(articles);
+      res.status(Http.OK).json(articles);
     },
   }
 });

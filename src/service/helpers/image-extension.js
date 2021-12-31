@@ -25,7 +25,7 @@ const isArray = (value) => {
   return Array.isArray(value);
 };
 
-const _check = (buffer, headers) => {
+const checkHeaders = (buffer, headers) => {
   for (const [index, header] of headers.entries()) {
     if (header !== buffer[index]) {
       return false;
@@ -35,7 +35,7 @@ const _check = (buffer, headers) => {
 };
 
 const getType = (buffer) => {
-  const check = (headers) => _check(buffer, headers);
+  const check = (headers) => checkHeaders(buffer, headers);
 
   if (check([0xFF, 0xD8, 0xFF])) {
     return {

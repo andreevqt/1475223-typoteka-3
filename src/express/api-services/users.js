@@ -1,6 +1,7 @@
 'use strict';
-const Base = require(`./Base`);
+const Base = require(`src/express/api-services/base`);
 const axios = require(`axios`);
+const {Http} = require(`../../service/constants`);
 
 class Users extends Base {
   async login(email, password) {
@@ -10,7 +11,7 @@ class Users extends Base {
     try {
       result = (await axios.post(`${this.url}/login`, {email, password})).data;
     } catch (err) {
-      if (!(err.response && err.response.status === 403)) {
+      if (!(err.response && err.response.status === Http.FO)) {
         throw err;
       }
       errors = {email: `Неправильный email или пароль`};

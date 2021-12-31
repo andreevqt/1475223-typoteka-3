@@ -5,14 +5,14 @@ const router = new Router();
 const {logger} = require(`../helpers`);
 const upload = require(`../middleware/upload`);
 const api = require(`../api-services`);
-const {http} = require(`../../service/constants`);
-const isEditor = require(`../middleware/isEditor`);
+const {Http} = require(`../../service/constants`);
+const isEditor = require(`src/express/middleware/is-editor`);
 
 module.exports = (_app) => {
   router.param(`categoryId`, async (req, res, next, id) => {
     const category = await api.categories.get(id);
     if (!category) {
-      res.status(http.NOT_FOUND).render(`errors/404`);
+      res.status(Http.NOT_FOUND).render(`errors/404`);
     }
 
     res.locals.category = category;
@@ -22,7 +22,7 @@ module.exports = (_app) => {
   router.param(`articleId`, async (req, res, next, id) => {
     const article = await api.articles.get(id);
     if (!article) {
-      res.status(http.NOT_FOUND).render(`errors/404`);
+      res.status(Http.NOT_FOUND).render(`errors/404`);
     }
 
     article.comments = await api.comments.fetch(article.id);
@@ -64,7 +64,7 @@ module.exports = (_app) => {
         redirectTo: `/articles/${article.id}`
       });
     } catch (err) {
-      if (err.response && err.response.status === http.BAD_REQUEST) {
+      if (err.response && err.response.status === Http.BAD_REQUEST) {
         res.json({errors: err.response.data});
         return;
       }
@@ -88,7 +88,7 @@ module.exports = (_app) => {
     try {
       await api.comments.create(article.id, attrs);
     } catch (err) {
-      if (err.response && err.response.status === http.BAD_REQUEST) {
+      if (err.response && err.response.status === Http.BAD_REQUEST) {
         const errors = err.response.data;
         res.render(`pages/post`, {article, errors});
         return;
@@ -123,12 +123,12 @@ module.exports = (_app) => {
       });
     } catch (err) {
       if (err.response) {
-        if (err.response.status === http.NOT_FOUND) {
-          res.status(http.NOT_FOUND).send(`Not found`);
+        if (err.response.status === Http.NOT_FOUND) {
+          res.status(Http.NOT_FOUND).send(`Not found`);
           return;
         }
 
-        if (err.response.status === http.BAD_REQUEST) {
+        if (err.response.status === Http.BAD_REQUEST) {
           res.json({errors: err.response.data});
           return;
         }
@@ -146,7 +146,7 @@ module.exports = (_app) => {
     try {
       articles = await api.articles.fetchByCat({id: category.id, query, page});
     } catch (err) {
-      res.status(http.NOT_FOUND).render(`errors/404`);
+      res.status(Http.NOT_FOUND).render(`errors/404`);
       return;
     }
 

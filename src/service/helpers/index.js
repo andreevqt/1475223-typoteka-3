@@ -1,6 +1,6 @@
 'use strict';
 
 module.exports = {
-  imageExtension: require(`./imageExtension`),
+  imageExtension: require(`./image-extension`),
   logger: require(`./logger`)
 };

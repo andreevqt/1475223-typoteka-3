@@ -1,19 +1,11 @@
 'use strict';
 
-const Paginator = require(`./paginator/Paginator`);
+const Paginator = require(`src/express/helpers/paginator/paginator`);
 
 class Collection {
   constructor(items = [], totalPages, currentPage) {
     this._paginator = new Paginator(totalPages, currentPage);
     this._items = items;
-  }
-
-  [Symbol.iterator]() {
-    return this._items.items.values();
-  }
-
-  links() {
-    return this._paginator.links();
   }
 
   get items() {
@@ -34,6 +26,14 @@ class Collection {
 
   set items(items) {
     this._items.items = items;
+  }
+
+  [Symbol.iterator]() {
+    return this._items.items.values();
+  }
+
+  links() {
+    return this._paginator.links();
   }
 }
 

@@ -2,14 +2,14 @@
 
 module.exports = {
   shuffle: require(`./shuffle`),
-  randomInt: require(`./randomInt`),
+  randomInt: require(`./random-int`),
   pad: require(`./pad`),
-  getNumLen: require(`./getNumLen`),
-  maxStringLen: require(`./maxStringLen`),
-  formatDate: require(`./formatDate`),
-  getMocks: require(`./getMocks`),
+  getNumLen: require(`./get-num-len`),
+  maxStringLen: require(`./max-string-len`),
+  formatDate: require(`./format-date`),
+  getMocks: require(`./get-mocks`),
   logger: require(`./logger`),
-  isClass: require(`./isClass`),
-  readData: require(`./readData`),
-  translateMessage: require(`./translateMessage`)
+  isClass: require(`./is-class`),
+  readData: require(`./read-data`),
+  translateMessage: require(`./translate-message`)
 };

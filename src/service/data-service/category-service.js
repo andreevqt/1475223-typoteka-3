@@ -1,6 +1,6 @@
 'use strict';
 
-const BaseService = require(`./BaseService`);
+const BaseService = require(`./base-service`);
 
 class CategoryService extends BaseService {}
 
