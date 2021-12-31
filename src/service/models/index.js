@@ -1,3 +1,4 @@
 'use strict';
 
-module.exports = require(`./load-models`);
+const loadedModels = require(`./load-models`);
+module.exports = loadedModels;

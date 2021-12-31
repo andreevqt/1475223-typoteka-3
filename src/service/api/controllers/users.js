@@ -1,6 +1,7 @@
 'use strict';
 
 const {Http} = require(`../../constants`);
+const UserService = require(`../../data-service/user-service`);
 
 module.exports = (services) => ({
   checkUser: async (req, res, next, id) => {
@@ -30,7 +31,7 @@ module.exports = (services) => ({
       const user = await services.users.register(req.body);
       res.status(Http.CREATED).send(user);
     } catch (err) {
-      next(services.users.checkDuplicateEmail(err));
+      next(UserService.checkDuplicateEmail(err));
     }
   },
 
@@ -40,7 +41,7 @@ module.exports = (services) => ({
       const updated = await services.users.update(user, req.body);
       res.status(Http.OK).send(updated);
     } catch (err) {
-      next(services.users.checkDuplicateEmail(err));
+      next(UserService.checkDuplicateEmail(err));
     }
   },
 

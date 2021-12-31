@@ -45,20 +45,6 @@ class BaseModel extends Model {
     };
   }
 
-  static getThumbnail(name) {
-    return function () {
-      const picture = this.getDataValue(name); // eslint-disable-line
-      if (!picture) {
-        return null;
-      }
-
-      return {
-        small: picture,
-        big: picture.replace(/\.(?=[^.]*$)/, `@2x.`)
-      };
-    };
-  }
-
   static getQueryOptions() {
     return {};
   }

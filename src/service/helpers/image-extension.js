@@ -1,16 +1,28 @@
 'use strict';
-/* eslint-disable */
+
+const {MimeSignatures} = require(`../constants`);
 
 const compare = (a, b, operator) => {
   switch (operator) {
-    case `=`: return a === b;
-    case `>`: return a > b;
-    case `<`: return a < b;
-    case `>=`: return a >= b;
-    case `<=`: return a <= b;
+    case `=`: {
+      return a === b;
+    }
+    case `>`: {
+      return a > b;
+    }
+    case `<`: {
+      return a < b;
+    }
+    case `>=`: {
+      return a >= b;
+    }
+    case `<=`: {
+      return a <= b;
+    }
+    default: {
+      return null;
+    }
   }
-
-  return null;
 };
 
 const isNumber = (value) => {
@@ -37,14 +49,14 @@ const checkHeaders = (buffer, headers) => {
 const getType = (buffer) => {
   const check = (headers) => checkHeaders(buffer, headers);
 
-  if (check([0xFF, 0xD8, 0xFF])) {
+  if (check(MimeSignatures.JPEG)) {
     return {
       ext: `jpg`,
       mime: `image/jpeg`
     };
   }
 
-  if (check([0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A])) {
+  if (check(MimeSignatures.PNG)) {
     return {
       ext: `png`,
       mime: `image/png`
@@ -72,13 +84,17 @@ const imageExtension = (joi) => ({
       return {
         value: Buffer.from(value, `base64`)
       };
-    } catch (_ignore) {}
+    } catch (_ignore) {
+      return null;
+    }
   },
 
   validate(value, {error}) {
     if (!Buffer.isBuffer(value)) {
       return {value, errors: error(`image.base`)};
     }
+
+    return null;
   },
 
   rules: {

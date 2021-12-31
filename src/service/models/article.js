@@ -1,7 +1,5 @@
 'use strict';
 
-/* eslint-disable object-shorthand */
-
 const BaseModel = require(`./base-model`);
 const {Sequelize} = require(`sequelize`);
 const moment = require(`moment`);
@@ -40,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
     static getQueryOptions() {
       const {User, Category} = sequelize.models;
 
-      const include = [{
+      const includes = [{
         model: User, as: `author`,
         attributes: [`id`, `name`, `email`]
       }, {
@@ -63,11 +61,11 @@ module.exports = (sequelize, DataTypes) => {
         ]
       };
 
-      const order = [
+      const orders = [
         [`createdAt`, `desc`]
       ];
 
-      return {include: include, attributes, order: order};
+      return {include: includes, attributes, order: orders};
     }
   }
 
@@ -77,26 +75,18 @@ module.exports = (sequelize, DataTypes) => {
     fullText: DataTypes.TEXT,
     createdAt: {
       type: DataTypes.DATE,
-      get: function () {
+      get() {
         return moment(this.getDataValue(`createdAt`)).format(`DD.MM.YYYY, hh:mm`);
       }
     },
     updatedAt: {
       type: DataTypes.DATE,
-      get: function () {
+      get() {
         return moment(this.getDataValue(`createdAt`)).format(`DD.MM.YYYY, hh:mm`);
       }
     },
     picture: {
       type: DataTypes.JSON,
-      /* set: function (value) {
-        const picture = {
-          orig: `/img/${value}`,
-          big: `/img/${value}`,
-          small: `/img/${value}`
-        };
-        this.setDataValue(`picture`, picture);
-      } */
     }
   }, {
     sequelize,

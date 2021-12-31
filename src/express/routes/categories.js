@@ -1,6 +1,7 @@
 'use strict';
 
 const {Router} = require(`express`);
+const _ = require(`lodash`);
 const router = new Router();
 const api = require(`../api-services`);
 
@@ -10,7 +11,7 @@ module.exports = (_app) => {
   });
 
   router.post(`/`, async (req, res) => {
-    const {_csrf, ...attrs} = req.body;  // eslint-disable-line
+    const attrs = _.omit(req.body, `_csrf`);
     try {
       await api.categories.create(attrs);
     } catch (err) {

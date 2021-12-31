@@ -1,11 +1,13 @@
 'use strict';
 
+const insertAt = require(`./insert-at`);
+const logger = require(`./logger`);
+const Collection = require(`./collection`);
+const Paginator = require(`./paginator/paginator`);
+
 module.exports = {
-  latestArticles: require(`./latest-articles`),
-  popularArticles: require(`./popular-articles`),
-  latestComments: require(`./latest-comments`),
-  insertAt: require(`./insert-at`),
-  logger: require(`./logger`),
-  Collection: require(`./collection`),
-  Paginator: require(`./paginator/paginator`)
+  insertAt,
+  logger,
+  Collection,
+  Paginator
 };

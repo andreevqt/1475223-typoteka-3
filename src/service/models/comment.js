@@ -1,7 +1,5 @@
 'use strict';
 
-/* eslint-disable object-shorthand  */
-
 const BaseModel = require(`./base-model`);
 const moment = require(`moment`);
 
@@ -28,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
 
     static getQueryOptions() {
       const {User, Article} = sequelize.models;
-      const include = [{
+      const includes = [{
         model: User,
         as: `author`,
         attributes: [`id`, `name`, `email`, `avatar`]
@@ -37,8 +35,8 @@ module.exports = (sequelize, DataTypes) => {
         as: `article`,
         attributes: [`id`, `title`]
       }];
-      const exclude = [`authorId`];
-      return {include: include, attributes: {exclude: exclude}};
+      const excludes = [`authorId`];
+      return {include: includes, attributes: {exclude: excludes}};
     }
   }
 
@@ -48,13 +46,13 @@ module.exports = (sequelize, DataTypes) => {
     authorId: DataTypes.INTEGER,
     createdAt: {
       type: DataTypes.DATE,
-      get: function () {
+      get() {
         return moment(this.getDataValue(`createdAt`)).format(`DD.MM.YYYY, hh:mm`);
       }
     },
     updatedAt: {
       type: DataTypes.DATE,
-      get: function () {
+      get() {
         return moment(this.getDataValue(`createdAt`)).format(`DD.MM.YYYY, hh:mm`);
       }
     },

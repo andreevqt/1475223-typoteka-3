@@ -58,7 +58,6 @@ app.use(async (req, res, next) => {
     action: `/articles/add`,
     category: []
   };
-  // res.locals.login = true;
   next();
 });
 

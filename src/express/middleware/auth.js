@@ -4,6 +4,7 @@ const config = require(`../../../config`);
 const jwt = require(`jsonwebtoken`);
 const api = require(`../api-services`);
 const axios = require(`axios`);
+const {logger} = require(`../helpers`);
 
 const auth = async (req, res, next) => {
   const accessToken = req.cookies.access_token;
@@ -37,7 +38,9 @@ const auth = async (req, res, next) => {
           setHeaders(tokens.access);
           setCookies(tokens);
           userId = getUID(tokens.access);
-        } catch (_err) {}  // eslint-disable-line
+        } catch (_err) {
+          logger.debug(`failed to refresh token for user, do nothing`);
+        }
       }
 
       try {

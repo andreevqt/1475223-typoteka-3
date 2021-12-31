@@ -6,6 +6,12 @@ const api = require(`../api-services`);
 const upload = require(`../middleware/upload`);
 const checkAuth = require(`src/express/middleware/check-auth`);
 const redirectIfUser = require(`src/express/middleware/redirect-if-user`);
+const {Http} = require(`../../service/constants`);
+const {
+  MAX_COMMENT_LENGTH,
+  MAX_POPULAR_ARTICLES,
+  MAX_LATEST_ARTICLES
+} = require(`../constants`);
 
 const router = new Router();
 
@@ -29,14 +35,14 @@ module.exports = (_app) => {
 
     try {
       articles = await api.articles.fetch({order: `latest`, query, page});
-      popular = await api.articles.fetch({order: `popular`, limit: 4});
+      popular = await api.articles.fetch({order: `popular`, limit: MAX_POPULAR_ARTICLES});
       if (popular.items.every((item) => !item.commentsCount)) {
         popular.items = [];
       }
-      comments = await api.comments.latest({limit: 4});
+      comments = await api.comments.latest({limit: MAX_LATEST_ARTICLES});
       comments.items.forEach((comment) => {
-        if (comment.text.length > 100) {
-          comment.text = `${comment.text.slice(0, 100)}...`;
+        if (comment.text.length > MAX_COMMENT_LENGTH) {
+          comment.text = `${comment.text.slice(0, MAX_COMMENT_LENGTH)}...`;
         }
       });
       empty = !articles.length;
@@ -101,7 +107,7 @@ module.exports = (_app) => {
     try {
       await api.users.register(attrs);
     } catch (err) {
-      if (err.response && err.response.status === 400) {
+      if (err.response && err.response.status === Http.BAD_REQUEST) {
         res.json({errors: err.response.data});
         return;
       }

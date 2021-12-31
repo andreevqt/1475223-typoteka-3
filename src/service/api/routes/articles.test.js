@@ -1,5 +1,4 @@
 'use strict';
-/* eslint-disable no-undef, max-nested-callbacks */
 
 const request = require(`supertest`);
 const {

@@ -4,7 +4,7 @@ const packageJson = require(`../../../../package.json`);
 const chalk = require(`chalk`);
 
 
-const version = async (/* commandsManager,  args */) => {
+const version = async () => {
   console.log(chalk.blue(packageJson.version));
 };
 

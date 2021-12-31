@@ -15,12 +15,7 @@ const {
 const command = process.argv[2];
 const args = process.argv.slice(3);
 
-/* eslint-disable */
-const commandManager = new ConsoleCommandManager(
-  `server`,
-  `Программа запускает http-сервер и формирует файл с данными для API.`
-);
-/* eslint-enable */
+const commandManager = new ConsoleCommandManager(`server`, `Программа запускает http-сервер и формирует файл с данными для API.`);
 
 commandManager
   .add(`--generate`, `формирует файл mocks.json`, generate, [`count`])

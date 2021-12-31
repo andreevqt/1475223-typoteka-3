@@ -3,7 +3,7 @@
 const {maxStringLen} = require(`../../../utils`);
 const chalk = require(`chalk`);
 
-const help = async (manager/* , args */) => {
+const help = async (manager) => {
   const {commands, name, description} = manager;
 
   const commandsToPrint = Array.from(commands).map((val) => {

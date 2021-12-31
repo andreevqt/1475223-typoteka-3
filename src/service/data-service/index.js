@@ -6,5 +6,5 @@ module.exports = {
   CategoryService: require(`./category-service`),
   SearchService: require(`./search-service`),
   UserService: require(`./user-service`),
-  JWTService: require(`./jtw-service`)
+  JWTService: require(`./jwt-service`)
 };

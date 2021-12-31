@@ -35,8 +35,8 @@
   },
   "homepage": "https://github.com/qprquo/1475223-typoteka-3#readme",
   "devDependencies": {
-    "eslint": "6.8.0",
-    "eslint-config-htmlacademy": "0.5.2",
+    "eslint": "7.0.0",
+    "eslint-config-htmlacademy": "5.0.0",
     "jest": "26.1.0",
     "pino-pretty": "4.0.0",
     "sequelize-cli": "6.2.0",
