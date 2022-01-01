@@ -1,30 +1,32 @@
 .main-page__section-flex
   section.main-page__hot.hot
-    h2.hot__name Самое обсуждаемое 
+    h2.hot__name Самое обсуждаемое
       span.hot__icon.hot__icon--fire
-    if popular.length > 0
-      ul.hot__list
-        - for (let article of popular)
-            li.hot__list-item
-              a.hot__list-link(href=`/articles/${article.id}`)
-                | #{article.title}
-                sup.hot__link-sup #{article.commentsCount}
-    else
-      p.hot__empty Здесь пока ничего нет...
+    .hot__inner
+      if popular.length > 0
+        ul.hot__list
+          - for (let article of popular)
+              li.hot__list-item
+                a.hot__list-link(href=`/articles/${article.id}`)
+                  | #{article.title}
+                  sup.hot__link-sup #{article.commentsCount ? article.commentsCount : 0}
+      else
+        p.hot__empty Здесь пока ничего нет...
 
   section.main-page__last.last
-    h2.last__name Последние комментарии 
+    h2.last__name Последние комментарии
       span.last__icon.last__icon--cloud
-    if comments.length > 0
-      ul.last__list
-        - for (let comment of comments)
-          li.last__list-item
-            if comment.author.avatar
-              img.last__list-image(src=comment.author.avatar.orig, width=`20`, height=`20`, alt=comment.author.name)
-            else
-              img.last__list-image(src=`//avatars.dicebear.com/api/male/${comment.author.id}.svg`, width=`20`, height=`20`, alt=comment.author.name)
+    .last__inner
+      if comments.length > 0
+        ul.last__list
+          - for (let comment of comments)
+            li.last__list-item
+              if comment.author.avatar
+                img.last__list-image(src=comment.author.avatar.orig, width=`20`, height=`20`, alt=comment.author.name)
+              else
+                img.last__list-image(src=`//avatars.dicebear.com/api/male/${comment.author.id}.svg`, width=`20`, height=`20`, alt=comment.author.name)
 
-            b.last__list-name #{comment.author.name}
-            a.last__list-link(href=`/articles/${comment.articleId}#comment-${comment.id}`) #{comment.text}
-    else
-      p.last__empty Здесь пока ничего нет...
+              b.last__list-name #{comment.author.name}
+              a.last__list-link(href=`/articles/${comment.articleId}#comment-${comment.id}`) #{comment.text}
+      else
+        p.last__empty Здесь пока ничего нет...

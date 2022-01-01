@@ -10,14 +10,6 @@ const enableScrolling = () => {
 
 enableScrolling();
 
-/* const backBtn = document.querySelector('.button--backwards');
-if (backBtn) {
-  backBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    history.go(-1);
-  });
-} */
-
 const htmlToElement = (html) => {
   var template = document.createElement('template');
   html = html.trim();
@@ -25,22 +17,18 @@ const htmlToElement = (html) => {
   return template.content.firstChild;
 }
 
-const hotBlock = document.querySelector('.main-page__hot .hot__list');
-const lastBlock = document.querySelector('.main-page__last .last__list');
+const hotBlock = document.querySelector('.main-page__hot .hot__inner');
+const lastBlock = document.querySelector('.main-page__last .last__inner');
 
-const socket = io('http://localhost:3000',{
+const socket = io(meta.wsUrl, {
   withCredentials: false
 });
 
-socket.on('COMMENTS_CHANGED', (comments) => {
-  if (!lastBlock) {
-    return;
-  }
-  lastBlock.innerHTML = '';
+socket.on(meta.Events.COMMENTS_CHANGED, (comments) => {
   const template = (comment) => htmlToElement(`<li class="last__list-item">
     ${comment.author.avatar
-        ? `<img class="last__list-image" src="${comment.author.avatar.orig}" width="20" height="20" alt="${comment.author.name}">`
-        : `<img class="last__list-image" src="//avatars.dicebear.com/api/male/${comment.author.id}.svg">`
+      ? `<img class="last__list-image" src="${comment.author.avatar.orig}" width="20" height="20" alt="${comment.author.name}">`
+      : `<img class="last__list-image" src="//avatars.dicebear.com/api/male/${comment.author.id}.svg">`
     }
     <b class="last__list-name">${comment.author.name}</b>
     <a class="last__list-link" href="/articles/${comment.articleId}#comment-${comment.id}">
@@ -48,27 +36,46 @@ socket.on('COMMENTS_CHANGED', (comments) => {
     </a>
   </li>`);
 
+  if (!lastBlock) {
+    return;
+  }
+  lastBlock.innerHTML = '';
+  if (!comments.length) {
+    lastBlock.append(htmlToElement(`<p class="last__empty">Здесь пока ничего нет</p>`))
+    return;
+  }
+  const list = htmlToElement(`<ul class="last__list"></ul>`);
+  lastBlock.append(list);
+
   comments.forEach((comment) => {
     const el = template(comment);
-    lastBlock.append(el);
+    list.append(el);
   })
 });
 
-socket.on('POPULAR_ARTICLES_CHANGED', (articles) => {
+socket.on(meta.Events.POPULAR_ARTICLES_CHANGED, (articles) => {
+  const template = (article) => htmlToElement(`<li class="hot__list-item">
+    <a class="hot__list-link" href="/articles/${article.id}">
+      ${article.title}
+      <sup class="hot__link-sup">${article.commentsCount || 0}</sup>
+    </a>
+  </li>`);
+
   if (!hotBlock) {
     return;
   }
   hotBlock.innerHTML = '';
-  const template = (article) => htmlToElement(`<li class="hot__list-item">
-    <a class="hot__list-link" href="/articles/${article.id}">
-      ${article.title}
-      <sup class="hot__link-sup">${article.commentsCount}</sup>
-    </a>
-  </li>`);
+  if (!articles.length) {
+    hotBlock.append(htmlToElement(`<p class="hot__empty">Здесь пока ничего нет</p>`))
+    return;
+  }
+  const list = htmlToElement(`<ul class="hot__list"></ul>`)
+  hotBlock.append(list);
+
 
   articles.forEach((article) => {
     const el = template(article);
-    hotBlock.append(el);
+    list.append(el);
   })
 });
 
@@ -275,7 +282,7 @@ let textarea = null;
 if (comments || publication) {
   textarea = document.querySelectorAll('textarea');
 }
-const map = (typeof Map === 'function') ? new Map() : (function() {
+const map = (typeof Map === 'function') ? new Map() : (function () {
   const keys = [];
   const values = [];
 

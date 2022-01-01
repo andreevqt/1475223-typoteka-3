@@ -18,11 +18,13 @@ const {
   my,
   categories
 } = require(`./routes`);
+const {Events} = require(`../service/constants`)
 
 const app = express();
 
 const appUrl = `${config.app.url}:${config.app.port}`;
 const apiUrl = `${config.app.url}:${config.server.port}` + API_PREFIX;
+const wsUrl = `${config.app.url}:${config.server.port}`;
 
 app.set(`app_url`, appUrl);
 app.set(`api_url`, apiUrl);
@@ -45,7 +47,6 @@ app.use(async (req, res, next) => {
   try {
     cats = await api.categories.fetch({
       order: `desc`,
-      hideEmpty: req.url !== `/categories`,
       limit: 50
     });
   } catch (err) {
@@ -53,6 +54,12 @@ app.use(async (req, res, next) => {
       logger.error(`[ERROR] route: ${req.url}, message: status - ${err.response.status}, data - ${err.response.data}`);
     }
   }
+  res.locals.meta = {
+    apiUrl,
+    wsUrl,
+    Events,
+  };
+
   res.locals.categories = cats;
   res.locals.formData = {
     action: `/articles/add`,
