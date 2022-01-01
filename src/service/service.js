@@ -1,6 +1,6 @@
 'use strict';
 
-const ConsoleCommandManager = require(`src/service/cli/console-command-manager`);
+const ConsoleCommandManager = require(`./cli/console-command-manager`);
 const chalk = require(`chalk`);
 const {
   generate,

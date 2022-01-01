@@ -1,3 +1,5 @@
 'use strict';
 
-module.exports = require(`./load-routes`);
+const loadedRoutes = require(`./load-routes`);
+
+module.exports = loadedRoutes;

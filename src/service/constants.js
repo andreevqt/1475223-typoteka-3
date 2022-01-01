@@ -23,7 +23,7 @@ const MimeSignatures = {
 };
 
 const File = {
-  EXT_POS: -3,
+  EXT_POS: -3
 };
 
 module.exports = {

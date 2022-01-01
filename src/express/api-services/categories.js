@@ -1,6 +1,6 @@
 'use strict';
 
-const Base = require(`src/express/api-services/base`);
+const Base = require(`./base`);
 
 class Categories extends Base {
   async fetch({hideEmpty = true, ...rest}) {

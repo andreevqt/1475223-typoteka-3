@@ -1,8 +1,13 @@
 'use strict';
 
+const data = require(`./data`);
+const server = require(`./server`);
+const teardown = require(`./teardown`);
+const setup = require(`./setup`);
+
 module.exports = {
-  data: require(`./data`),
-  server: require(`./server`),
-  teardown: require(`./teardown`),
-  setup: require(`./setup`),
+  data,
+  server,
+  teardown,
+  setup,
 };

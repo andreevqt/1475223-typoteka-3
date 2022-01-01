@@ -4,8 +4,8 @@ const {Router} = require(`express`);
 const {logger} = require(`../helpers`);
 const api = require(`../api-services`);
 const upload = require(`../middleware/upload`);
-const checkAuth = require(`src/express/middleware/check-auth`);
-const redirectIfUser = require(`src/express/middleware/redirect-if-user`);
+const checkAuth = require(`../middleware/check-auth`);
+const redirectIfUser = require(`../middleware/redirect-if-user`);
 const {Http} = require(`../../service/constants`);
 const {
   MAX_COMMENT_LENGTH,

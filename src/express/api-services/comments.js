@@ -1,7 +1,7 @@
 'use strict';
 
 const axios = require(`axios`);
-const Base = require(`src/express/api-services/base`);
+const Base = require(`./base`);
 const {Collection} = require(`../helpers`);
 
 class Comments extends Base {

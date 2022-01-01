@@ -11,7 +11,7 @@ const {translateMessage} = require(`../../../utils`);
 const path = require(`path`);
 const {
   API_PREFIX,
-  http
+  Http
 } = require(`../../constants`);
 
 const server = async (manager, args) => {
@@ -36,7 +36,7 @@ const server = async (manager, args) => {
 
   app.use(express.static(path.resolve(__dirname, `../../public`)));
 
-  app.use((req, res) => res.status(http.NOT_FOUND).send(`Not found`));
+  app.use((req, res) => res.status(Http.NOT_FOUND).send(`Not found`));
 
   app.use((err, req, res, _next) => {
     if (err instanceof ValidationError) {
@@ -56,7 +56,7 @@ const server = async (manager, args) => {
     }
 
     console.log(`[ERROR] ${err.stack}`);
-    res.status(http.INTERNAL_SERVER_ERROR).send(`Internal server error`);
+    res.status(Http.INTERNAL_SERVER_ERROR).send(`Internal server error`);
   });
 
   return once(app.listen(port), `listening`)

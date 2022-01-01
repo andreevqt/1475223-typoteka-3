@@ -54,7 +54,7 @@ module.exports = (sequelize, DataTypes) => {
         ],
         include: [
           [sequelize.literal(`(
-            SELECT COUNT(*) FROM "comments"
+            SELECT CAST(COUNT(*) as INTEGER) FROM "comments"
             WHERE "articleId" = "Article"."id"
             GROUP BY "articleId"
           )`), `commentsCount`]

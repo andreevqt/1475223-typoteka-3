@@ -5,11 +5,11 @@ const express = require(`express`);
 const path = require(`path`);
 const {logger} = require(`./helpers`);
 const {once} = require(`events`);
-const {API_PREFIX, http} = require(`../service/constants`);
+const {API_PREFIX, Http} = require(`../service/constants`);
 const api = require(`./api-services`);
 const auth = require(`./middleware/auth`);
-const checkAuth = require(`src/express/middleware/check-auth`);
-const isEditor = require(`src/express/middleware/is-editor`);
+const checkAuth = require(`./middleware/check-auth`);
+const isEditor = require(`./middleware/is-editor`);
 const csrf = require(`./middleware/csrf`);
 const cookieParser = require(`cookie-parser`);
 const {
@@ -68,8 +68,8 @@ app.use(`/my`, [checkAuth, isEditor], my(app));
 app.use(`/articles`, articles(app));
 app.use(`/categories`, [checkAuth, isEditor], categories(app));
 
-app.use((_req, res) => res.status(http.NOT_FOUND).render(`errors/404`));
-app.use((err, _req, res, _next) => res.status(http.INTERNAL_SERVER_ERROR).render(`errors/500`, {message: err.message}));
+app.use((_req, res) => res.status(Http.NOT_FOUND).render(`errors/404`));
+app.use((err, _req, res, _next) => res.status(Http.INTERNAL_SERVER_ERROR).render(`errors/500`, {message: err.message}));
 
 app.set(`views`, path.join(__dirname, `templates`));
 app.set(`view engine`, `pug`);

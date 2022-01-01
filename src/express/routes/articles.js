@@ -7,7 +7,7 @@ const {logger} = require(`../helpers`);
 const upload = require(`../middleware/upload`);
 const api = require(`../api-services`);
 const {Http} = require(`../../service/constants`);
-const isEditor = require(`src/express/middleware/is-editor`);
+const isEditor = require(`../middleware/is-editor`);
 
 module.exports = (_app) => {
   router.param(`categoryId`, async (req, res, next, id) => {
