@@ -3,6 +3,8 @@
 const {logger} = require(`../../helpers`);
 const config = require(`../../../../config`);
 const express = require(`express`);
+const http = require(`http`);
+const {Server} = require(`socket.io`);
 const {once} = require(`events`);
 const api = require(`../../api/routes`);
 const {ValidationError} = require(`express-validation`);
@@ -18,6 +20,9 @@ const server = async (manager, args) => {
   const port = args[0] || config.server.port;
 
   const app = express();
+  const server = http.createServer(app);
+  const io = new Server(server);
+
   app.use(express.urlencoded({
     extended: true,
   }));
@@ -59,7 +64,11 @@ const server = async (manager, args) => {
     res.status(Http.INTERNAL_SERVER_ERROR).send(`Internal server error`);
   });
 
-  return once(app.listen(port), `listening`)
+  io.on(`connection`, () => {
+    socket.on(`COMMENT_CHANGED`);
+  })
+
+  return once(server.listen(port), `listening`)
     .then(() => console.log(`[SERVER] Ожидаю соединений на ${port}`))
     .catch((err) => {
       logger.info(`[ERROR] ${err.msg}`);
