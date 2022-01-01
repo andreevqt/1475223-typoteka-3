@@ -26,6 +26,11 @@ const File = {
   EXT_POS: -3
 };
 
+const Events = {
+  COMMENTS_CHANGED: `COMMENTS_CHANGED`,
+  POPULAR_ARTICLES_CHANGED: `POPULAR_ARTICLES_CHANGED`
+};
+
 module.exports = {
   MAX_POSTS_COUNT,
   ID_LEN,
@@ -33,5 +38,6 @@ module.exports = {
   API_SERVER_DEFAULT_PORT,
   Http,
   MimeSignatures,
-  File
+  File,
+  Events
 };

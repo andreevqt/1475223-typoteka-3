@@ -39,7 +39,7 @@ const auth = async (req, res, next) => {
           setCookies(tokens);
           userId = getUID(tokens.access);
         } catch (_err) {
-          logger.debug(`failed to refresh token for user, do nothing`);
+          logger.debug(`failed to refresh token for user, err: ${err.message}, stack: ${err.stack}`);
         }
       }
 

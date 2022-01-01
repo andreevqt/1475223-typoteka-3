@@ -20,8 +20,20 @@ const server = async (manager, args) => {
   const port = args[0] || config.server.port;
 
   const app = express();
-  const server = http.createServer(app);
-  const io = new Server(server);
+
+  const httpServer = http.createServer(app);
+  const io = new Server(httpServer, {
+    cors: {
+      origin: `*`,
+      methods: [`GET`, `POST`],
+      credentials: false,
+    }
+  });
+
+  app.use((_req, res, next) => {
+    res.io = io;
+    next();
+  });
 
   app.use(express.urlencoded({
     extended: true,
@@ -64,11 +76,11 @@ const server = async (manager, args) => {
     res.status(Http.INTERNAL_SERVER_ERROR).send(`Internal server error`);
   });
 
-  io.on(`connection`, () => {
-    socket.on(`COMMENT_CHANGED`);
-  })
+  io.on(`connection`, (_socket) => {
+    logger.info(`Client connected`);
+  });
 
-  return once(server.listen(port), `listening`)
+  return once(httpServer.listen(port), `listening`)
     .then(() => console.log(`[SERVER] Ожидаю соединений на ${port}`))
     .catch((err) => {
       logger.info(`[ERROR] ${err.msg}`);
