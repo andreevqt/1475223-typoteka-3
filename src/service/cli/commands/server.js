@@ -3,6 +3,8 @@
 const {logger} = require(`../../helpers`);
 const config = require(`../../../../config`);
 const express = require(`express`);
+const http = require(`http`);
+const {Server} = require(`socket.io`);
 const {once} = require(`events`);
 const api = require(`../../api/routes`);
 const {ValidationError} = require(`express-validation`);
@@ -11,13 +13,28 @@ const {translateMessage} = require(`../../../utils`);
 const path = require(`path`);
 const {
   API_PREFIX,
-  http
+  Http
 } = require(`../../constants`);
 
 const server = async (manager, args) => {
   const port = args[0] || config.server.port;
 
   const app = express();
+
+  const httpServer = http.createServer(app);
+  const io = new Server(httpServer, {
+    cors: {
+      origin: `*`,
+      methods: [`GET`, `POST`],
+      credentials: false,
+    }
+  });
+
+  app.use((_req, res, next) => {
+    res.io = io;
+    next();
+  });
+
   app.use(express.urlencoded({
     extended: true,
   }));
@@ -36,7 +53,7 @@ const server = async (manager, args) => {
 
   app.use(express.static(path.resolve(__dirname, `../../public`)));
 
-  app.use((req, res) => res.status(http.NOT_FOUND).send(`Not found`));
+  app.use((req, res) => res.status(Http.NOT_FOUND).send(`Not found`));
 
   app.use((err, req, res, _next) => {
     if (err instanceof ValidationError) {
@@ -56,10 +73,14 @@ const server = async (manager, args) => {
     }
 
     console.log(`[ERROR] ${err.stack}`);
-    res.status(http.INTERNAL_SERVER_ERROR).send(`Internal server error`);
+    res.status(Http.INTERNAL_SERVER_ERROR).send(`Internal server error`);
   });
 
-  return once(app.listen(port), `listening`)
+  io.on(`connection`, (_socket) => {
+    logger.info(`Client connected`);
+  });
+
+  return once(httpServer.listen(port), `listening`)
     .then(() => console.log(`[SERVER] Ожидаю соединений на ${port}`))
     .catch((err) => {
       logger.info(`[ERROR] ${err.msg}`);

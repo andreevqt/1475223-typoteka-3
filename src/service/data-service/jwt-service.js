@@ -6,12 +6,8 @@ const jwt = require(`jsonwebtoken`);
 const config = require(`../../../config`);
 
 class JWTService extends BaseService {
-  verifyAccess(token) {
-    return jwt.verify(token, config.jwt.secret.access);
-  }
-
-  verifyRefresh(token) {
-    return jwt.verify(token, config.jwt.secret.refresh);
+  async findByToken(token) {
+    return this.findOne({where: {token}});
   }
 
   async drop(token) {
@@ -22,23 +18,27 @@ class JWTService extends BaseService {
     });
   }
 
-  generateAccessToken(user) {
+  static verifyAccess(token) {
+    return jwt.verify(token, config.jwt.secret.access);
+  }
+
+  static verifyRefresh(token) {
+    return jwt.verify(token, config.jwt.secret.refresh);
+  }
+
+  static generateAccessToken(user) {
     return user.generateToken();
   }
 
-  async generateRefreshToken(user) {
+  static async generateRefreshToken(user) {
     return (await RefreshToken.generate(user)).token;
   }
 
-  async generateTokens(user) {
+  static async generateTokens(user) {
     return {
       access: this.generateAccessToken(user),
       refresh: await this.generateRefreshToken(user)
     };
-  }
-
-  async findByToken(token) {
-    return this.findOne({where: {token}});
   }
 }
 

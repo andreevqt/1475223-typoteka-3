@@ -1,7 +1,5 @@
 'use strict';
 
-/* eslint-disable indent */
-
 const {Sequelize} = require(`sequelize`);
 const config = require(`../../../config`);
 const {logger} = require(`../helpers`);
@@ -92,18 +90,19 @@ const create = (options = null) => {
       logging,
     })
     : new Sequelize(
-      config.db.database,
-      config.db.username,
-      config.db.password, {
-      host: config.db.host,
-      dialect: `postgres`,
-      pool: {
-        max: 5,
-        min: 0,
-        idle: 10000
-      },
-      logging
-    });
+        config.db.database,
+        config.db.username,
+        config.db.password, {
+          host: config.db.host,
+          dialect: `postgres`,
+          pool: {
+            max: 5,
+            min: 0,
+            idle: 10000
+          },
+          logging
+        }
+    );
 
   return new DbService(sequelize);
 };

@@ -10,7 +10,7 @@ const allowed = (key) => {
 
 const makeOrder = (order) => {
   if (order === `popular`) {
-    return [Sequelize.literal(`"commentsCount"`), `desc`];
+    return [Sequelize.literal(`"commentsCount"`), `desc nulls last`];
   }
 
   if (order === `asc`) {

@@ -24,7 +24,6 @@ const generatePicture = () => {
     small,
     big
   };
-  // return pictures[randomInt(0, pictures.length - 1)];
 };
 
 const generateDate = () => {
@@ -53,13 +52,12 @@ const filldb = async (manager, args) => {
     updatedAt: generateDate()
   })));
 
-  /* eslint-disable indent */
   // articles
   await service.bulkDelete(`articles`);
   const titles = await readData(`${root}/titles.txt`);
   const sentences = await readData(`${root}/sentences.txt`);
   const articles = await Article.bulkCreate(
-    Array(count).fill({})
+      Array(count).fill({})
       .map(() => ({
         title: getRndField(titles),
         announce: shuffle(sentences).slice(0, randomInt(1, 5)).join(` `),
@@ -70,7 +68,6 @@ const filldb = async (manager, args) => {
         updatedAt: generateDate(),
       }))
   );
-  /* eslint-enable */
 
   // articles_categories
   await service.bulkDelete(`articles_categories`);

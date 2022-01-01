@@ -1,8 +1,13 @@
 'use strict';
 
+const articles = require(`./articles`);
+const main = require(`./main`);
+const my = require(`./my`);
+const categories = require(`./categories`);
+
 module.exports = {
-  articles: require(`./articles`),
-  main: require(`./main`),
-  my: require(`./my`),
-  categories: require(`./categories`),
+  articles,
+  main,
+  my,
+  categories,
 };

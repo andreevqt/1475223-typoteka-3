@@ -1,5 +1,4 @@
 'use strict';
-/* eslint-disable no-undef */
 
 const Paginator = require(`./paginator`);
 

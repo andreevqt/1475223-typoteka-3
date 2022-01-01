@@ -1,10 +1,17 @@
 'use strict';
 
+const ArticleService = require(`./article-service`);
+const CommentService = require(`./comment-service`);
+const CategoryService = require(`./category-service`);
+const SearchService = require(`./search-service`);
+const UserService = require(`./user-service`);
+const JWTService = require(`./jwt-service`);
+
 module.exports = {
-  ArticleService: require(`./article-service`),
-  CommentService: require(`./comment-service`),
-  CategoryService: require(`./category-service`),
-  SearchService: require(`./search-service`),
-  UserService: require(`./user-service`),
-  JWTService: require(`./jtw-service`)
+  ArticleService,
+  CommentService,
+  CategoryService,
+  SearchService,
+  UserService,
+  JWTService
 };

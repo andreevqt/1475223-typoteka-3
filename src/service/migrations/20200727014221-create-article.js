@@ -1,5 +1,4 @@
 'use strict';
-/* eslint-disable new-cap */
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {

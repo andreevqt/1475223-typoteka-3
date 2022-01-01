@@ -2,7 +2,7 @@
 
 const dotenv = require(`dotenv`);
 const fs = require(`fs`).promises;
-const cryptoService = require(`src/service/crypto-service/crypto-service`);
+const cryptoService = require(`../../crypto-service/crypto-service`);
 
 // https://github.com/bkeepers/update-dotenv/
 const escapeNewlines = (str) => {

@@ -1,11 +1,19 @@
 'use strict';
 
+const logRequests = require(`./log-requests`);
+const parseQuery = require(`./parse-query`);
+const auth = require(`./auth`);
+const authorize = require(`./authorize`);
+const isCurrentUser = require(`./is-current-user`);
+const checkStatus = require(`./check-status`);
+const isEditor = require(`./is-editor`);
+
 module.exports = {
-  logRequests: require(`./log-requests`),
-  parseQuery: require(`./parse-query`),
-  auth: require(`./auth`),
-  authorize: require(`./authorize`),
-  isCurrentUser: require(`./is-current-user`),
-  checkStatus: require(`./check-status`),
-  isEditor: require(`./is-editor`)
+  logRequests,
+  parseQuery,
+  auth,
+  authorize,
+  isCurrentUser,
+  checkStatus,
+  isEditor
 };

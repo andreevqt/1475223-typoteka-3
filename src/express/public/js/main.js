@@ -4,19 +4,80 @@ const csrf = document.querySelector('meta[name="csrf-token"]').getAttribute('con
 
 // vendor.js hackfix
 const enableScrolling = () => {
-  document.body.removeAttribute("style");
-  document.body.classList.remove("body-fixed");
+  document.body.removeAttribute('style');
+  document.body.classList.remove('body-fixed');
 };
 
 enableScrolling();
 
-/* const backBtn = document.querySelector('.button--backwards');
-if (backBtn) {
-  backBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    history.go(-1);
-  });
-} */
+const htmlToElement = (html) => {
+  var template = document.createElement('template');
+  html = html.trim();
+  template.innerHTML = html;
+  return template.content.firstChild;
+}
+
+const hotBlock = document.querySelector('.main-page__hot .hot__inner');
+const lastBlock = document.querySelector('.main-page__last .last__inner');
+
+const socket = io(meta.wsUrl, {
+  withCredentials: false
+});
+
+socket.on(meta.Events.COMMENTS_CHANGED, (comments) => {
+  const template = (comment) => htmlToElement(`<li class="last__list-item">
+    ${comment.author.avatar
+      ? `<img class="last__list-image" src="${comment.author.avatar.orig}" width="20" height="20" alt="${comment.author.name}">`
+      : `<img class="last__list-image" src="//avatars.dicebear.com/api/male/${comment.author.id}.svg">`
+    }
+    <b class="last__list-name">${comment.author.name}</b>
+    <a class="last__list-link" href="/articles/${comment.articleId}#comment-${comment.id}">
+      ${comment.text}
+    </a>
+  </li>`);
+
+  if (!lastBlock) {
+    return;
+  }
+  lastBlock.innerHTML = '';
+  if (!comments.length) {
+    lastBlock.append(htmlToElement(`<p class="last__empty">Здесь пока ничего нет</p>`))
+    return;
+  }
+  const list = htmlToElement(`<ul class="last__list"></ul>`);
+  lastBlock.append(list);
+
+  comments.forEach((comment) => {
+    const el = template(comment);
+    list.append(el);
+  })
+});
+
+socket.on(meta.Events.POPULAR_ARTICLES_CHANGED, (articles) => {
+  const template = (article) => htmlToElement(`<li class="hot__list-item">
+    <a class="hot__list-link" href="/articles/${article.id}">
+      ${article.title}
+      <sup class="hot__link-sup">${article.commentsCount || 0}</sup>
+    </a>
+  </li>`);
+
+  if (!hotBlock) {
+    return;
+  }
+  hotBlock.innerHTML = '';
+  if (!articles.length) {
+    hotBlock.append(htmlToElement(`<p class="hot__empty">Здесь пока ничего нет</p>`))
+    return;
+  }
+  const list = htmlToElement(`<ul class="hot__list"></ul>`)
+  hotBlock.append(list);
+
+
+  articles.forEach((article) => {
+    const el = template(article);
+    list.append(el);
+  })
+});
 
 // create post form
 const popups = document.querySelectorAll('[data-ajax-form] .popup');
@@ -221,7 +282,7 @@ let textarea = null;
 if (comments || publication) {
   textarea = document.querySelectorAll('textarea');
 }
-const map = (typeof Map === 'function') ? new Map() : (function() {
+const map = (typeof Map === 'function') ? new Map() : (function () {
   const keys = [];
   const values = [];
 

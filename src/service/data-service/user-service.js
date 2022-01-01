@@ -6,10 +6,58 @@ const {ValidationError} = require(`express-validation`);
 const {UniqueConstraintError} = require(`sequelize`);
 const cryptoService = require(`../crypto-service/crypto-service`);
 const imageService = require(`../image-service/image-service`);
+const JWTService = require(`./jwt-service`);
 const {Http} = require(`../constants`);
 
 class UserService extends BaseService {
-  checkDuplicateEmail(err) {
+  async findByEmail(email) {
+    return this.findOne({where: {email}});
+  }
+
+  async register(attrs) {
+    const others = await this.findAll();
+    if (!others.length) {
+      attrs.isEditor = true;
+    }
+
+    const user = await this.create(attrs);
+
+    return {
+      ...user.toJSON(),
+      tokens: JWTService.generateTokens(user)
+    };
+  }
+
+  async login(email, password) {
+    const user = await this.findByEmail(email);
+    if (!user) {
+      return null;
+    }
+
+    if (!UserService.checkPassword(user, password)) {
+      return null;
+    }
+
+    return {
+      ...user.toJSON(),
+      tokens: await JWTService.generateTokens(user)
+    };
+  }
+
+  async logout(token) {
+    const {jwt} = this._services;
+    return jwt.drop(token);
+  }
+
+  async create(attrs) {
+    if (attrs.avatar) {
+      attrs.avatar = await imageService.makeFromBuffer(attrs.avatar, 74, 74);
+    }
+    // call instance method
+    return super.create(attrs);
+  }
+
+  static checkDuplicateEmail(err) {
     const errors = {
       body: [
         {
@@ -35,57 +83,7 @@ class UserService extends BaseService {
     return err;
   }
 
-  async findByEmail(email) {
-    return this.findOne({where: {email}});
-  }
-
-  async register(attrs) {
-    const {jwt} = this._services;
-    const others = await this.findAll();
-    if (!others.length) {
-      attrs.isEditor = true;
-    }
-
-    const user = await this.create(attrs);
-
-    return {
-      ...user.toJSON(),
-      tokens: jwt.generateTokens(user)
-    };
-  }
-
-  async login(email, password) {
-    const user = await this.findByEmail(email);
-    if (!user) {
-      return null;
-    }
-
-    if (!this.checkPassword(user, password)) {
-      return null;
-    }
-
-    const {jwt} = this._services;
-
-    return {
-      ...user.toJSON(),
-      tokens: await jwt.generateTokens(user)
-    };
-  }
-
-  async logout(token) {
-    const {jwt} = this._services;
-    return jwt.drop(token);
-  }
-
-  async create(attrs) {
-    if (attrs.avatar) {
-      attrs.avatar = await imageService.makeFromBuffer(attrs.avatar, 74, 74);
-    }
-
-    return super.create(attrs);
-  }
-
-  async update(user, attrs) {
+  static async update(user, attrs) {
     if (attrs.avatar) {
       await imageService.remove(user.avatar);
       attrs.avatar = await imageService.makeFromBuffer(attrs.avatar, 74, 74);
@@ -94,7 +92,7 @@ class UserService extends BaseService {
     return user.update(attrs);
   }
 
-  checkPassword(user, password) {
+  static checkPassword(user, password) {
     return cryptoService.compare(password, user.password);
   }
 }

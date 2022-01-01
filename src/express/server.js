@@ -5,11 +5,11 @@ const express = require(`express`);
 const path = require(`path`);
 const {logger} = require(`./helpers`);
 const {once} = require(`events`);
-const {API_PREFIX, http} = require(`../service/constants`);
+const {API_PREFIX, Http, Events} = require(`../service/constants`);
 const api = require(`./api-services`);
 const auth = require(`./middleware/auth`);
-const checkAuth = require(`src/express/middleware/check-auth`);
-const isEditor = require(`src/express/middleware/is-editor`);
+const checkAuth = require(`./middleware/check-auth`);
+const isEditor = require(`./middleware/is-editor`);
 const csrf = require(`./middleware/csrf`);
 const cookieParser = require(`cookie-parser`);
 const {
@@ -23,6 +23,7 @@ const app = express();
 
 const appUrl = `${config.app.url}:${config.app.port}`;
 const apiUrl = `${config.app.url}:${config.server.port}` + API_PREFIX;
+const wsUrl = `${config.app.url}:${config.server.port}`;
 
 app.set(`app_url`, appUrl);
 app.set(`api_url`, apiUrl);
@@ -45,7 +46,6 @@ app.use(async (req, res, next) => {
   try {
     cats = await api.categories.fetch({
       order: `desc`,
-      hideEmpty: req.url !== `/categories`,
       limit: 50
     });
   } catch (err) {
@@ -53,12 +53,17 @@ app.use(async (req, res, next) => {
       logger.error(`[ERROR] route: ${req.url}, message: status - ${err.response.status}, data - ${err.response.data}`);
     }
   }
+  res.locals.meta = {
+    apiUrl,
+    wsUrl,
+    Events,
+  };
+
   res.locals.categories = cats;
   res.locals.formData = {
     action: `/articles/add`,
     category: []
   };
-  // res.locals.login = true;
   next();
 });
 
@@ -69,8 +74,8 @@ app.use(`/my`, [checkAuth, isEditor], my(app));
 app.use(`/articles`, articles(app));
 app.use(`/categories`, [checkAuth, isEditor], categories(app));
 
-app.use((_req, res) => res.status(http.NOT_FOUND).render(`errors/404`));
-app.use((err, _req, res, _next) => res.status(http.INTERNAL_SERVER_ERROR).render(`errors/500`, {message: err.message}));
+app.use((_req, res) => res.status(Http.NOT_FOUND).render(`errors/404`));
+app.use((err, _req, res, _next) => res.status(Http.INTERNAL_SERVER_ERROR).render(`errors/500`, {message: err.message}));
 
 app.set(`views`, path.join(__dirname, `templates`));
 app.set(`view engine`, `pug`);

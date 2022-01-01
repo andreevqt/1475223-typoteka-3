@@ -1,6 +1,6 @@
 'use strict';
 
-const Base = require(`src/express/api-services/base`);
+const Base = require(`./base`);
 const {insertAt} = require(`../helpers`);
 const {Collection} = require(`../helpers`);
 
@@ -8,7 +8,7 @@ class Search extends Base {
   async fetch(params) {
     let articles = new Collection();
     const {query} = params;
-
+    // call instance method
     articles = await super.fetch(params);
     articles.items = articles.items.map((article) => {
       const idx = article.title.toLowerCase().indexOf(query.toLowerCase());

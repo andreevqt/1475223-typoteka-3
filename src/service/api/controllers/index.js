@@ -1,10 +1,17 @@
 'use strict';
 
+const articles = require(`./articles`);
+const categories = require(`./categories`);
+const search = require(`./search`);
+const comments = require(`./comments`);
+const status = require(`./status`);
+const users = require(`./users`);
+
 module.exports = {
-  articles: require(`./articles`),
-  categories: require(`./categories`),
-  search: require(`./search`),
-  comments: require(`./comments`),
-  status: require(`./status`),
-  users: require(`./users`)
+  articles,
+  categories,
+  search,
+  comments,
+  status,
+  users
 };

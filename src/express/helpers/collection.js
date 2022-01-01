@@ -1,6 +1,6 @@
 'use strict';
 
-const Paginator = require(`src/express/helpers/paginator/paginator`);
+const Paginator = require(`./paginator/paginator`);
 
 class Collection {
   constructor(items = [], totalPages, currentPage) {

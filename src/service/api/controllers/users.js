@@ -1,6 +1,7 @@
 'use strict';
 
 const {Http} = require(`../../constants`);
+const {JWTService, UserService} = require(`../../data-service`);
 
 module.exports = (services) => ({
   checkUser: async (req, res, next, id) => {
@@ -30,17 +31,17 @@ module.exports = (services) => ({
       const user = await services.users.register(req.body);
       res.status(Http.CREATED).send(user);
     } catch (err) {
-      next(services.users.checkDuplicateEmail(err));
+      next(UserService.checkDuplicateEmail(err));
     }
   },
 
   update: async (req, res, next) => {
     try {
       const {user} = res.locals;
-      const updated = await services.users.update(user, req.body);
+      const updated = await UserService.update(user, req.body);
       res.status(Http.OK).send(updated);
     } catch (err) {
-      next(services.users.checkDuplicateEmail(err));
+      next(UserService.checkDuplicateEmail(err));
     }
   },
 
@@ -79,7 +80,7 @@ module.exports = (services) => ({
     }
 
     try {
-      const {userId, email} = await services.jwt.verifyRefresh(token);
+      const {userId, email} = await JWTService.verifyRefresh(token);
       await services.jwt.drop(email, token);
 
       const user = await services.users.findById(userId);
@@ -88,8 +89,8 @@ module.exports = (services) => ({
         return;
       }
 
-      const tokens = await services.jwt.generateTokens(user);
-      res.status(200).json(tokens);
+      const tokens = await JWTService.generateTokens(user);
+      res.status(Http.OK).json(tokens);
     } catch (err) {
       res.status(Http.FORBIDDEN).send(`Forbidden`);
     }

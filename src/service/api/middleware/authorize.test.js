@@ -1,10 +1,10 @@
 'use strict';
 
-/* eslint-disable no-undef */
-
 const sinon = require(`sinon`);
 const {setup, teardown, data} = require(`../../test-setup`);
 const {services} = require(`../routes`);
+const {Http} = require(`../../constants`);
+const JWTService = require(`../../data-service/jwt-service`)
 const authorize = require(`./authorize`)(services);
 
 const mockResponse = () => {
@@ -51,12 +51,12 @@ describe(`Should verify that user has access to specific route`, () => {
 
   test(`If token is not provided it should return 401 status code`, async () => {
     await authorize(req, res, next);
-    expect(res.status.calledWith(401)).toBe(true);
+    expect(res.status.calledWith(Http.UNAUTHROIZED)).toBe(true);
   });
 
   test(`If user has been autorized successfully then next() should be called once`, async () => {
     const storedUser = await services.users.findByEmail(user.email);
-    const token = await services.jwt.generateAccessToken(storedUser);
+    const token = await JWTService.generateAccessToken(storedUser);
     req.headers.authorization = token;
     await authorize(req, res, next);
     expect(next.calledOnce).toBe(true);
@@ -69,21 +69,21 @@ describe(`Should verify that user has access to specific route`, () => {
     const token = storedUser.generateToken();
     req.headers.authorization = token;
     await authorize(req, res, next);
-    expect(res.status.calledWith(401)).toBe(true);
+    expect(res.status.calledWith(Http.UNAUTHROIZED)).toBe(true);
   });
 
   test(`If token has been wrong it should return 403 status code`, async () => {
     req.headers.authorization = `babecafe`;
     await authorize(req, res, next);
-    expect(res.status.calledWith(403)).toBe(true);
+    expect(res.status.calledWith(Http.FORBIDDEN)).toBe(true);
   });
 
   test(`If token has expired it should return 403`, async () => {
     const storedUser = await services.users.findByEmail(user.email);
-    const token = await services.jwt.generateAccessToken(storedUser);
+    const token = await JWTService.generateAccessToken(storedUser);
     req.headers.authorization = token;
     clock.tick(`00:15:00`);
     await authorize(req, res, next);
-    expect(res.status.calledWith(403)).toBe(true);
+    expect(res.status.calledWith(Http.FORBIDDEN)).toBe(true);
   });
 });

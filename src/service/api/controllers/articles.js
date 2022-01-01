@@ -1,5 +1,6 @@
 'use strict';
 const {Http} = require(`../../constants`);
+const {emitArticles, emitComments} = require(`../../helpers`);
 
 module.exports = (services) => ({
   checkArticle: async (req, res, next, id) => {
@@ -57,6 +58,7 @@ module.exports = (services) => ({
   delete: async (req, res) => {
     const {article} = res.locals;
     const deleted = await services.articles.delete(article);
+    await emitArticles(res.io, services);
     res.status(Http.OK).json(deleted);
   },
 
@@ -70,12 +72,16 @@ module.exports = (services) => ({
     create: async (req, res) => {
       const {article} = res.locals;
       const comment = await services.comments.create(article, req.body);
+      await emitComments(res.io, services);
+      await emitArticles(res.io, services);
       res.status(Http.CREATED).json(comment);
     },
 
     delete: async (req, res) => {
       const {comment} = res.locals;
       const deleted = await services.comments.delete(comment);
+      await emitComments(res.io, services);
+      await emitArticles(res.io, services);
       res.status(Http.OK).json(deleted);
     }
   },

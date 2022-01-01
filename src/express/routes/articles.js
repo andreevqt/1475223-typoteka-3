@@ -2,11 +2,12 @@
 
 const {Router} = require(`express`);
 const router = new Router();
+const _ = require(`lodash`);
 const {logger} = require(`../helpers`);
 const upload = require(`../middleware/upload`);
 const api = require(`../api-services`);
 const {Http} = require(`../../service/constants`);
-const isEditor = require(`src/express/middleware/is-editor`);
+const isEditor = require(`../middleware/is-editor`);
 
 module.exports = (_app) => {
   router.param(`categoryId`, async (req, res, next, id) => {
@@ -83,7 +84,7 @@ module.exports = (_app) => {
 
   router.post(`/:articleId/comments`, async (req, res, next) => {
     const {article} = res.locals;
-    const {_csrf, ...attrs} = req.body;  // eslint-disable-line
+    const attrs = _.omit(req.body, `_csrf`);
 
     try {
       await api.comments.create(article.id, attrs);

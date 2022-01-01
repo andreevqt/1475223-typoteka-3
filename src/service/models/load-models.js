@@ -1,8 +1,8 @@
 'use strict';
-/* eslint-disable no-invalid-this */
 
 const dbService = require(`../db-service/db-service`);
 const {isClass} = require(`../../utils`);
+const {File} = require(`../constants`);
 
 const fs = require(`fs`);
 const path = require(`path`);
@@ -27,7 +27,7 @@ service.sequelize.addHook(`beforeCount`, function (options) {
 fs
   .readdirSync(__dirname)
   .filter((file) => {
-    return (file.indexOf(`.`) !== 0) && (file !== basename) && (file !== `index.js`) && (file.slice(-3) === `.js`);
+    return (file.indexOf(`.`) !== 0) && (file !== basename) && (file !== `index.js`) && (file.slice(File.EXT_POS) === `.js`);
   })
   .forEach((file) => {
     const definer = require(path.join(__dirname, file));
