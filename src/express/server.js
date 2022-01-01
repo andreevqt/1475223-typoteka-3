@@ -5,7 +5,7 @@ const express = require(`express`);
 const path = require(`path`);
 const {logger} = require(`./helpers`);
 const {once} = require(`events`);
-const {API_PREFIX, Http} = require(`../service/constants`);
+const {API_PREFIX, Http, Events} = require(`../service/constants`);
 const api = require(`./api-services`);
 const auth = require(`./middleware/auth`);
 const checkAuth = require(`./middleware/check-auth`);
@@ -18,7 +18,6 @@ const {
   my,
   categories
 } = require(`./routes`);
-const {Events} = require(`../service/constants`)
 
 const app = express();
 
