@@ -13,7 +13,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       announce: {
-        type: Sequelize.STRING(512)
+        type: new Sequelize.STRING(512)
       },
       fullText: {
         type: Sequelize.TEXT

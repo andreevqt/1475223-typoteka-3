@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
         ]
       };
 
-      return {attributes};
+      return {attributes, distinct: true};
     }
   }
 

@@ -65,7 +65,7 @@ module.exports = (sequelize, DataTypes) => {
         [`createdAt`, `desc`]
       ];
 
-      return {include: includes, attributes, order: orders};
+      return {include: includes, attributes, order: orders, distinct: true};
     }
   }
 
