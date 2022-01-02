@@ -2,7 +2,7 @@
 
 const {Joi} = require(`express-validation`);
 
-module.exports = {
+const comments = {
   create: {
     body: Joi.object({
       authorId: Joi.number().label(`authorId`).required(),
@@ -16,3 +16,5 @@ module.exports = {
     })
   }
 };
+
+module.exports = comments;

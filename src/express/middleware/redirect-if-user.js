@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = (req, res, next) => {
+const redirectIfUser = (_req, res, next) => {
   if (res.locals.currentUser) {
     res.redirect(`back`);
     return;
@@ -8,3 +8,5 @@ module.exports = (req, res, next) => {
 
   next();
 };
+
+module.exports = redirectIfUser;

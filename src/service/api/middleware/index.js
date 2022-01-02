@@ -7,6 +7,7 @@ const authorize = require(`./authorize`);
 const isCurrentUser = require(`./is-current-user`);
 const checkStatus = require(`./check-status`);
 const isEditor = require(`./is-editor`);
+const sanitizeDate = require(`./sanitize-date`);
 
 module.exports = {
   logRequests,
@@ -15,5 +16,6 @@ module.exports = {
   authorize,
   isCurrentUser,
   checkStatus,
-  isEditor
+  isEditor,
+  sanitizeDate
 };

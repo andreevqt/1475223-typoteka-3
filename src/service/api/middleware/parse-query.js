@@ -24,7 +24,7 @@ const makeOrder = (order) => {
   return [];
 };
 
-module.exports = (req, res, next) => {
+const parseQuery = (req, res, next) => {
   const {query} = req;
 
   let parsed = {
@@ -51,3 +51,5 @@ module.exports = (req, res, next) => {
   res.locals.parsed = parsed;
   next();
 };
+
+module.exports = parseQuery;

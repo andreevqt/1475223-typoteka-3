@@ -8,7 +8,7 @@ const {parseQuery, authorize, isCurrentUser, auth} = require(`../middleware`);
 
 const router = new Router();
 
-module.exports = (app, services) => {
+const usersRoute = (app, services) => {
   const controller = controllers.users(services);
 
   app.use(`/users`, router);
@@ -38,3 +38,5 @@ module.exports = (app, services) => {
     .put([authorize(services), isCurrentUser, validate(users.update, {}, {abortEarly: false})], controller.update)
     .delete([authorize(services), isCurrentUser], controller.delete);
 };
+
+module.exports = usersRoute;

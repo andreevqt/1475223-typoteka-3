@@ -5,7 +5,7 @@ const controllers = require(`../controllers`);
 
 const router = new Router();
 
-module.exports = (app, services) => {
+const statusRoute = (app, services) => {
   const controller = controllers.status(services);
 
   app.use(`/status`, router);
@@ -15,3 +15,5 @@ module.exports = (app, services) => {
     .get(controller.status);
 
 };
+
+module.exports = statusRoute;

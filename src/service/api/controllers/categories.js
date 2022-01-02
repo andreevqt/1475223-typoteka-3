@@ -1,7 +1,7 @@
 'use strict';
 const {Http} = require(`../../constants`);
 
-module.exports = (services) => ({
+const categoriesController = (services) => ({
   checkCategory: async (req, res, next, id) => {
     const category = await services.categories.findById(id);
     if (!category) {
@@ -51,3 +51,5 @@ module.exports = (services) => ({
     res.status(Http.OK).json(deleted);
   }
 });
+
+module.exports = categoriesController;

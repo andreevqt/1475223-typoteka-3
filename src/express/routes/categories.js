@@ -5,7 +5,7 @@ const _ = require(`lodash`);
 const router = new Router();
 const api = require(`../api-services`);
 
-module.exports = (_app) => {
+const categoriesRoute = (_app) => {
   router.get(`/`, async (_req, res) => {
     res.render(`pages/all-categories`);
   });
@@ -50,3 +50,5 @@ module.exports = (_app) => {
 
   return router;
 };
+
+module.exports = categoriesRoute;

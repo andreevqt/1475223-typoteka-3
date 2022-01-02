@@ -8,7 +8,7 @@ const {validate} = require(`express-validation`);
 
 const router = new Router();
 
-module.exports = (app, services) => {
+const categoriesRoute = (app, services) => {
   const controller = controllers.categories(services);
 
   app.use(`/categories`, router);
@@ -26,3 +26,5 @@ module.exports = (app, services) => {
     .put([authorize(services), isEditor, validate(categories.update)], controller.update)
     .delete([authorize(services), isEditor, controller.checkArticles], controller.delete);
 };
+
+module.exports = categoriesRoute;

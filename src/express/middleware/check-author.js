@@ -2,7 +2,7 @@
 
 const {Http} = require(`../../service/constants`);
 
-module.exports = (req, res, next) => {
+const checkAuthor = (req, res, next) => {
   const {currentUser} = res.locals;
   const model = res.locals.article || res.locals.comment;
   if (model.author.id !== currentUser.id) {
@@ -12,3 +12,5 @@ module.exports = (req, res, next) => {
 
   next();
 };
+
+module.exports = checkAuthor;

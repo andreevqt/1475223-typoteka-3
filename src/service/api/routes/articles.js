@@ -4,11 +4,12 @@ const {Router} = require(`express`);
 const controllers = require(`../controllers`);
 const {articles, comments} = require(`../validators`);
 const {validate} = require(`express-validation`);
-const {parseQuery, authorize, isEditor} = require(`../middleware`);
+const {parseQuery, authorize, isEditor, sanitizeDate} = require(`../middleware`);
+const sanitizer = sanitizeDate(`createdAt`);
 
 const router = new Router();
 
-module.exports = (app, services) => {
+const articlesRoute = (app, services) => {
   const controller = controllers.articles(services);
 
   app.use(`/articles`, router);
@@ -19,12 +20,12 @@ module.exports = (app, services) => {
   router
     .route(`/`)
     .get(parseQuery, controller.list)
-    .post([authorize(services), isEditor, validate(articles.create, {}, {abortEarly: false})], controller.create);
+    .post([authorize(services), isEditor, validate(articles.create, {}, {abortEarly: false}), sanitizer], controller.create);
 
   router
     .route(`/:articleId`)
     .get(controller.get)
-    .put([authorize(services), isEditor, validate(articles.update, {}, {abortEarly: false})], controller.update)
+    .put([authorize(services), isEditor, validate(articles.update, {}, {abortEarly: false}), sanitizer], controller.update)
     .delete(controller.delete);
 
   router
@@ -40,3 +41,5 @@ module.exports = (app, services) => {
     .route(`/category/:categoryId`)
     .get(parseQuery, controller.categories.get);
 };
+
+module.exports = articlesRoute;

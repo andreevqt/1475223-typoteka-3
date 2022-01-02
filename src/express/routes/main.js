@@ -25,7 +25,7 @@ const clearCookies = (res) => {
   res.clearCookie(`refresh_token`);
 };
 
-module.exports = (_app) => {
+const mainRoute = (_app) => {
   router.get(`/`, async (req, res) => {
     const {query, page} = req.query;
     let popular = [];
@@ -135,3 +135,5 @@ module.exports = (_app) => {
   });
   return router;
 };
+
+module.exports = mainRoute;

@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = (req, res, next) => {
+const checkAuth = (req, res, next) => {
   if (!res.locals.currentUser) {
     res.redirect(`/login`);
     return;
@@ -8,3 +8,5 @@ module.exports = (req, res, next) => {
 
   next();
 };
+
+module.exports = checkAuth;

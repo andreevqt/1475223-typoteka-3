@@ -6,7 +6,7 @@ const {parseQuery} = require(`../middleware`);
 
 const router = new Router();
 
-module.exports = (app, services) => {
+const searchRoute = (app, services) => {
   const controller = controllers.search(services);
 
   app.use(`/search`, router);
@@ -15,3 +15,5 @@ module.exports = (app, services) => {
     route(`/`).
     get(parseQuery, controller.search);
 };
+
+module.exports = searchRoute;
