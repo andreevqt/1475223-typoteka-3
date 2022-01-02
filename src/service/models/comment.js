@@ -36,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
         attributes: [`id`, `title`]
       }];
       const excludes = [`authorId`];
-      return {include: includes, attributes: {exclude: excludes}};
+      return {include: includes, attributes: {exclude: excludes}, distinct: true};
     }
   }
 
