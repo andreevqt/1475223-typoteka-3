@@ -6,7 +6,7 @@ const {logger} = require(`../helpers`);
 const api = require(`../api-services`);
 const {Http} = require(`../../service/constants`);
 
-module.exports = (_app) => {
+const myRoute = (_app) => {
   router.get(`/`, async (req, res) => {
     const {page} = req.query;
     let articles = [];
@@ -61,3 +61,5 @@ module.exports = (_app) => {
 
   return router;
 };
+
+module.exports = myRoute;

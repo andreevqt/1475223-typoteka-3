@@ -2,7 +2,7 @@
 const {Http} = require(`../../constants`);
 const {emitArticles, emitComments} = require(`../../helpers`);
 
-module.exports = (services) => ({
+const articlesController = (services) => ({
   checkArticle: async (req, res, next, id) => {
     const article = await services.articles.findById(id);
     if (!article) {
@@ -101,3 +101,5 @@ module.exports = (services) => ({
     },
   }
 });
+
+module.exports = articlesController;

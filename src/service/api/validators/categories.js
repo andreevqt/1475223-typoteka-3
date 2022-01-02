@@ -2,7 +2,7 @@
 
 const {Joi} = require(`express-validation`);
 
-module.exports = {
+const categories = {
   create: {
     body: Joi.object({
       name: Joi.string().label(`Заголовок категории`).min(5).max(30).required(),
@@ -14,3 +14,5 @@ module.exports = {
     })
   }
 };
+
+module.exports = categories;

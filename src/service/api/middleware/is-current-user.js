@@ -2,7 +2,7 @@
 
 const {Http} = require(`../../constants`);
 
-module.exports = (req, res, next) => {
+const isCurrentUser = (req, res, next) => {
   const {currentUser} = res.locals;
   const userId = +req.params.userId;
   if (currentUser.id !== userId) {
@@ -12,3 +12,5 @@ module.exports = (req, res, next) => {
 
   next();
 };
+
+module.exports = isCurrentUser;

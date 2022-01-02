@@ -6,7 +6,7 @@ const {parseQuery} = require(`../middleware`);
 
 const router = new Router();
 
-module.exports = (app, services) => {
+const commentsRoute = (app, services) => {
   const controller = controllers.comments(services);
 
   app.use(`/comments`, router);
@@ -15,3 +15,5 @@ module.exports = (app, services) => {
     route(`/`).
     get(parseQuery, controller.list);
 };
+
+module.exports = commentsRoute;

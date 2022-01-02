@@ -9,7 +9,7 @@ const api = require(`../api-services`);
 const {Http} = require(`../../service/constants`);
 const isEditor = require(`../middleware/is-editor`);
 
-module.exports = (_app) => {
+const articlesRoute = (_app) => {
   router.param(`categoryId`, async (req, res, next, id) => {
     const category = await api.categories.get(id);
     if (!category) {
@@ -156,3 +156,5 @@ module.exports = (_app) => {
 
   return router;
 };
+
+module.exports = articlesRoute;

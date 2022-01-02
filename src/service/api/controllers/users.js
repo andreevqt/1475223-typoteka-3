@@ -3,8 +3,8 @@
 const {Http} = require(`../../constants`);
 const {JWTService, UserService} = require(`../../data-service`);
 
-module.exports = (services) => ({
-  checkUser: async (req, res, next, id) => {
+const usersController = (services) => ({
+  checkUser: async (_req, res, next, id) => {
     if (!/^[0-9]+$/.test(id)) {
       res.status(Http.BAD_REQUEST).send(`Id should be a number`);
       return;
@@ -96,3 +96,5 @@ module.exports = (services) => ({
     }
   }
 });
+
+module.exports = usersController;

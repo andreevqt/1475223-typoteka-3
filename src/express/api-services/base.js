@@ -10,6 +10,19 @@ class Base {
     this.url = `${this.baseUrl}/${route}`;
   }
 
+  async get(id) {
+    try {
+      const result = (await axios.get(`${this.url}/${id}`)).data;
+      return result;
+    } catch (err) {
+      if (err.response && err.response.status === Http.NOT_FOUND) {
+        return null;
+      }
+
+      throw err;
+    }
+  }
+
   async fetch(params) {
     const items = (await axios.get(this.url, {params})).data;
     return new Collection(items, items.totalPages, items.currentPage);
@@ -25,19 +38,6 @@ class Base {
 
   async delete(id) {
     return (await axios.delete(`${this.url}/${id}`)).data;
-  }
-
-  async get(id) {
-    try {
-      const result = (await axios.get(`${this.url}/${id}`)).data;
-      return result;
-    } catch (err) {
-      if (err.response && err.response.status === Http.NOT_FOUND) {
-        return null;
-      }
-
-      throw err;
-    }
   }
 }
 

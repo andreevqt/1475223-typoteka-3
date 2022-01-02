@@ -1,11 +1,13 @@
 'use strict';
 
-const csrf = require(`csurf`);
+const csurf = require(`csurf`);
 
-module.exports = [
-  csrf({cookie: true}),
+const csrf = [
+  csurf({cookie: true}),
   (req, res, next) => {
     res.locals.csrf = req.csrfToken();
     next();
   }
 ];
+
+module.exports = csrf;

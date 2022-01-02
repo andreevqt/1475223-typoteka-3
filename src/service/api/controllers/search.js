@@ -1,7 +1,7 @@
 'use strict';
 const {Http} = require(`../../constants`);
 
-module.exports = (services) => ({
+const search = (services) => ({
   search: async (req, res) => {
     const {page, limit, rest} = res.locals.parsed;
     const {query} = req.query;
@@ -12,3 +12,5 @@ module.exports = (services) => ({
       .json(articles);
   },
 });
+
+module.exports = search;

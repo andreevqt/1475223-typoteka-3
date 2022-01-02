@@ -4,7 +4,7 @@ const BaseJoi = require(`joi`);
 const {imageExtension} = require(`../../helpers`);
 const Joi = BaseJoi.extend(imageExtension);
 
-module.exports = {
+const articles = {
   create: {
     body: Joi.object({
       title: Joi.string().label(`Заголовок`).required().min(30).max(250),
@@ -32,3 +32,5 @@ module.exports = {
     })
   }
 };
+
+module.exports = articles;

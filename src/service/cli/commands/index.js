@@ -5,7 +5,7 @@ const help = require(`./help`);
 const version = require(`./version`);
 const server = require(`./server`);
 const fill = require(`./fill`);
-const filldb = require(`./filldb`);
+const filldb = require(`./fill-db`);
 const secret = require(`./secret`);
 
 module.exports = {

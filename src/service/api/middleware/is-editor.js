@@ -2,7 +2,7 @@
 
 const {Http} = require(`../../constants`);
 
-module.exports = (req, res, next) => {
+const isEditor = (_req, res, next) => {
   const {currentUser} = res.locals;
   if (!currentUser.isEditor) {
     res.status(Http.FORBIDDEN).send(`Forbidden`);
@@ -10,3 +10,5 @@ module.exports = (req, res, next) => {
   }
   next();
 };
+
+module.exports = isEditor;

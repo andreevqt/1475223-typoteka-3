@@ -3,7 +3,7 @@
 const {Joi} = require(`express-validation`);
 const NAME_REGEX = /^[ а-яА-Яё]+$/;
 
-module.exports = {
+const users = {
   create: {
     body: Joi.object({
       name: Joi.string().label(`Имя и фамилия`).regex(NAME_REGEX, `символы русского алфавита`).min(3).max(1000),
@@ -26,3 +26,5 @@ module.exports = {
     })
   }
 };
+
+module.exports = users;
