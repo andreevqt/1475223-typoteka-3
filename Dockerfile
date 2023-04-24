@@ -14,4 +14,4 @@ RUN apk add --no-cache git
 RUN apk add --no-cache bash
 RUN git clone https://github.com/vishnubob/wait-for-it.git
 
-EXPOSE 8080 3000
+EXPOSE 80 3000
