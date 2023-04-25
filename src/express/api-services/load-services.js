@@ -9,7 +9,7 @@ const Users = require(`./users`);
 const Status = require(`./status`);
 const {API_PREFIX} = require(`../../service/constants`);
 
-const url = `${config.app.url}:${config.server.port}` + API_PREFIX;
+const url = config.server.url + API_PREFIX;
 
 const articles = new Articles(url, `articles`);
 const categories = new Categories(url, `categories`);

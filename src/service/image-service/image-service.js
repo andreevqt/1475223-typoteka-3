@@ -7,7 +7,7 @@ const fs = require(`fs`).promises;
 const {logger} = require(`../helpers`);
 
 
-const url = `${config.app.url}:${config.server.port}/uploads`;
+const url = `${config.app.url}/uploads`;
 const uploadPath = path.resolve(__dirname, `../public/uploads`);
 
 const makeFromBuffer = async (src, width, height) => {

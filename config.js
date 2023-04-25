@@ -12,10 +12,11 @@ module.exports = {
   },
   app: {
     key: process.env.APP_KEY,
-    url: process.env.APP_URL || `http://localhost`,
+    url: process.env.APP_URL || `http://localhost:8080`,
     port: process.env.APP_PORT || 8080,
   },
   server: {
+    url: process.env.SERVER_URL || `http://localhost:3000`,
     port: process.env.SERVER_PORT || 3000,
     enabled: (process.env.API_ENABLED === `true`) || true
   },

@@ -3,9 +3,9 @@
 const config = require(`../../config`);
 const express = require(`express`);
 const path = require(`path`);
-const {logger} = require(`./helpers`);
-const {once} = require(`events`);
-const {API_PREFIX, Http, Events} = require(`../service/constants`);
+const { logger } = require(`./helpers`);
+const { once } = require(`events`);
+const { API_PREFIX, Http, Events } = require(`../service/constants`);
 const api = require(`./api-services`);
 const auth = require(`./middleware/auth`);
 const checkAuth = require(`./middleware/check-auth`);
@@ -21,9 +21,9 @@ const {
 
 const app = express();
 
-const appUrl = `${config.app.url}:${config.app.port}`;
-const apiUrl = `${config.app.url}:${config.server.port}` + API_PREFIX;
-const wsUrl = `${config.app.url}:${config.server.port}`;
+const appUrl = config.app.url;
+const apiUrl = config.server.url + API_PREFIX;
+const wsUrl = config.server.url;
 
 app.set(`app_url`, appUrl);
 app.set(`api_url`, apiUrl);
@@ -75,7 +75,7 @@ app.use(`/articles`, articles(app));
 app.use(`/categories`, [checkAuth, isEditor], categories(app));
 
 app.use((_req, res) => res.status(Http.NOT_FOUND).render(`errors/404`));
-app.use((err, _req, res, _next) => res.status(Http.INTERNAL_SERVER_ERROR).render(`errors/500`, {message: err.message}));
+app.use((err, _req, res, _next) => res.status(Http.INTERNAL_SERVER_ERROR).render(`errors/500`, { message: err.message }));
 
 app.set(`views`, path.join(__dirname, `templates`));
 app.set(`view engine`, `pug`);

@@ -4,7 +4,7 @@ const {Category, Article, Comment, User, service} = require(`../../models`);
 const moment = require(`moment`);
 const config = require(`../../../../config`);
 
-const url = `${config.app.url}:${config.app.port}/img`;
+const url = `${config.app.url}/img`;
 
 const {
   readData,
